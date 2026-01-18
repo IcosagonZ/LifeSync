@@ -2,6 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+// Pages
+import 'timeline.dart';
+import 'settings.dart';
+import 'add_data.dart';
+
+// Page sections
+import 'sections/academics.dart';
+import 'sections/activity.dart';
+import 'sections/bodymeasurements.dart';
+import 'sections/mind.dart';
+import 'sections/notes.dart';
+import 'sections/nutrition.dart';
+import 'sections/sleep.dart';
+import 'sections/symptoms.dart';
+import 'sections/time.dart';
+import 'sections/vitals.dart';
+import 'sections/workout.dart';
+
 class Page_Overview extends StatefulWidget
 {
   const Page_Overview({super.key});
@@ -47,10 +65,27 @@ class Page_Overview_State extends State<Page_Overview>
         title: Text("Overview"),
         actions: [
           IconButton(
+            icon: Icon(Icons.add),
+            tooltip: "Add data",
+            onPressed: (){
+              print("Add data pressed");
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              }
+              ));
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.timeline),
             tooltip: "Timeline",
             onPressed: (){
               print("Timeline pressed");
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_Timeline();
+              }
+              ));
             },
           ),
           IconButton(
@@ -58,6 +93,11 @@ class Page_Overview_State extends State<Page_Overview>
             tooltip: "Settings",
             onPressed: (){
               print("Settings pressed");
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_Settings();
+              }
+              ));
             },
           ),
         ]
@@ -82,6 +122,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Time",
                       onPressed: (){
                         print("Time pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Time();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -93,6 +138,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Academics",
                       onPressed: (){
                         print("Academics pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Academics();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -104,6 +154,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Activity",
                       onPressed: (){
                         print("Activity pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Activity();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -115,6 +170,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Mind",
                       onPressed: (){
                         print("Mind pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Mind();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -126,6 +186,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Vitals",
                       onPressed: (){
                         print("Vitals pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Vitals();
+                        }
+                        ));
                       },
                     ),
                   ]
@@ -151,6 +216,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Sleep",
                       onPressed: (){
                         print("Sleep pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Sleep();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -162,6 +232,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Workout",
                       onPressed: (){
                         print("Workout pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Workout();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -173,6 +248,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Nutrition",
                       onPressed: (){
                         print("Nutrition pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Nutrition();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -184,6 +264,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Symptoms",
                       onPressed: (){
                         print("Symptoms pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_Symptoms();
+                        }
+                        ));
                       },
                     ),
                     SizedBox(height: spacing_quickaction),
@@ -195,6 +280,11 @@ class Page_Overview_State extends State<Page_Overview>
                       tooltip: "Body",
                       onPressed: (){
                         print("Body pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)
+                        {
+                          return const Page_BodyMeasurements();
+                        }
+                        ));
                       },
                     ),
                   ]
@@ -456,6 +546,16 @@ class Page_Overview_State extends State<Page_Overview>
           ]
         )
       ),
+
+      /*
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()
+        {
+          print("Add data pressed");
+        },
+        child: const Icon(Symbols.add),
+      ),
+      */
     );
   }
 }
