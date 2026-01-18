@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class Page_Overview extends StatefulWidget
 {
@@ -37,6 +38,10 @@ class Page_Overview_State extends State<Page_Overview>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
+    // Widget size variables
+    const double spacing_quickaction = 8;
+    const double iconsize_quickaction = 24;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Overview"),
@@ -61,10 +66,140 @@ class Page_Overview_State extends State<Page_Overview>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            SvgPicture.asset(
-              "assets/avatar.svg",
-              fit: BoxFit.contain,
-              height: MediaQuery.of(context).size.height * 0.45,
+            Row(
+              children:
+              [
+                // Left quick action buttons
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:
+                  [
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.schedule, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Time",
+                      onPressed: (){
+                        print("Time pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.grading, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Academics",
+                      onPressed: (){
+                        print("Academics pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.directions_run, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Activity",
+                      onPressed: (){
+                        print("Activity pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.cognition_2, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Mind",
+                      onPressed: (){
+                        print("Mind pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.ecg_heart, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Vitals",
+                      onPressed: (){
+                        print("Vitals pressed");
+                      },
+                    ),
+                  ]
+                ),
+                // Avatar
+                Expanded(
+                  child: SvgPicture.asset(
+                    "assets/avatar.svg",
+                    fit: BoxFit.contain,
+                    height: MediaQuery.of(context).size.height * 0.45,
+                  ),
+                ),
+                // Right quick action buttons
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:
+                  [
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.bedtime, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Sleep",
+                      onPressed: (){
+                        print("Sleep pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.exercise, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Workout",
+                      onPressed: (){
+                        print("Workout pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.fastfood, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Nutrition",
+                      onPressed: (){
+                        print("Nutrition pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.sick, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Symptoms",
+                      onPressed: (){
+                        print("Symptoms pressed");
+                      },
+                    ),
+                    SizedBox(height: spacing_quickaction),
+                    IconButton(
+                      icon: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: Icon(Symbols.weight, size: iconsize_quickaction),
+                      ),
+                      tooltip: "Body",
+                      onPressed: (){
+                        print("Body pressed");
+                      },
+                    ),
+                  ]
+                ),
+              ]
             ),
             SizedBox(
               height: 32
