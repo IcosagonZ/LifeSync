@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
@@ -12,6 +13,80 @@ class Page_AddData extends StatefulWidget
 
 class Page_AddData_State extends State<Page_AddData>
 {
+  // Widget variables
+  final List<String> datatype_dropdown_options = [
+    "Academics",
+    "Activity",
+    "Body Measurements",
+    "Nutrition",
+    "Time",
+    "Vitals",
+    "Workout",
+  ];
+
+  String? datatype_dropdown_chosen;
+
+  DateTime data_datetime = DateTime.now();
+
+  TimeOfDay? data_time_chosen;
+  DateTime? _data_time_chosen;
+  DateTime? data_date_chosen;
+
+  @override
+  void initState()
+  {
+    super.initState();
+
+    data_time_chosen = TimeOfDay.now();
+    data_date_chosen = DateTime.now();
+  }
+
+  Future<void> data_time_select(BuildContext context) async
+  {
+    final TimeOfDay? picked_time = await showTimePicker
+    (
+      context: context,
+     initialTime: data_time_chosen ?? TimeOfDay.now(),
+     builder: (BuildContext context, Widget? child)
+     {
+       return MediaQuery(
+         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+         child: child!,
+       );
+     }
+    );
+
+    if(picked_time != null && picked_time != data_time_chosen)
+    {
+      setState(()
+      {
+        data_time_chosen = picked_time;
+        _data_time_chosen = DateTime(2025, 5, 15, picked_time.hour, picked_time.minute);
+      }
+      );
+    }
+  }
+
+  Future<void> data_date_select(BuildContext context) async
+  {
+    final DateTime? picked_date = await showDatePicker
+    (
+      context: context,
+     initialDate: data_date_chosen ?? DateTime.now(),
+     firstDate: DateTime(2010),
+     lastDate: DateTime.now(),
+    );
+
+    if(picked_date != null && picked_date != data_date_chosen)
+    {
+      setState(()
+      {
+        data_date_chosen = picked_date;
+      }
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -38,8 +113,6 @@ class Page_AddData_State extends State<Page_AddData>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Add data"),
@@ -48,7 +121,70 @@ class Page_AddData_State extends State<Page_AddData>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Add data")
+            // Data type choser
+            Row(
+              children: [
+                Expanded(
+                  child: Text("Data type")
+                ),
+                DropdownButton<String>(
+                  hint: Text("Select data type"),
+                  value: datatype_dropdown_chosen,
+                  onChanged: (String? newValue)
+                  {
+                    setState(()
+                    {
+                      datatype_dropdown_chosen = newValue;
+                      print(datatype_dropdown_chosen);
+                    });
+                  },
+                  items: datatype_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                  {
+                    return DropdownMenuItem<String>(
+                      value: dropdown_item,
+                      child: Text(dropdown_item)
+                    );
+                  }
+                  ).toList(),
+                )
+              ],
+            ),
+            SizedBox(height: 16),
+            // Time choser
+            Row(
+              children: [
+                Expanded(
+                  child: Text("Time")
+                ),
+                ActionChip(
+                  label: Text(data_time_chosen == null
+                    ? "Select time"
+                    : "${data_time_chosen!.format(context)}"
+                  ),
+                  onPressed: (){
+                    data_time_select(context);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            // Date choser
+            Row(
+              children: [
+                Expanded(
+                  child: Text("Date")
+                ),
+                ActionChip(
+                  label: Text(data_date_chosen == null
+                  ? "Select date"
+                  : "${data_date_chosen!.toLocal()}".split(" ")[0],
+                  ),
+                  onPressed: (){
+                    data_date_select(context);
+                  },
+                ),
+              ],
+            ),
           ]
         )
       ),
