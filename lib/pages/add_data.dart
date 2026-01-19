@@ -32,6 +32,12 @@ class Page_AddData_State extends State<Page_AddData>
   DateTime? _data_time_chosen;
   DateTime? data_date_chosen;
 
+  // Controllers
+  final TextEditingController academics_subject_controller = TextEditingController();
+  final TextEditingController academics_marks_type_controller = TextEditingController();
+  final TextEditingController academics_marks_controller = TextEditingController();
+  final TextEditingController academics_marks_total_controller = TextEditingController();
+
   @override
   void initState()
   {
@@ -46,14 +52,14 @@ class Page_AddData_State extends State<Page_AddData>
     final TimeOfDay? picked_time = await showTimePicker
     (
       context: context,
-     initialTime: data_time_chosen ?? TimeOfDay.now(),
-     builder: (BuildContext context, Widget? child)
-     {
-       return MediaQuery(
-         data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-         child: child!,
-       );
-     }
+      initialTime: data_time_chosen ?? TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child)
+      {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      }
     );
 
     if(picked_time != null && picked_time != data_time_chosen)
@@ -90,29 +96,6 @@ class Page_AddData_State extends State<Page_AddData>
   @override
   Widget build(BuildContext context)
   {
-    // Theming and text styles
-    final color_scheme = Theme.of(context).colorScheme;
-    final text_theme = Theme.of(context).textTheme;
-
-    Color color_primary = color_scheme.primary;
-    Color color_secondary = color_scheme.secondary;
-    Color color_onprimary = color_scheme.onPrimary;
-    Color color_onsecondary = color_scheme.onSecondary;
-    Color color_background = color_scheme.onBackground;
-    Color color_surface = color_scheme.onSurface;
-
-    final style_displaylarge = text_theme.displayLarge;
-    final style_displaymedium = text_theme.displayMedium;
-    final style_displaysmall = text_theme.displaySmall;
-
-    final style_headlinelarge = text_theme.headlineLarge;
-    final style_headlinemedium = text_theme.headlineMedium;
-    final style_headlinesmall = text_theme.headlineSmall;
-
-    final style_titlelarge = text_theme.titleLarge;
-    final style_titlemedium = text_theme.titleMedium;
-    final style_titlesmall = text_theme.titleSmall;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Add data"),
@@ -150,6 +133,7 @@ class Page_AddData_State extends State<Page_AddData>
               ],
             ),
             SizedBox(height: 16),
+
             // Time choser
             Row(
               children: [
@@ -168,6 +152,7 @@ class Page_AddData_State extends State<Page_AddData>
               ],
             ),
             SizedBox(height: 16),
+
             // Date choser
             Row(
               children: [
@@ -185,7 +170,126 @@ class Page_AddData_State extends State<Page_AddData>
                 ),
               ],
             ),
+            SizedBox(height: 16),
+
+            Divider(),
+
+            SizedBox(height: 16),
+
+            // Academics data entry
+            Visibility(
+              visible: true,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Subject")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: academics_subject_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Mark type")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: academics_marks_type_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Marks received")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 50,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: academics_marks_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Marks total")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 50,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: academics_marks_total_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                ]
+              )
+            )
           ]
+        )
+      ),
+
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: ElevatedButton(
+            child: Text("Add data"),
+            onPressed: (){
+              print("Add data pressed");
+            },
+          )
         )
       ),
     );
