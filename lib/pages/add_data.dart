@@ -63,14 +63,28 @@ class Page_AddData_State extends State<Page_AddData>
 
   // Nutrition widgets
   final TextEditingController nutrition_name_controller = TextEditingController();
-  final TextEditingController nutrition_class_controller = TextEditingController();
-  final TextEditingController nutrition_type_controller = TextEditingController();
   final TextEditingController nutrition_qty_controller = TextEditingController();
   final TextEditingController nutrition_mass_controller = TextEditingController();
   final TextEditingController nutrition_calories_controller = TextEditingController();
   final TextEditingController nutrition_carbs_controller = TextEditingController();
   final TextEditingController nutrition_proteins_controller = TextEditingController();
   final TextEditingController nutrition_fats_controller = TextEditingController();
+
+  final List<String> nutrition_form_options = [
+    "Drink",
+    "Solid Food",
+    "Supplement",
+  ];
+  String? nutrition_form_dropdown_chosen;
+
+  final List<String> nutrition_type_options = [
+    "Breakfast",
+    "Lunch",
+    "Dinner",
+    "Snacks",
+    "Brunch",
+  ];
+  String? nutrition_type_dropdown_chosen;
 
   @override
   void initState()
@@ -603,22 +617,32 @@ class Page_AddData_State extends State<Page_AddData>
                   Row(
                     children: [
                       Expanded(
-                        child: Text("Class")
+                        child: Text("Form")
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
                           minWidth: 100,
                         ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: nutrition_class_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
-                            ),
-                          ),
-                        ),
+                        child:   DropdownButton<String>(
+                          hint: Text("Select..."),
+                          value: nutrition_form_dropdown_chosen,
+                          onChanged: (String? newValue)
+                          {
+                            setState(()
+                            {
+                              nutrition_form_dropdown_chosen = newValue;
+                              print(nutrition_form_dropdown_chosen);
+                            });
+                          },
+                          items: nutrition_form_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                          {
+                            return DropdownMenuItem<String>(
+                              value: dropdown_item,
+                              child: Text(dropdown_item)
+                            );
+                          }
+                          ).toList(),
+                        )
                       ),
                     ]
                   ),
@@ -632,16 +656,26 @@ class Page_AddData_State extends State<Page_AddData>
                         constraints: BoxConstraints(
                           minWidth: 100,
                         ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: nutrition_type_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
-                            ),
-                          ),
-                        ),
+                        child:  DropdownButton<String>(
+                          hint: Text("Select..."),
+                          value: nutrition_type_dropdown_chosen,
+                          onChanged: (String? newValue)
+                          {
+                            setState(()
+                            {
+                              nutrition_type_dropdown_chosen = newValue;
+                              print(nutrition_type_dropdown_chosen);
+                            });
+                          },
+                          items: nutrition_type_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                          {
+                            return DropdownMenuItem<String>(
+                              value: dropdown_item,
+                              child: Text(dropdown_item)
+                            );
+                          }
+                          ).toList(),
+                        )
                       ),
                     ]
                   ),
