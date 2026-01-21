@@ -33,10 +33,22 @@ class Page_AddData_State extends State<Page_AddData>
   DateTime? data_date_chosen;
 
   // Controllers
+  // Common controllers
+  final TextEditingController general_notes_controller = TextEditingController();
+
+  // Academic controllers
   final TextEditingController academics_subject_controller = TextEditingController();
   final TextEditingController academics_marks_type_controller = TextEditingController();
   final TextEditingController academics_marks_controller = TextEditingController();
   final TextEditingController academics_marks_total_controller = TextEditingController();
+
+  // Activity controllers
+  final TextEditingController activity_name_controller = TextEditingController();
+  final TextEditingController activity_type_controller = TextEditingController();
+  final TextEditingController activity_duration_hours_controller = TextEditingController();
+  final TextEditingController activity_duration_minutes_controller = TextEditingController();
+  final TextEditingController activity_calories_controller = TextEditingController();
+  final TextEditingController activity_distance_controller = TextEditingController();
 
   @override
   void initState()
@@ -96,6 +108,20 @@ class Page_AddData_State extends State<Page_AddData>
   @override
   Widget build(BuildContext context)
   {
+    // Widget style variables
+    final text_theme = Theme.of(context).textTheme;
+    final style_displaylarge = text_theme.displayLarge;
+    final style_displaymedium = text_theme.displayMedium;
+    final style_displaysmall = text_theme.displaySmall;
+
+    final style_headlinelarge = text_theme.headlineLarge;
+    final style_headlinemedium = text_theme.headlineMedium;
+    final style_headlinesmall = text_theme.headlineSmall;
+
+    final style_titlelarge = text_theme.titleLarge;
+    final style_titlemedium = text_theme.titleMedium;
+    final style_titlesmall = text_theme.titleSmall;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Add data"),
@@ -178,7 +204,7 @@ class Page_AddData_State extends State<Page_AddData>
 
             // Academics data entry
             Visibility(
-              visible: true,
+              visible: datatype_dropdown_chosen=="Academics",
               child: Column(
                 children: [
                   Row(
@@ -195,7 +221,7 @@ class Page_AddData_State extends State<Page_AddData>
                             controller: academics_subject_controller,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: UnderlineInputBorder(),
                               isDense: true,
                             ),
                           ),
@@ -218,7 +244,7 @@ class Page_AddData_State extends State<Page_AddData>
                             controller: academics_marks_type_controller,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: UnderlineInputBorder(),
                               isDense: true,
                             ),
                           ),
@@ -234,37 +260,32 @@ class Page_AddData_State extends State<Page_AddData>
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                          minWidth: 50,
+                          minWidth: 20,
                         ),
                         child: IntrinsicWidth(
                           child: TextField(
                             controller: academics_marks_controller,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: UnderlineInputBorder(),
                               isDense: true,
                             ),
                           ),
                         ),
                       ),
-                    ]
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text("Marks total")
-                      ),
+                      SizedBox(width: 16),
+                      Text("out of"),
+                      SizedBox(width: 16),
                       ConstrainedBox(
                         constraints: BoxConstraints(
-                          minWidth: 50,
+                          minWidth: 20,
                         ),
                         child: IntrinsicWidth(
                           child: TextField(
                             controller: academics_marks_total_controller,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                              border: UnderlineInputBorder(),
                               isDense: true,
                             ),
                           ),
@@ -276,7 +297,169 @@ class Page_AddData_State extends State<Page_AddData>
                   Divider(),
                 ]
               )
-            )
+            ),
+
+            // Activity data entry
+            Visibility(
+              visible: datatype_dropdown_chosen=="Activity",
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Name")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: activity_name_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Type")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: activity_type_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Duration")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 20,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: activity_duration_hours_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text("hrs"),
+                      SizedBox(width: 16),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 20,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: activity_duration_minutes_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text("mins"),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Calories")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 50,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: activity_calories_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text("cal"),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Distance")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 50,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: activity_distance_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text("km"),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                ]
+              )
+            ),
+
+            // Notes
+            SizedBox(height: 16),
+            IntrinsicHeight(
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Note",
+                  hintText: "Enter note",
+                ),
+                maxLines: null,
+              ),
+            ),
           ]
         )
       ),
