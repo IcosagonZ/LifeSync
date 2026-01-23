@@ -41,6 +41,8 @@ class Page_Timeline_State extends State<Page_Timeline>
     List<String> list_common_months = [];
     List<String> list_common_years = [];
 
+    List<TimelineData> timeline_data = get_timeline_data();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Timeline"),
@@ -50,9 +52,9 @@ class Page_Timeline_State extends State<Page_Timeline>
         child: Stack(
           children: [
             Visibility(
-              visible: data_timeline_list.isNotEmpty,
+              visible: timeline_data.isNotEmpty,
               child: ListView(
-                children: data_timeline_list.map((data)
+                children: timeline_data.map((data)
                 {
                   String data_date_string = DateFormat('d/M/yyyy').format(data.item_datetime);
                   String data_month_string = DateFormat('M/yyyy').format(data.item_datetime);
@@ -202,7 +204,7 @@ class Page_Timeline_State extends State<Page_Timeline>
               )
             ),
             Visibility(
-              visible: data_timeline_list.isEmpty,
+              visible: timeline_data.isEmpty,
               child: Center(
                 child: Text("No data")
               )

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../../components/recents_listtile.dart';
+
+import '../../data/database.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
 {
@@ -38,7 +42,8 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
+    // Widget variables
+    List<TimelineData> recents_data = get_bodymeasurements_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +53,86 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Body measurements")
+            Text("Overview", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Height", style: TextStyle(color: color_primary))
+                              ),
+                              Text("170 cm")
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Weight", style: TextStyle(color: color_primary))
+                              ),
+                              Text("62 kg")
+                            ],
+                          )
+                        ]
+                      )
+                    ),
+                    SizedBox(width: 32),
+                    CircleAvatar(
+                      child: Text("21.2"),
+                      radius: 32,
+                    ),
+                  ],
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Recents", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: recents_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: recents_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          children: recents_data.map((data)
+                          {
+                            String data_date_string = DateFormat('d/M/yyyy').format(data.item_datetime);
+                            String data_month_string = DateFormat('M/yyyy').format(data.item_datetime);
+                            String data_year_string = DateFormat('yyyy').format(data.item_datetime);
+
+                            return RecentsListTile(
+                              list_icon: Icon(data.item_icon),
+                              list_title: data.item_title,
+                              list_subtitle: data.item_subtitle,
+                              list_date: data.item_datetime,
+                            );
+                          }).toList(),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
+            )
           ]
         )
       ),
