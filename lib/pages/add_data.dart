@@ -93,6 +93,7 @@ class Page_AddData_State extends State<Page_AddData>
   final List<String> time_type_options = [
     "Sleep",
     "Study",
+    "Food",
     "Hobby",
     "Gaming",
     "Outing",
