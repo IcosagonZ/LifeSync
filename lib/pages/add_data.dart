@@ -147,10 +147,10 @@ class Page_AddData_State extends State<Page_AddData>
   final TextEditingController vital_heartrate_controller = TextEditingController();
 
   final List<String> vital_name_options = [
-    "Body temperature",
-    "Blood oxygen",
-    "Blood pressure",
-    "Blood sugar",
+    "Body Temperature",
+    "Blood Oxygen",
+    "Blood Pressure",
+    "Blood Sugar",
     "Heartrate"
   ];
   String? vital_name_dropdown_chosen;
