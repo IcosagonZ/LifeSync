@@ -79,7 +79,8 @@ class Page_AddData_State extends State<Page_AddData>
     "Skateboarding",
     "Sprint",
     "Surfing",
-    "Volleyball"
+    "Volleyball",
+    "Custom"
   ];
   String? activity_dropdown_chosen;
 
