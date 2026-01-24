@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../components/recents_listtile.dart';
-
 import '../../data/database.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
@@ -85,8 +82,15 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                     ),
                     SizedBox(width: 32),
                     CircleAvatar(
-                      child: Text("21.2"),
                       radius: 32,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("21.2"),
+                          Text("BMI", style: TextStyle(fontSize: 10)),
+                        ]
+                      ),
                     ),
                   ],
                 )

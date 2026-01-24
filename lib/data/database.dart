@@ -25,6 +25,7 @@ List<TimelineData> data_timeline_list = [
   TimelineData(iconmapper_geticon("Activity", "Football"), "Football", "95min, 724 cal", "Activity", DateTime(2026, 5, 10, 4, 54)),
   TimelineData(iconmapper_geticon("Vitals", "Blood Pressure"), "Blood Pressure", "113/74", "Vitals", DateTime(2026, 5, 10, 4, 34)),
   TimelineData(iconmapper_geticon("Body Measurements", "Height"), "Height", "170 cm", "Body Measurements", DateTime(2026, 5, 10, 4, 14)),
+  TimelineData(iconmapper_geticon("Sleep"), "Sleep", "7 hr 45 min", "Time", DateTime(2026, 7, 10, 4, 14)),
 ];
 
 // Data display for main timeline
@@ -51,4 +52,23 @@ List<TimelineData> get_bodymeasurements_data()
   }
 
   return data_bodymeasurements_list;
+}
+
+// Sleep data
+List<TimelineData> get_sleep_data()
+{
+  print("Sleep data requested");
+  List<TimelineData> data_sleep_list = [];
+
+  List columns = ["Sleep"];
+
+  for(var data in data_timeline_list)
+  {
+    if(columns.contains(data.item_title))
+    {
+      data_sleep_list.add(data);
+    }
+  }
+
+  return data_sleep_list;
 }

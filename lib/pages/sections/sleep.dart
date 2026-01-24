@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../../data/database.dart';
+import '../../components/recents_listtile.dart';
 
 class Page_Sleep extends StatefulWidget
 {
@@ -38,7 +40,8 @@ class Page_Sleep_State extends State<Page_Sleep>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
+    // Widget variables
+    List<TimelineData> recents_data = get_sleep_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +51,89 @@ class Page_Sleep_State extends State<Page_Sleep>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Sleep")
+            Text("Overview", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Time slept", style: TextStyle(color: color_primary))
+                              ),
+                              Text("7hrs 25 mins")
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Recommended", style: TextStyle(color: color_primary))
+                              ),
+                              Text("8 hrs")
+                            ],
+                          )
+                        ]
+                      )
+                    ),
+                    SizedBox(width: 32),
+                    CircleAvatar(
+                      radius: 32,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("89"),
+                          Text("Score", style: TextStyle(fontSize: 10)),
+                        ]
+                      ),
+                    ),
+                  ],
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Recents", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: recents_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: recents_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          children: recents_data.map((data)
+                          {
+                            return RecentsListTile(
+                              list_icon: Icon(data.item_icon),
+                              list_title: data.item_title,
+                              list_subtitle: data.item_subtitle,
+                              list_date: data.item_datetime,
+                            );
+                          }).toList(),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
+            )
           ]
         )
       ),
