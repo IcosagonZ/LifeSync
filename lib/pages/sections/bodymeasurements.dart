@@ -115,10 +115,6 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                         child: Column(
                           children: recents_data.map((data)
                           {
-                            String data_date_string = DateFormat('d/M/yyyy').format(data.item_datetime);
-                            String data_month_string = DateFormat('M/yyyy').format(data.item_datetime);
-                            String data_year_string = DateFormat('yyyy').format(data.item_datetime);
-
                             return RecentsListTile(
                               list_icon: Icon(data.item_icon),
                               list_title: data.item_title,
