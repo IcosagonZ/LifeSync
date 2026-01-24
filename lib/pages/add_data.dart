@@ -43,12 +43,45 @@ class Page_AddData_State extends State<Page_AddData>
   final TextEditingController academics_marks_total_controller = TextEditingController();
 
   // Activity controllers
-  final TextEditingController activity_name_controller = TextEditingController();
+  //final TextEditingController activity_name_controller = TextEditingController();
   final TextEditingController activity_type_controller = TextEditingController();
   final TextEditingController activity_duration_hours_controller = TextEditingController();
   final TextEditingController activity_duration_minutes_controller = TextEditingController();
   final TextEditingController activity_calories_controller = TextEditingController();
   final TextEditingController activity_distance_controller = TextEditingController();
+
+  final List<String> activity_dropdown_options = [
+    "Badminton",
+    "Baseball",
+    "Basketball",
+    "Cricket",
+    "Cycling",
+    "Downhill Skiing",
+    "Electric Bike",
+    "Football",
+    "Golf",
+    "Handball",
+    "Hiking",
+    "Hockey",
+    "Ice Skating",
+    "Kabbadi",
+    "Kayaking",
+    "Kite Surfing",
+    "Martial Arts",
+    "Mixed Martial Arts",
+    "Motorsports",
+    "Pickleball",
+    "Pool",
+    "Roller Skating",
+    "Rugby",
+    "Running",
+    "Sailing",
+    "Skateboarding",
+    "Sprint",
+    "Surfing",
+    "Volleyball"
+  ];
+  String? activity_dropdown_chosen;
 
   // Body measurement widgets
   final TextEditingController bodymeasurement_height_controller = TextEditingController();
@@ -394,20 +427,31 @@ class Page_AddData_State extends State<Page_AddData>
                         constraints: BoxConstraints(
                           minWidth: 100,
                         ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: activity_name_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
-                            ),
-                          ),
-                        ),
+                        child:  DropdownButton<String>(
+                          hint: Text("Select..."),
+                          value: activity_dropdown_chosen,
+                          onChanged: (String? newValue)
+                          {
+                            setState(()
+                            {
+                              activity_dropdown_chosen = newValue;
+                              print(activity_dropdown_chosen);
+                            });
+                          },
+                          items: activity_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                          {
+                            return DropdownMenuItem<String>(
+                              value: dropdown_item,
+                              child: Text(dropdown_item)
+                            );
+                          }
+                          ).toList(),
+                        )
                       ),
                     ]
                   ),
                   SizedBox(height: 16),
+                  /*
                   Row(
                     children: [
                       Expanded(
@@ -431,6 +475,7 @@ class Page_AddData_State extends State<Page_AddData>
                     ]
                   ),
                   SizedBox(height: 16),
+                  */
                   Row(
                     children: [
                       Expanded(
