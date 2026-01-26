@@ -14,6 +14,11 @@ class Page_Vitals_State extends State<Page_Vitals>
 {
   // Dummy data
   List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
+  List<List<double>> data_bodytemperatures = [[0, 93],[1, 92],[2, 91],[3, 93],[4, 91],[5, 93],[6, 97]];
+  List<List<double>> data_bloodpressure_systolic = [[0, 125],[1, 121],[2, 111],[3, 131],[4, 123],[5, 125],[6, 115]];
+  List<List<double>> data_bloodpressure_diastolic = [[0, 75],[1, 77],[2, 74],[3, 84],[4, 73],[5, 73],[6, 78]];
+  List<List<double>> data_bloodoxygen = [[0, 97],[1, 98],[2, 99],[3, 97],[4, 99],[5, 96],[6, 98]];
+  List<List<double>> data_bloodsugar = [[0, 125],[1, 132],[2, 123],[3, 132],[4, 132],[5, 121],[6, 122]];
 
   @override
   Widget build(BuildContext context)
@@ -78,7 +83,7 @@ class Page_Vitals_State extends State<Page_Vitals>
       );
     }
 
-    LineChartData linechartdata_widget(LineChartBarData chartdata){
+    LineChartData linechartdata_widget(List<LineChartBarData> chartdata){
       return LineChartData(
         gridData: FlGridData(
           show: false,
@@ -135,14 +140,12 @@ class Page_Vitals_State extends State<Page_Vitals>
         ),
         minX: 0,
         maxX: 6,
-        lineBarsData: [
-          chartdata
-        ],
+        lineBarsData: chartdata,
         backgroundColor: color_onsecondary,
       );
     }
 
-    Card linechart_card(LineChartBarData chartdata)
+    Card linechart_card(List<LineChartBarData> chartdata)
     {
       return
       Card(
@@ -181,52 +184,68 @@ class Page_Vitals_State extends State<Page_Vitals>
             Text("Heartrate", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
             linechart_card(
-              LineChartBarData(
-                spots: data_heartrates.map((data)
-                {
-                  return FlSpot(data[0], data[1]);
-                }).toList(),
-                isCurved: true,
-                color: color_primary,
-              )
+              [
+                LineChartBarData(
+                  spots: data_heartrates.map((data)
+                  {
+                    return FlSpot(data[0], data[1]);
+                  }).toList(),
+                  isCurved: true,
+                  color: color_primary,
+                )
+              ]
             ),
             Text("Blood Sugar", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
             linechart_card(
-              LineChartBarData(
-                spots: data_heartrates.map((data)
-                {
-                  return FlSpot(data[0], data[1]);
-                }).toList(),
-                isCurved: true,
-                color: color_primary,
-              )
+              [
+                LineChartBarData(
+                  spots: data_bloodsugar.map((data)
+                  {
+                    return FlSpot(data[0], data[1]);
+                  }).toList(),
+                  isCurved: true,
+                  color: color_primary,
+                )
+              ]
             ),
             SizedBox(height: 16),
             Text("Blood Oxygen", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
             linechart_card(
-              LineChartBarData(
-                spots: data_heartrates.map((data)
-                {
-                  return FlSpot(data[0], data[1]);
-                }).toList(),
-                isCurved: true,
-                color: color_primary,
-              )
+              [
+                LineChartBarData(
+                  spots: data_bloodpressure_systolic.map((data)
+                  {
+                    return FlSpot(data[0], data[1]);
+                  }).toList(),
+                  isCurved: true,
+                  color: color_primary,
+                ),
+                LineChartBarData(
+                  spots: data_bloodpressure_diastolic.map((data)
+                  {
+                    return FlSpot(data[0], data[1]);
+                  }).toList(),
+                  isCurved: true,
+                  color: color_primary,
+                ),
+              ]
             ),
             SizedBox(height: 16),
             Text("Body Temperature", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
             linechart_card(
-              LineChartBarData(
-                spots: data_heartrates.map((data)
-                {
-                  return FlSpot(data[0], data[1]);
-                }).toList(),
-                isCurved: true,
-                color: color_primary,
-              )
+              [
+                LineChartBarData(
+                  spots: data_bodytemperatures.map((data)
+                  {
+                    return FlSpot(data[0], data[1]);
+                  }).toList(),
+                  isCurved: true,
+                  color: color_primary,
+                )
+              ]
             ),
           ]
         )
