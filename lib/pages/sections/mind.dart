@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../components/recents_listtile_multiline.dart';
+import '../../components/recents_listtile_symptoms.dart';
+import '../../data/database.dart';
+
 class Page_Mind extends StatefulWidget
 {
   const Page_Mind({super.key});
@@ -38,7 +42,8 @@ class Page_Mind_State extends State<Page_Mind>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
+    // Widget variables
+    List<TimelineData> recents_data = get_mind_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +53,169 @@ class Page_Mind_State extends State<Page_Mind>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Mind")
+            Text("Overview", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Status", style: TextStyle(color: color_primary))
+                              ),
+                              Text("Slightly stressed")
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Severity", style: TextStyle(color: color_primary)),
+                              ),
+                              Text("Moderate"),
+                            ],
+                          ),
+                        ]
+                      )
+                    ),
+                    SizedBox(width: 32),
+                    CircleAvatar(
+                      radius: 32,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("72"),
+                          Text("Score", style: TextStyle(fontSize: 10)),
+                        ]
+                      ),
+                    ),
+                  ],
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Tracking", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card.outlined(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: recents_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: recents_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          spacing: 2,
+                          children: List.generate(recents_data.length, (index){
+                            final data = recents_data[index];
+                            int count = 0;
+
+                            if(data.item_subtitle.contains("unresolved"))
+                            {
+                              final item_subtitle = data.item_subtitle.replaceAll(", unresolved", "");
+
+                              final tile = RecentsListTileSymptoms(
+                                list_icon: Icon(data.item_icon),
+                                list_title: data.item_title,
+                                list_subtitle: item_subtitle,
+                                list_date: data.item_datetime,
+                              );
+
+                              if(count>0)
+                              {
+                                count++;
+                                return Column(
+                                  children: [
+                                    Divider(height: 1),
+                                    tile,
+                                  ]
+                                );
+                              }
+                              else
+                              {
+                                count++;
+                                return tile;
+                              }
+                            }
+                            else
+                            {
+                              return SizedBox(height: 0,);
+                            }
+                          }),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Recents", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card.outlined(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: recents_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: recents_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          spacing: 2,
+                          children: List.generate(recents_data.length, (index){
+                            final data = recents_data[index];
+                            final tile = RecentsListTileMultiline(
+                              list_icon: Icon(data.item_icon),
+                              list_title: data.item_title,
+                              list_subtitle: data.item_subtitle,
+                              list_date: data.item_datetime,
+                            );
+
+                            if(index>0)
+                            {
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
+                              );
+                            }
+                            else
+                            {
+                              return tile;
+                            }
+                          }),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
+            )
           ]
         )
       ),
