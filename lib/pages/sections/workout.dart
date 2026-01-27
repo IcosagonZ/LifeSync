@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
+//import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../../components/recents_listtile_multiline.dart';
+import '../../data/database.dart';
 
 class Page_Workout extends StatefulWidget
 {
@@ -38,7 +41,8 @@ class Page_Workout_State extends State<Page_Workout>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
+    // Widget variables
+    List<TimelineData> recents_data = get_workout_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +52,114 @@ class Page_Workout_State extends State<Page_Workout>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Workout")
+
+            Text("Overview", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Calories burned", style: TextStyle(color: color_primary))
+                              ),
+                              Text("700 cal")
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Muscle groups targeted", style: TextStyle(color: color_primary)),
+                              ),
+                              Text("3"),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Intensity rating", style: TextStyle(color: color_primary))
+                              ),
+                              Text("4/10")
+                            ],
+                          )
+                        ]
+                      )
+                    ),
+                    SizedBox(width: 32),
+                    CircleAvatar(
+                      radius: 32,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("82"),
+                          Text("Score", style: TextStyle(fontSize: 10)),
+                        ]
+                      ),
+                    ),
+                  ],
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Recents", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card.outlined(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: recents_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: recents_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          spacing: 2,
+                          children: List.generate(recents_data.length, (index){
+                            final data = recents_data[index];
+                            final tile = RecentsListTileMultiline(
+                              list_icon: Icon(data.item_icon),
+                              list_title: data.item_title,
+                              list_subtitle: data.item_subtitle,
+                              list_date: data.item_datetime,
+                            );
+
+                            if(index>0)
+                            {
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
+                              );
+                            }
+                            else
+                            {
+                              return tile;
+                            }
+                          }),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
+            )
           ]
         )
       ),

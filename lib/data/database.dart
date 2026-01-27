@@ -19,9 +19,11 @@ class TimelineData
 List<TimelineData> data_timeline_list = [
   TimelineData(iconmapper_geticon("Vitals", "Heartrate"), "Heartrate", "93 bpm", "Vitals", DateTime(2026, 5, 12, 12, 54)),
   TimelineData(iconmapper_geticon("Activity", "Running"), "Running", "2km, 49min, 432 cal", "Activity", DateTime(2026, 5, 11, 8, 54)),
+  TimelineData(iconmapper_geticon("Workout"), "Pushup", "34 reps", "Workout", DateTime(2026, 5, 11, 9, 54)),
   TimelineData(iconmapper_geticon("Body Measurements", "Weight"), "Weight", "60 kg", "Body Measurements", DateTime(2026, 5, 11, 8, 44)),
   TimelineData(iconmapper_geticon("Activity", "Cycling"), "Cycling", "2.5km, 26min, 332 cal", "Activity", DateTime(2026, 5, 11, 7, 4)),
   TimelineData(iconmapper_geticon("Body Measurements", "Weight"), "Weight", "62 kg", "Body Measurements", DateTime(2026, 5, 11, 7, 1)),
+  TimelineData(iconmapper_geticon("Workout"), "Pushup", "54 reps", "Workout", DateTime(2026, 5, 11, 7, 1)),
   TimelineData(iconmapper_geticon("Activity", "Football"), "Football", "95min, 724 cal", "Activity", DateTime(2026, 5, 10, 4, 54)),
   TimelineData(iconmapper_geticon("Vitals", "Blood Pressure"), "Blood Pressure", "113/74", "Vitals", DateTime(2026, 5, 10, 4, 34)),
   TimelineData(iconmapper_geticon("Body Measurements", "Height"), "Height", "170 cm", "Body Measurements", DateTime(2026, 5, 10, 4, 14)),
@@ -52,6 +54,22 @@ List<TimelineData> get_activity_data()
   return data_activity_list;
 }
 
+// Data display for workout page
+List<TimelineData> get_workout_data()
+{
+  print("Workout data requested");
+  List<TimelineData> data_activity_list = [];
+
+  for(var data in data_timeline_list)
+  {
+    if(data.item_datatype=="Workout")
+    {
+      data_activity_list.add(data);
+    }
+  }
+
+  return data_activity_list;
+}
 // Data display for body measurements page
 List<TimelineData> get_bodymeasurements_data()
 {
