@@ -101,7 +101,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
             SizedBox(height: 16),
             Card(
               child: Padding(
-                padding: EdgeInsets.all(2),
+                padding: EdgeInsets.all(8),
                 child: Stack(
                   children: [
                     Visibility(
@@ -117,6 +117,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                       visible: recents_data.isNotEmpty,
                       child: Center(
                         child: Column(
+                          spacing: 2,
                           children: recents_data.map((data)
                           {
                             return RecentsListTile(

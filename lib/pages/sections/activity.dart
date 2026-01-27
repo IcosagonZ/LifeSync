@@ -129,15 +129,29 @@ class Page_Activity_State extends State<Page_Activity>
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: recents_data.map((data)
-                          {
-                            return RecentsListTileMultiline(
+                          children: List.generate(recents_data.length, (index){
+                            final data = recents_data[index];
+                            final tile = RecentsListTileMultiline(
                               list_icon: Icon(data.item_icon),
                               list_title: data.item_title,
                               list_subtitle: data.item_subtitle,
                               list_date: data.item_datetime,
                             );
-                          }).toList(),
+
+                            if(index>0)
+                            {
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
+                              );
+                            }
+                            else
+                            {
+                              return tile;
+                            }
+                          }),
                         )
                       )
                     ),

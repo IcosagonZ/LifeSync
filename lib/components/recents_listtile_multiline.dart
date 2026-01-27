@@ -44,59 +44,57 @@ class RecentsListTileMultiline extends StatelessWidget
     final style_titlesmall = text_theme.titleSmall;
 
 
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(2),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 8,
+    return Padding(
+      padding: EdgeInsets.all(2),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 8,
+          ),
+          list_icon,
+          SizedBox(
+            width: 16,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
+                Text(list_subtitle)
+              ]
             ),
-            list_icon,
-            SizedBox(
-              width: 16,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
-                  Text(list_subtitle)
-                ]
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Text(DateFormat('dd/M/yy').format(list_date)),
+          SizedBox(
+            width: 8,
+          ),
+          Text(DateFormat('h:mm a').format(list_date)),
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                child: Text("View"),
+                onTap: (){
+                  print("View tapped");
+                },
               ),
-            ),
-            SizedBox(
-              width: 16,
-            ),
-            Text(DateFormat('dd/M/yy').format(list_date)),
-            SizedBox(
-              width: 8,
-            ),
-            Text(DateFormat('h:mm a').format(list_date)),
-            PopupMenuButton(
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  child: Text("View"),
-                  onTap: (){
-                    print("View tapped");
-                  },
-                ),
-                PopupMenuItem(
-                  child: Text("Edit"),
-                  onTap: (){
-                    print("Edit tapped");
-                  },
-                ),
-                PopupMenuItem(
-                  child: Text("Remove"),
-                  onTap: (){
-                    print("Remove tapped");
-                  },
-                ),
-              ],
-            )
-          ]
-        )
+              PopupMenuItem(
+                child: Text("Edit"),
+                onTap: (){
+                  print("Edit tapped");
+                },
+              ),
+              PopupMenuItem(
+                child: Text("Remove"),
+                onTap: (){
+                  print("Remove tapped");
+                },
+              ),
+            ],
+          )
+        ]
       )
     );
   }
