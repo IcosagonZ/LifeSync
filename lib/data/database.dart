@@ -35,17 +35,32 @@ List<TimelineData> get_timeline_data()
   return data_timeline_list;
 }
 
+// Data display for activity page
+List<TimelineData> get_activity_data()
+{
+  print("Activity data requested");
+  List<TimelineData> data_activity_list = [];
+
+  for(var data in data_timeline_list)
+  {
+    if(data.item_datatype=="Activity")
+    {
+      data_activity_list.add(data);
+    }
+  }
+
+  return data_activity_list;
+}
+
 // Data display for body measurements page
 List<TimelineData> get_bodymeasurements_data()
 {
   print("Body measurements data requested");
   List<TimelineData> data_bodymeasurements_list = [];
 
-  List columns = ["Weight", "Height"];
-
   for(var data in data_timeline_list)
   {
-    if(columns.contains(data.item_title))
+    if(data.item_datatype=="Body Measurements")
     {
       data_bodymeasurements_list.add(data);
     }
