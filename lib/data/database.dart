@@ -18,6 +18,7 @@ class TimelineData
 // Dummy data
 List<TimelineData> data_timeline_list = [
   TimelineData(iconmapper_geticon("Vitals", "Heartrate"), "Heartrate", "93 bpm", "Vitals", DateTime(2026, 5, 12, 12, 54)),
+  TimelineData(iconmapper_geticon("Symptoms"), "Headache", "Moderate, unresolved", "Symptoms", DateTime(2026, 5, 12, 12, 54)),
   TimelineData(iconmapper_geticon("Activity", "Running"), "Running", "2km, 49min, 432 cal", "Activity", DateTime(2026, 5, 11, 8, 54)),
   TimelineData(iconmapper_geticon("Workout"), "Pushup", "34 reps", "Workout", DateTime(2026, 5, 11, 7, 54)),
   TimelineData(iconmapper_geticon("Nutrition"), "Brownies", "2 pieces, 342 calories", "Nutrition", DateTime(2026, 5, 11, 7, 34)),
@@ -30,6 +31,7 @@ List<TimelineData> data_timeline_list = [
   TimelineData(iconmapper_geticon("Vitals", "Blood Pressure"), "Blood Pressure", "113/74", "Vitals", DateTime(2026, 5, 10, 4, 34)),
   TimelineData(iconmapper_geticon("Body Measurements", "Height"), "Height", "170 cm", "Body Measurements", DateTime(2026, 5, 10, 4, 14)),
   TimelineData(iconmapper_geticon("Sleep"), "Sleep", "7 hr 45 min", "Time", DateTime(2026, 7, 10, 4, 14)),
+  TimelineData(iconmapper_geticon("Symptoms"), "Fever", "Light, resolved", "Symptoms", DateTime(2026, 7, 10, 4, 14)),
 ];
 
 // Data display for main timeline
@@ -107,6 +109,22 @@ List<TimelineData> get_bodymeasurements_data()
   return data_bodymeasurements_list;
 }
 
+// Data display for symptoms page
+List<TimelineData> get_symptoms_data()
+{
+  print("Symptoms data requested");
+  List<TimelineData> data_symptoms_list = [];
+
+  for(var data in data_timeline_list)
+  {
+    if(data.item_datatype=="Symptoms")
+    {
+      data_symptoms_list.add(data);
+    }
+  }
+
+  return data_symptoms_list;
+}
 // Sleep data
 List<TimelineData> get_sleep_data()
 {
