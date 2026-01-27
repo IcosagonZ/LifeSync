@@ -19,9 +19,11 @@ class TimelineData
 List<TimelineData> data_timeline_list = [
   TimelineData(iconmapper_geticon("Vitals", "Heartrate"), "Heartrate", "93 bpm", "Vitals", DateTime(2026, 5, 12, 12, 54)),
   TimelineData(iconmapper_geticon("Activity", "Running"), "Running", "2km, 49min, 432 cal", "Activity", DateTime(2026, 5, 11, 8, 54)),
-  TimelineData(iconmapper_geticon("Workout"), "Pushup", "34 reps", "Workout", DateTime(2026, 5, 11, 9, 54)),
+  TimelineData(iconmapper_geticon("Workout"), "Pushup", "34 reps", "Workout", DateTime(2026, 5, 11, 7, 54)),
+  TimelineData(iconmapper_geticon("Nutrition"), "Brownies", "2 pieces, 342 calories", "Nutrition", DateTime(2026, 5, 11, 7, 34)),
   TimelineData(iconmapper_geticon("Body Measurements", "Weight"), "Weight", "60 kg", "Body Measurements", DateTime(2026, 5, 11, 8, 44)),
   TimelineData(iconmapper_geticon("Activity", "Cycling"), "Cycling", "2.5km, 26min, 332 cal", "Activity", DateTime(2026, 5, 11, 7, 4)),
+  TimelineData(iconmapper_geticon("Nutrition"), "Peppermint Tea", "200ml, 32 cal", "Nutrition", DateTime(2026, 5, 11, 7, 0)),
   TimelineData(iconmapper_geticon("Body Measurements", "Weight"), "Weight", "62 kg", "Body Measurements", DateTime(2026, 5, 11, 7, 1)),
   TimelineData(iconmapper_geticon("Workout"), "Pushup", "54 reps", "Workout", DateTime(2026, 5, 11, 7, 1)),
   TimelineData(iconmapper_geticon("Activity", "Football"), "Football", "95min, 724 cal", "Activity", DateTime(2026, 5, 10, 4, 54)),
@@ -58,18 +60,36 @@ List<TimelineData> get_activity_data()
 List<TimelineData> get_workout_data()
 {
   print("Workout data requested");
-  List<TimelineData> data_activity_list = [];
+  List<TimelineData> data_workout_list = [];
 
   for(var data in data_timeline_list)
   {
     if(data.item_datatype=="Workout")
     {
-      data_activity_list.add(data);
+      data_workout_list.add(data);
     }
   }
 
-  return data_activity_list;
+  return data_workout_list;
 }
+
+// Data display for nutrition page
+List<TimelineData> get_nutrition_data()
+{
+  print("Nutrition data requested");
+  List<TimelineData> data_nutrition_list = [];
+
+  for(var data in data_timeline_list)
+  {
+    if(data.item_datatype=="Nutrition")
+    {
+      data_nutrition_list.add(data);
+    }
+  }
+
+  return data_nutrition_list;
+}
+
 // Data display for body measurements page
 List<TimelineData> get_bodymeasurements_data()
 {
