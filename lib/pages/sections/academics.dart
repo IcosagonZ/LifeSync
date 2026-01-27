@@ -48,7 +48,107 @@ class Page_Academics_State extends State<Page_Academics>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Academics")
+            Text("Overview", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Performance", style: TextStyle(color: color_primary))
+                              ),
+                              Text("Suboptimal")
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Assignments", style: TextStyle(color: color_primary)),
+                              ),
+                              Text("2/3"),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Absent", style: TextStyle(color: color_primary)),
+                              ),
+                              Text("3 days"),
+                            ],
+                          ),
+                        ]
+                      )
+                    ),
+                    SizedBox(width: 32),
+                    CircleAvatar(
+                      radius: 32,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("25"),
+                          Text("Score", style: TextStyle(fontSize: 10)),
+                        ]
+                      ),
+                    ),
+                  ],
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Exams", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Text("No data available")
+                ),
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Assignments", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Text("No data available")
+                ),
+              )
+            ),
+
+            SizedBox(height: 16),
+            Text("Marks", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Text("No data available")
+                ),
+              )
+            ),
+
+            SizedBox(height: 16),
+            Text("Absent", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(
+                  child: Text("No data available")
+                ),
+              )
+            )
           ]
         )
       ),
