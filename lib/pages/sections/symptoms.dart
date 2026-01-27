@@ -123,6 +123,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                           spacing: 2,
                           children: List.generate(recents_data.length, (index){
                             final data = recents_data[index];
+                            int count = 0;
 
                             if(data.item_subtitle.contains("unresolved"))
                             {
@@ -135,8 +136,9 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                                 list_date: data.item_datetime,
                               );
 
-                              if(index>0)
+                              if(count>0)
                               {
+                                count++;
                                 return Column(
                                   children: [
                                     Divider(height: 1),
@@ -146,6 +148,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                               }
                               else
                               {
+                                count++;
                                 return tile;
                               }
                             }
