@@ -50,9 +50,24 @@ final Map<String, IconData> activity_mapping = {
 
 IconData iconmapper_geticon(String section, [String item = "None"])
 {
-  if(section=="Academics")
+  if(section=="Academics Exam")
   {
-    return Symbols.grading;
+    return Symbols.quiz;
+  }
+
+  if(section=="Academics Assignment")
+  {
+    return Symbols.assignment;
+  }
+
+  if(section=="Academics Mark")
+  {
+    return Symbols.leaderboard;
+  }
+
+  if(section=="Academics Absent")
+  {
+    return Symbols.location_away;
   }
 
   if(section=="Activity")

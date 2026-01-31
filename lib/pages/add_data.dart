@@ -13,12 +13,14 @@ class Page_AddData extends StatefulWidget
 
 class Page_AddData_State extends State<Page_AddData>
 {
-  // Datatyle variables
+  // Datatype variables
   final List<String> datatype_dropdown_options = [
-    "Academics",
+    "Academics", // Contains 4 subcategories
     "Activity",
     "Body Measurements",
+    "Mind",
     "Nutrition",
+    "Symptoms",
     "Time",
     "Vitals",
     "Workout",
@@ -37,8 +39,34 @@ class Page_AddData_State extends State<Page_AddData>
   final TextEditingController general_notes_controller = TextEditingController();
 
   // Academic controllers
+  final List<String> academics_dropdown_options = [
+    "Absent",
+    "Assignment",
+    "Exam",
+    "Marks",
+  ];
+  String? academics_dropdown_chosen;
+
+  // Common to assignment, absent, exam and marks (type not required for absent)
   final TextEditingController academics_subject_controller = TextEditingController();
-  final TextEditingController academics_marks_type_controller = TextEditingController();
+  final TextEditingController academics_type_controller = TextEditingController();
+
+  // Absent
+  final TextEditingController academics_absent_reason_controller = TextEditingController();
+  DateTime? academics_absent_date;
+
+  // Assignment
+  final TextEditingController academics_assignment_topic_controller = TextEditingController();
+  DateTime? academics_assignment_due_date;
+  DateTime? academics_assignment_submission_date;
+  bool? academics_assignment_submitted;
+
+  // Exam
+  final TextEditingController academics_exam_duration_hours_controller = TextEditingController();
+  final TextEditingController academics_exam_duration_mins_controller = TextEditingController();
+  DateTime? academics_exam_date;
+
+  // Marks
   final TextEditingController academics_marks_controller = TextEditingController();
   final TextEditingController academics_marks_total_controller = TextEditingController();
 
@@ -88,12 +116,14 @@ class Page_AddData_State extends State<Page_AddData>
   final TextEditingController bodymeasurement_height_controller = TextEditingController();
   final TextEditingController bodymeasurement_weight_controller = TextEditingController();
 
-
   final List<String> bodymeasurement_dropdown_options = [
     "Height",
     "Weight",
   ];
   String? bodymeasurement_dropdown_chosen;
+
+  // Mind widgets
+  // TBA
 
   // Nutrition widgets
   final TextEditingController nutrition_name_controller = TextEditingController();
@@ -119,6 +149,9 @@ class Page_AddData_State extends State<Page_AddData>
     "Brunch",
   ];
   String? nutrition_type_dropdown_chosen;
+
+  // Symptoms
+  // TBA
 
   // Time widgets
   final TextEditingController time_duration_hours_controller = TextEditingController();
@@ -200,24 +233,22 @@ class Page_AddData_State extends State<Page_AddData>
     }
   }
 
-  Future<void> data_date_select(BuildContext context) async
+  Future<DateTime?> data_date_select(BuildContext context) async
   {
     final DateTime? picked_date = await showDatePicker
     (
       context: context,
-     initialDate: data_date_chosen ?? DateTime.now(),
-     firstDate: DateTime(2010),
-     lastDate: DateTime.now(),
+      initialDate: data_date_chosen ?? DateTime.now(),
+      firstDate: DateTime(2010),
+      lastDate: DateTime.now(),
     );
 
     if(picked_date != null && picked_date != data_date_chosen)
     {
-      setState(()
-      {
-        data_date_chosen = picked_date;
-      }
-      );
+      return picked_date;
     }
+
+    return null;
   }
 
   @override
@@ -305,8 +336,15 @@ class Page_AddData_State extends State<Page_AddData>
                   ? "Select date"
                   : "${data_date_chosen!.toLocal()}".split(" ")[0],
                   ),
-                  onPressed: (){
-                    data_date_select(context);
+                  onPressed: () async{
+                    final date_chosen = await data_date_select(context);
+                    setState(()
+                    {
+                      if(date_chosen!=null)
+                      {
+                        data_date_chosen = date_chosen;
+                      }
+                    });
                   },
                 ),
               ],
@@ -325,89 +363,463 @@ class Page_AddData_State extends State<Page_AddData>
                   Row(
                     children: [
                       Expanded(
-                        child: Text("Subject")
+                        child: Text("Subtype")
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(
                           minWidth: 100,
                         ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: academics_subject_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
-                            ),
-                          ),
+                        child: DropdownButton<String>(
+                          hint: Text("Select..."),
+                          value: academics_dropdown_chosen,
+                          onChanged: (String? newValue)
+                          {
+                            setState(()
+                            {
+                              academics_dropdown_chosen = newValue;
+                              print(academics_dropdown_chosen);
+                            });
+                          },
+                          items: academics_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                          {
+                            return DropdownMenuItem<String>(
+                              value: dropdown_item,
+                              child: Text(dropdown_item)
+                            );
+                          }
+                          ).toList(),
                         ),
                       ),
                     ]
                   ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text("Mark type")
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 100,
-                        ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: academics_marks_type_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
+
+                  // Absent
+                  Visibility(
+                    visible: academics_dropdown_chosen=="Absent",
+                    child: Column(
+                      children: [
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Reason")
                             ),
-                          ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_absent_reason_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
                         ),
-                      ),
-                    ]
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Absent date")
+                            ),
+
+                            ActionChip(
+                              label: Text(academics_absent_date == null
+                              ? "Select date"
+                              : "${academics_absent_date!.toLocal()}".split(" ")[0],
+                              ),
+                              onPressed: () async{
+                                final date_chosen = await data_date_select(context);
+                                setState(()
+                                {
+                                  if(date_chosen!=null)
+                                  {
+                                    academics_absent_date = date_chosen;
+                                  }
+                                });
+                              },
+                            ),
+                          ]
+                        ),
+                      ]
+                    )
                   ),
-                  SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text("Marks received")
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 20,
-                        ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: academics_marks_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
+
+                  // Assignment
+                  Visibility(
+                    visible: academics_dropdown_chosen=="Assignment",
+                    child: Column(
+                      children: [
+                        SizedBox(height: 16),
+                        Divider(),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Subject")
                             ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Text("out of"),
-                      SizedBox(width: 16),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 20,
-                        ),
-                        child: IntrinsicWidth(
-                          child: TextField(
-                            controller: academics_marks_total_controller,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(),
-                              isDense: true,
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_subject_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ]
                         ),
-                      ),
-                    ]
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Assignment type")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_type_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Assignment topic")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_assignment_topic_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Divider(),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Due date")
+                            ),
+
+                            ActionChip(
+                              label: Text(academics_assignment_due_date == null
+                              ? "Select date"
+                              : "${academics_assignment_due_date!.toLocal()}".split(" ")[0],
+                              ),
+                              onPressed: () async{
+                                final date_chosen = await data_date_select(context);
+                                setState(()
+                                {
+                                  if(date_chosen!=null)
+                                  {
+                                    academics_assignment_due_date = date_chosen;
+                                  }
+                                });
+                              },
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Submission date")
+                            ),
+                            ActionChip(
+                              label: Text(academics_assignment_submission_date == null
+                              ? "Select date"
+                              : "${academics_assignment_submission_date!.toLocal()}".split(" ")[0],
+                              ),
+                              onPressed: () async{
+                                final date_chosen = await data_date_select(context);
+                                setState(()
+                                {
+                                  if(date_chosen!=null)
+                                  {
+                                    academics_assignment_submission_date = date_chosen;
+                                  }
+                                });
+                              },
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Submitted")
+                            ),
+                            Checkbox(
+                              tristate: true,
+                              value: academics_assignment_submitted,
+                              onChanged: (bool? value){
+                                setState(() {
+                                  academics_assignment_submitted = value;
+                                });
+                              },
+                            )
+                          ]
+                        ),
+                      ]
+                    )
                   ),
+
+                  // Exam
+                  Visibility(
+                    visible: academics_dropdown_chosen=="Exam",
+                    child: Column(
+                      children: [
+                        SizedBox(height: 16),
+                        Divider(),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Subject")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_subject_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Exam type")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_type_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Exam date")
+                            ),
+                            ActionChip(
+                              label: Text(academics_exam_date == null
+                              ? "Select date"
+                              : "${academics_exam_date!.toLocal()}".split(" ")[0],
+                              ),
+                              onPressed: () async{
+                                final date_chosen = await data_date_select(context);
+                                setState(()
+                                {
+                                  if(date_chosen!=null)
+                                  {
+                                    academics_exam_date = date_chosen;
+                                  }
+                                });
+                              },
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Exam duration")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 20,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_exam_duration_hours_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Text("hrs"),
+                            SizedBox(width: 16),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 20,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_exam_duration_mins_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Text("mins"),
+                          ]
+                        ),
+                      ]
+                    )
+                  ),
+
+                  // Marks
+                  Visibility(
+                    visible: academics_dropdown_chosen=="Marks",
+                    child: Column(
+                      children: [
+                        SizedBox(height: 16),
+                        Divider(),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Subject")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_subject_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Mark type")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 100,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_type_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                        SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("Marks received")
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 20,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_marks_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 16),
+                            Text("out of"),
+                            SizedBox(width: 16),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: 20,
+                              ),
+                              child: IntrinsicWidth(
+                                child: TextField(
+                                  controller: academics_marks_total_controller,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]
+                        ),
+                      ]
+                    )
+                  ),
+
                   SizedBox(height: 16),
                   Divider(),
                 ]
