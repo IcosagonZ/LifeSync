@@ -1053,14 +1053,14 @@ class Page_AddData_State extends State<Page_AddData>
                   ),
                   SizedBox(height: 16),
                   Visibility(
-                    visible: vital_name_dropdown_chosen=="Blood oxygen",
+                    visible: vital_name_dropdown_chosen=="Blood Oxygen",
                     child: Column(
                       children: [
                         SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Blood oxygen percentage")
+                              child: Text("Blood Oxygen Percentage")
                             ),
                             ConstrainedBox(
                               constraints: BoxConstraints(
@@ -1085,14 +1085,14 @@ class Page_AddData_State extends State<Page_AddData>
                     )
                   ),
                   Visibility(
-                    visible: vital_name_dropdown_chosen=="Body temperature",
+                    visible: vital_name_dropdown_chosen=="Body Temperature",
                     child: Column(
                       children: [
                         SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Body temperature")
+                              child: Text("Body Temperature")
                             ),
                             ConstrainedBox(
                               constraints: BoxConstraints(
@@ -1117,14 +1117,14 @@ class Page_AddData_State extends State<Page_AddData>
                     )
                   ),
                   Visibility(
-                    visible: vital_name_dropdown_chosen=="Blood pressure",
+                    visible: vital_name_dropdown_chosen=="Blood Pressure",
                     child: Column(
                       children: [
                         SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Blood pressure")
+                              child: Text("Blood Pressure")
                             ),
                             ConstrainedBox(
                               constraints: BoxConstraints(
@@ -1165,14 +1165,14 @@ class Page_AddData_State extends State<Page_AddData>
                     )
                   ),
                   Visibility(
-                    visible: vital_name_dropdown_chosen=="Blood sugar",
+                    visible: vital_name_dropdown_chosen=="Blood Sugar",
                     child: Column(
                       children: [
                         SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Blood sugar")
+                              child: Text("Blood Sugar")
                             ),
                             ConstrainedBox(
                               constraints: BoxConstraints(
