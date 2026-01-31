@@ -20,7 +20,7 @@ class Page_AddData_State extends State<Page_AddData>
     "Body Measurements",
     "Mind",
     "Nutrition",
-    "Symptoms",
+    "Symptom",
     "Time",
     "Vitals",
     "Workout",
@@ -123,7 +123,16 @@ class Page_AddData_State extends State<Page_AddData>
   String? bodymeasurement_dropdown_chosen;
 
   // Mind widgets
-  // TBA
+  final TextEditingController mind_mood_name_controller = TextEditingController();
+  bool? mind_mood_resolved;
+  DateTime? mind_mood_end_date;
+
+  final List<String> mind_mood_intensity_dropdown_options = [
+    "Light",
+    "Moderate",
+    "Severe",
+  ];
+  String? mind_mood_intensity_dropdown_chosen;
 
   // Nutrition widgets
   final TextEditingController nutrition_name_controller = TextEditingController();
@@ -151,7 +160,16 @@ class Page_AddData_State extends State<Page_AddData>
   String? nutrition_type_dropdown_chosen;
 
   // Symptoms
-  // TBA
+  final TextEditingController symptoms_name_controller = TextEditingController();
+  bool? symptoms_resolved;
+  DateTime? symptoms_end_date;
+
+  final List<String> symptoms_intensity_dropdown_options = [
+    "Light",
+    "Moderate",
+    "Severe",
+  ];
+  String? symptoms_intensity_dropdown_chosen;
 
   // Time widgets
   final TextEditingController time_duration_hours_controller = TextEditingController();
@@ -425,7 +443,7 @@ class Page_AddData_State extends State<Page_AddData>
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Absent date")
+                              child: Text("Absent Date")
                             ),
 
                             ActionChip(
@@ -484,7 +502,7 @@ class Page_AddData_State extends State<Page_AddData>
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Assignment type")
+                              child: Text("Assignment Type")
                             ),
                             ConstrainedBox(
                               constraints: BoxConstraints(
@@ -507,7 +525,7 @@ class Page_AddData_State extends State<Page_AddData>
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Assignment topic")
+                              child: Text("Assignment Topic")
                             ),
                             ConstrainedBox(
                               constraints: BoxConstraints(
@@ -532,7 +550,7 @@ class Page_AddData_State extends State<Page_AddData>
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Due date")
+                              child: Text("Due Date")
                             ),
 
                             ActionChip(
@@ -557,7 +575,7 @@ class Page_AddData_State extends State<Page_AddData>
                         Row(
                           children: [
                             Expanded(
-                              child: Text("Submission date")
+                              child: Text("Submission Date")
                             ),
                             ActionChip(
                               label: Text(academics_assignment_submission_date == null
@@ -1089,6 +1107,116 @@ class Page_AddData_State extends State<Page_AddData>
               )
             ),
 
+            // Mind data entry
+            Visibility(
+              visible: datatype_dropdown_chosen=="Mind",
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Mood")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: mind_mood_name_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Intensity")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: DropdownButton<String>(
+                          hint: Text("Select..."),
+                          value: mind_mood_intensity_dropdown_chosen,
+                          onChanged: (String? newValue)
+                          {
+                            setState(()
+                            {
+                              mind_mood_intensity_dropdown_chosen = newValue;
+                              print(mind_mood_intensity_dropdown_chosen);
+                            });
+                          },
+                          items: mind_mood_intensity_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                          {
+                            return DropdownMenuItem<String>(
+                              value: dropdown_item,
+                              child: Text(dropdown_item)
+                            );
+                          }
+                          ).toList(),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Resolved")
+                      ),
+                      Checkbox(
+                        tristate: true,
+                        value: mind_mood_resolved,
+                        onChanged: (bool? value){
+                          setState(() {
+                            mind_mood_resolved = value;
+                          });
+                        },
+                      )
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("End date")
+                      ),
+
+                      ActionChip(
+                        label: Text(mind_mood_end_date == null
+                        ? "Select date"
+                        : "${mind_mood_end_date!.toLocal()}".split(" ")[0],
+                        ),
+                        onPressed: () async{
+                          final date_chosen = await data_date_select(context);
+                          setState(()
+                          {
+                            if(date_chosen!=null)
+                            {
+                              mind_mood_end_date = date_chosen;
+                            }
+                          });
+                        },
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                ]
+              )
+            ),
+
             // Nutrition data entry
             Visibility(
               visible: datatype_dropdown_chosen=="Nutrition",
@@ -1332,6 +1460,116 @@ class Page_AddData_State extends State<Page_AddData>
                       ),
                       SizedBox(width: 16),
                       Text("g"),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                ]
+              )
+            ),
+
+            // Symptom data entry
+            Visibility(
+              visible: datatype_dropdown_chosen=="Symptom",
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Symptom")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: IntrinsicWidth(
+                          child: TextField(
+                            controller: symptoms_name_controller,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Intensity")
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 100,
+                        ),
+                        child: DropdownButton<String>(
+                          hint: Text("Select..."),
+                          value: symptoms_intensity_dropdown_chosen,
+                          onChanged: (String? newValue)
+                          {
+                            setState(()
+                            {
+                              symptoms_intensity_dropdown_chosen = newValue;
+                              print(symptoms_intensity_dropdown_chosen);
+                            });
+                          },
+                          items: symptoms_intensity_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
+                          {
+                            return DropdownMenuItem<String>(
+                              value: dropdown_item,
+                              child: Text(dropdown_item)
+                            );
+                          }
+                          ).toList(),
+                        ),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Divider(),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Resolved")
+                      ),
+                      Checkbox(
+                        tristate: true,
+                        value: symptoms_resolved,
+                        onChanged: (bool? value){
+                          setState(() {
+                            symptoms_resolved = value;
+                          });
+                        },
+                      )
+                    ]
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("End date")
+                      ),
+
+                      ActionChip(
+                        label: Text(symptoms_end_date == null
+                        ? "Select date"
+                        : "${symptoms_end_date!.toLocal()}".split(" ")[0],
+                        ),
+                        onPressed: () async{
+                          final date_chosen = await data_date_select(context);
+                          setState(()
+                          {
+                            if(date_chosen!=null)
+                            {
+                              symptoms_end_date = date_chosen;
+                            }
+                          });
+                        },
+                      ),
                     ]
                   ),
                   SizedBox(height: 16),
