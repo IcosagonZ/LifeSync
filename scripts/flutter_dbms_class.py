@@ -1,16 +1,4 @@
 '''
-// Body measurements
-
-class BodyMeasurementData{
-  String measurement_type;
-  double value;
-  String unit;
-  DateTime entry_date;
-  String entry_note;
-
-  BodyMeasurementData(this.measurement_type, this.value, this.unit, this.entry_date, this.entry_note);
-}
-
 // Data display for body measurements page
 Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
 {
@@ -40,29 +28,7 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
   return data_bodymeasurements_list;
 }
 
-Future<int> database_insert_bodymeasurements(
-  String measurement_type,
-  String value,
-  String unit,
-  DateTime entry_date,
-  String entry_note
-) async
-{
-  Database database_db = await database_open();
 
-  int row_index = await database_db.insert(
-    "body_measurement",
-    {
-      'type':measurement_type,
-      'value':value,
-      'unit':unit,
-      'entry_date':entry_date.toIso8601String(),
-      'entry_note':entry_note,
-    }
-  );
-
-  return row_index;
-}
 '''
 
 f = open("table_main.csv")
