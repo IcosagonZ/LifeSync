@@ -1,36 +1,3 @@
-'''
-// Data display for body measurements page
-Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
-{
-  print("Body measurements data requested");
-
-  Database database_db = await database_open();
-
-  final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query('body_measurement', columns: ['type', 'value', 'unit', 'entry_date', 'entry_note']);
-
-  List<BodyMeasurementData> data_bodymeasurements_list = [];
-
-  for(var data in data_bodymeasurements_map)
-  {
-    data_bodymeasurements_list.add(
-      BodyMeasurementData(
-        data["type"],
-        data["value"] as double,
-        data["unit"],
-        DateTime.parse(data["entry_date"]),
-        data["entry_note"]
-      )
-    );
-  }
-
-  print("Found ${data_bodymeasurements_list.length} entries");
-
-  return data_bodymeasurements_list;
-}
-
-
-'''
-
 f = open("table_main.csv")
 
 rows = f.readlines()
@@ -222,7 +189,7 @@ class TimeData{
   TimeData(this.event, this.duration, this.entry_date, this.entry_note);
 }
 
-class Vitals{
+class VitalsData{
   String type;
   String value;
   String unit;
