@@ -21,6 +21,7 @@ Front end will be made using Flutter for mobile friendly cross platform data ent
 
 ## Tech stack used
 - Flutter + Dart
+- SQLite (sqlite3)
 
 ### Libraries used
 - Material Symbols Icons

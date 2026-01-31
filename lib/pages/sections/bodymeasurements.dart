@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../components/recents_listtile.dart';
 import '../../data/database.dart';
+import '../../data/iconmapper.dart';
+
+import '../../components/recents_listtile.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
 {
@@ -13,6 +15,26 @@ class Page_BodyMeasurements extends StatefulWidget
 
 class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
 {
+  // Widget variables
+  List<BodyMeasurementData> bodymeasurements_data = [];
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async{
+    List<BodyMeasurementData> bodymeasurements_data_result = await database_get_bodymeasurement();
+
+    setState(()
+    {
+      bodymeasurements_data = bodymeasurements_data_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -38,9 +60,6 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
-
-    // Widget variables
-    List<TimelineData> recents_data = get_bodymeasurements_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +124,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: bodymeasurements_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -114,17 +133,17 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: bodymeasurements_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(bodymeasurements_data.length, (index){
+                            final data = bodymeasurements_data[index];
                             final tile = RecentsListTile(
-                              list_icon: Icon(data.item_icon),
-                              list_title: data.item_title,
-                              list_subtitle: data.item_subtitle,
-                              list_date: data.item_datetime,
+                              list_icon: Icon(iconmapper_geticon("Body Measurements", data.measurement_type)),
+                              list_title: data.measurement_type,
+                              list_subtitle: "${data.value} ${data.unit}",
+                              list_date: data.entry_date,
                             );
 
                             if(index>0)

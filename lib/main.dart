@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'pages/overview.dart';
 
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 void main()
 {
+  // Database setup
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+
   runApp(const MainApp());
 }
 

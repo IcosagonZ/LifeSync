@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../data/database.dart';
+
 class Page_AddData extends StatefulWidget
 {
   const Page_AddData({super.key});
@@ -53,18 +55,18 @@ class Page_AddData_State extends State<Page_AddData>
 
   // Absent
   final TextEditingController academics_absent_reason_controller = TextEditingController();
-  DateTime? academics_absent_date;
+  DateTime academics_absent_date = DateTime.now();
 
   // Assignment
   final TextEditingController academics_assignment_topic_controller = TextEditingController();
-  DateTime? academics_assignment_due_date;
-  DateTime? academics_assignment_submission_date;
+  DateTime academics_assignment_due_date  = DateTime.now();
+  DateTime academics_assignment_submission_date  = DateTime.now();
   bool? academics_assignment_submitted;
 
   // Exam
   final TextEditingController academics_exam_duration_hours_controller = TextEditingController();
   final TextEditingController academics_exam_duration_mins_controller = TextEditingController();
-  DateTime? academics_exam_date;
+  DateTime academics_exam_date  = DateTime.now();
 
   // Marks
   final TextEditingController academics_marks_controller = TextEditingController();
@@ -223,6 +225,23 @@ class Page_AddData_State extends State<Page_AddData>
 
     data_time_chosen = TimeOfDay.now();
     data_date_chosen = DateTime.now();
+  }
+
+  // Move to seperate file
+  SnackBar notify_snackbar(String message)
+  {
+    return SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(
+          color:Color.fromRGBO(250, 250, 250, 1)
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      showCloseIcon: true,
+      backgroundColor: Color.fromRGBO(33, 33, 33, 1),
+      closeIconColor: Color.fromRGBO(250, 250, 250, 1),
+    );
   }
 
   Future<void> data_time_select(BuildContext context) async
@@ -2106,8 +2125,223 @@ class Page_AddData_State extends State<Page_AddData>
           padding: EdgeInsets.all(16),
           child: ElevatedButton(
             child: Text("Add data"),
-            onPressed: (){
+            onPressed: ()
+            {
               print("Add data pressed");
+
+              // Set date time
+              data_datetime = DateTime(
+                data_date_chosen!.year,
+                data_date_chosen!.month,
+                data_date_chosen!.day,
+                data_time_chosen!.hour,
+                data_time_chosen!.minute,
+              );
+
+              final String entry_date = data_datetime.toIso8601String();
+
+              if(datatype_dropdown_chosen=="Academics")
+              {
+                if(academics_dropdown_chosen=="Absent")
+                {
+                  if(academics_absent_reason_controller.text.isEmpty)
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+                  }
+                  else
+                  {
+                    database_insert_academics_absent(
+                      academics_absent_reason_controller.text,
+                      academics_absent_date.toIso8601String(),
+                      entry_date,
+                      general_notes_controller.text
+                    ).then((int row_index)
+                    {
+                      if(row_index==0)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                      }
+                      else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                      }
+                    });
+                  }
+                }
+                else if(academics_dropdown_chosen=="Assignment")
+                {
+                  if(
+                    academics_subject_controller.text.isEmpty ||
+                    academics_type_controller.text.isEmpty ||
+                    academics_assignment_topic_controller.text.isEmpty
+                  )
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+                  }
+                  else
+                  {
+                    int academics_assignment_submitted_int = 0;
+                    if(academics_assignment_submitted==true)
+                    {
+                      academics_assignment_submitted_int = 1;
+                    }
+                    else
+                    {
+                      academics_assignment_submitted_int = 0;
+                    }
+
+                    database_insert_academics_assignment(
+                      academics_subject_controller.text,
+                      academics_type_controller.text,
+                      academics_assignment_topic_controller.text,
+                      academics_assignment_submitted_int,
+                      academics_assignment_due_date.toIso8601String(),
+                      academics_assignment_submission_date.toIso8601String(),
+                      entry_date,
+                      general_notes_controller.text
+                    ).then((int row_index)
+                    {
+                      if(row_index==0)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                      }
+                      else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                      }
+                    });
+                  }
+
+
+                }
+                else if(academics_dropdown_chosen=="Exam")
+                {
+                  if(
+                    academics_exam_duration_hours_controller.text.isEmpty ||
+                    academics_exam_duration_mins_controller.text.isEmpty ||
+                    academics_subject_controller.text.isEmpty ||
+                    academics_type_controller.text.isEmpty
+                  )
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+                  }
+                  else
+                  {
+                    int duration = int.parse(academics_exam_duration_hours_controller.text) * 60 + int.parse(academics_exam_duration_mins_controller.text);
+
+                    database_insert_academics_exam(
+                      academics_subject_controller.text,
+                      academics_type_controller.text,
+                      academics_exam_date.toIso8601String(),
+                      duration,
+                      entry_date,
+                      general_notes_controller.text
+                    ).then((int row_index)
+                    {
+                      if(row_index==0)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                      }
+                      else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                      }
+                    });
+                  }
+                }
+                else if(academics_dropdown_chosen=="Marks")
+                {
+                  if(
+                    academics_subject_controller.text.isEmpty ||
+                    academics_type_controller.text.isEmpty ||
+                    academics_marks_controller.text.isEmpty ||
+                    academics_marks_total_controller.text.isEmpty
+                  )
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+                  }
+                  else
+                  {
+                    database_insert_academics_mark(
+                      academics_subject_controller.text,
+                      academics_type_controller.text,
+                      double.parse(academics_marks_controller.text),
+                      double.parse(academics_marks_total_controller.text),
+                      entry_date,
+                      general_notes_controller.text
+                    ).then((int row_index)
+                    {
+                      if(row_index==0)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                      }
+                      else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                      }
+                    });
+                  }
+                }
+              }
+
+              if(datatype_dropdown_chosen=="Body Measurements")
+              {
+                if(bodymeasurement_dropdown_chosen=="Height")
+                {
+                  if(bodymeasurement_height_controller.text.isEmpty)
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Height is empty"));
+                  }
+                  else
+                  {
+                    database_insert_bodymeasurements(
+                      "Height",
+                      bodymeasurement_height_controller.text,
+                      "cm",
+                      entry_date,
+                      general_notes_controller.text
+                    ).then((int row_index)
+                    {
+                      if(row_index==0)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                      }
+                      else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                      }
+                    });
+                  }
+                }
+
+                if(bodymeasurement_dropdown_chosen=="Weight")
+                {
+                  if(bodymeasurement_weight_controller.text.isEmpty)
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Weight is empty"));
+                  }
+                  else
+                  {
+                    database_insert_bodymeasurements(
+                      "Weight",
+                      bodymeasurement_weight_controller.text,
+                      "kg",
+                      entry_date,
+                      general_notes_controller.text
+                    ).then((int row_index)
+                    {
+                      if(row_index==0)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                      }
+                      else
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                      }
+                    });
+                  }
+                }
+              }
             },
           )
         )
