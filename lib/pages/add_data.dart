@@ -1213,6 +1213,7 @@ class Page_AddData_State extends State<Page_AddData>
                         onChanged: (bool? value){
                           setState(() {
                             mind_mood_resolved = value;
+                            print(value);
                           });
                         },
                       )
@@ -2300,6 +2301,36 @@ class Page_AddData_State extends State<Page_AddData>
                       }
                     });
                   }
+                }
+              }
+
+              if(datatype_dropdown_chosen=="Mind")
+              {
+                if(mind_mood_name_controller.text.isEmpty)
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+                }
+                else
+                {
+                  print(mind_mood_resolved);
+                  database_insert_mind_mood(
+                    mind_mood_name_controller.text,
+                    mind_mood_intensity_dropdown_chosen ?? "",
+                    mind_mood_resolved ?? false,
+                    mind_mood_end_date?.toIso8601String() ?? "",
+                    entry_date,
+                    general_notes_controller.text
+                  ).then((int row_index)
+                  {
+                    if(row_index==0)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    }
+                  });
                 }
               }
 

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../data/database.dart';
+
 import '../../components/recents_listtile_multiline.dart';
 import '../../components/recents_listtile_symptoms.dart';
-import '../../data/database.dart';
+
 
 class Page_Mind extends StatefulWidget
 {
@@ -16,6 +18,26 @@ class Page_Mind extends StatefulWidget
 
 class Page_Mind_State extends State<Page_Mind>
 {
+  // Widget variables
+  List<MindMoodData> mind_mood_data = [];
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async{
+    List<MindMoodData> mind_mood_data_result = await database_get_mind_mood();
+
+    setState(()
+    {
+      mind_mood_data = mind_mood_data_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -108,7 +130,7 @@ class Page_Mind_State extends State<Page_Mind>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: mind_mood_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -117,23 +139,22 @@ class Page_Mind_State extends State<Page_Mind>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: mind_mood_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(mind_mood_data.length, (index){
+                            final data = mind_mood_data[index];
                             int count = 0;
 
-                            if(data.item_subtitle.contains("unresolved"))
+                            if(data.resolved==false)
                             {
-                              final item_subtitle = data.item_subtitle.replaceAll(", unresolved", "");
-
+                              print(data.resolved);
                               final tile = RecentsListTileSymptoms(
-                                list_icon: Icon(data.item_icon),
-                                list_title: data.item_title,
-                                list_subtitle: item_subtitle,
-                                list_date: data.item_datetime,
+                                list_icon: Icon(Symbols.cognition_2),
+                                list_title: data.name,
+                                list_subtitle: data.intensity,
+                                list_date: data.entry_date,
                               );
 
                               if(count>0)
@@ -173,7 +194,7 @@ class Page_Mind_State extends State<Page_Mind>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: mind_mood_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -182,17 +203,17 @@ class Page_Mind_State extends State<Page_Mind>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: mind_mood_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(mind_mood_data.length, (index){
+                            final data = mind_mood_data[index];
                             final tile = RecentsListTileMultiline(
-                              list_icon: Icon(data.item_icon),
-                              list_title: data.item_title,
-                              list_subtitle: data.item_subtitle,
-                              list_date: data.item_datetime,
+                              list_icon: Icon(Symbols.cognition_2),
+                              list_title: data.name,
+                              list_subtitle: data.intensity,
+                              list_date: data.entry_date,
                             );
 
                             if(index>0)

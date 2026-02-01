@@ -469,6 +469,93 @@ Future<int> database_insert_bodymeasurements(
   return row_index;
 }
 
+// Mind
+// Mood
+class MindMoodData
+{
+  String name;
+  String intensity;
+  bool resolved;
+  DateTime? end_date;
+  DateTime entry_date;
+  String entry_note;
+
+  MindMoodData(this.name, this.intensity, this.resolved, this.end_date, this.entry_date, this.entry_note);
+}
+
+Future<List<MindMoodData>> database_get_mind_mood() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query('mind_mood', columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
+
+  List<MindMoodData> data_mind_mood_list = [];
+
+  for(var data in data_mind_mood_map)
+  {
+    // int to bool
+    bool _resolved = false;
+    if(data["resolved"]==1)
+    {
+      _resolved = true;
+    }
+    else
+    {
+      _resolved = false;
+    }
+
+    data_mind_mood_list.add(
+      MindMoodData(
+        data["name"],
+        data["intensity"],
+        _resolved,
+        DateTime.tryParse(data["end_date"]),
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_mind_mood_list;
+}
+
+Future<int> database_insert_mind_mood(
+  String name,
+  String intensity,
+  bool resolved,
+  String end_date,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  // bool to int
+  int _resolved = 0;
+  if(resolved==true)
+  {
+    _resolved = 1;
+  }
+  else
+  {
+    _resolved = 0;
+  }
+
+  int row_index = await database_db.insert(
+    "mind_mood",
+    {
+      'name':name,
+      'intensity':intensity,
+      'resolved':_resolved,
+      'end_date': end_date,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+  print("Row index: ${row_index}");
+  return row_index;
+}
+
 // Data display for activity page
 List<TimelineData> get_activity_data()
 {
