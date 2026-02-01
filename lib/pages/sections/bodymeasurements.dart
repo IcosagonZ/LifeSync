@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../data/database.dart';
 import '../../data/iconmapper.dart';
 
+import '../../helpers/helper_string.dart';
+
 import '../../components/recents_listtile.dart';
 
 class Page_BodyMeasurements extends StatefulWidget

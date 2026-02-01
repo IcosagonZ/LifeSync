@@ -244,6 +244,19 @@ class Page_AddData_State extends State<Page_AddData>
     );
   }
 
+  // Also move this to seperate file
+  bool isNumeric(String s)
+  {
+    if(s.isEmpty)
+    {
+      return false;
+    }
+    else
+    {
+      return double.tryParse(s)!=null;
+    }
+  }
+
   Future<void> data_time_select(BuildContext context) async
   {
     final TimeOfDay? picked_time = await showTimePicker
@@ -2220,7 +2233,10 @@ class Page_AddData_State extends State<Page_AddData>
                     academics_exam_duration_hours_controller.text.isEmpty ||
                     academics_exam_duration_mins_controller.text.isEmpty ||
                     academics_subject_controller.text.isEmpty ||
-                    academics_type_controller.text.isEmpty
+                    academics_type_controller.text.isEmpty ||
+                    // Check if number
+                    !isNumeric(academics_exam_duration_hours_controller.text) ||
+                    !isNumeric(academics_exam_duration_mins_controller.text)
                   )
                   {
                     ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
@@ -2255,7 +2271,10 @@ class Page_AddData_State extends State<Page_AddData>
                     academics_subject_controller.text.isEmpty ||
                     academics_type_controller.text.isEmpty ||
                     academics_marks_controller.text.isEmpty ||
-                    academics_marks_total_controller.text.isEmpty
+                    academics_marks_total_controller.text.isEmpty ||
+                    // Check if number
+                    !isNumeric(academics_marks_controller.text) ||
+                    !isNumeric(academics_marks_total_controller.text)
                   )
                   {
                     ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
@@ -2284,11 +2303,56 @@ class Page_AddData_State extends State<Page_AddData>
                 }
               }
 
+              if(datatype_dropdown_chosen=="Activity")
+              {
+                if(
+                  activity_dropdown_chosen==null ||
+                  activity_duration_hours_controller.text.isEmpty ||
+                  activity_duration_minutes_controller.text.isEmpty ||
+                  activity_distance_controller.text.isEmpty ||
+                  activity_calories_controller.text.isEmpty ||
+                  // Check if number
+                  !isNumeric(activity_duration_hours_controller.text) ||
+                  !isNumeric(activity_duration_minutes_controller.text) ||
+                  !isNumeric(activity_distance_controller.text) ||
+                  !isNumeric(activity_calories_controller.text)
+                )
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+                }
+                else
+                {
+                  int duration = int.parse(activity_duration_hours_controller.text) * 60 + int.parse(activity_duration_minutes_controller.text);
+
+                  database_insert_activity(
+                    activity_dropdown_chosen ?? "",
+                    duration,
+                    int.parse(activity_distance_controller.text),
+                    double.parse(activity_calories_controller.text),
+                    entry_date,
+                    general_notes_controller.text
+                  ).then((int row_index)
+                  {
+                    if(row_index==0)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    }
+                  });
+                }
+              }
+
               if(datatype_dropdown_chosen=="Body Measurements")
               {
                 if(bodymeasurement_dropdown_chosen=="Height")
                 {
-                  if(bodymeasurement_height_controller.text.isEmpty)
+                  if(
+                    bodymeasurement_height_controller.text.isEmpty ||
+                    !isNumeric(bodymeasurement_height_controller.text)
+                  )
                   {
                     ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Height is empty"));
                   }
@@ -2316,7 +2380,10 @@ class Page_AddData_State extends State<Page_AddData>
 
                 if(bodymeasurement_dropdown_chosen=="Weight")
                 {
-                  if(bodymeasurement_weight_controller.text.isEmpty)
+                  if(
+                    bodymeasurement_weight_controller.text.isEmpty ||
+                    !isNumeric(bodymeasurement_weight_controller.text)
+                  )
                   {
                     ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Weight is empty"));
                   }

@@ -72,7 +72,7 @@ for table in tables:
 #insert
 i = 0
 for table in tables:
-    print("Future<List<TABLENAMEData> database_insert_" + table[0] + "() async")
+    print("Future<List<TABLENAMEData> database_get_" + table[0] + "() async")
     print("{")
     print("  Database database_db = await database_open();\n")
     print("  final List<Map<String, dynamic>> data_{}_map = await database_db.query('{}', columns: {});".format(table[0], table[0], rowise_columns[i]))
@@ -95,7 +95,7 @@ for table in tables:
     i+=1
 
 '''
-Future<List<AcademicsAbsentData> database_insert_academics_absent() async
+Future<List<AcademicsAbsentData> database_get_academics_absent() async
 {
   Database database_db = await database_open();
 
@@ -116,7 +116,7 @@ Future<List<AcademicsAbsentData> database_insert_academics_absent() async
   }
 }
 
-Future<List<AcademicsAssignmentData> database_insert_academics_assignment() async
+Future<List<AcademicsAssignmentData> database_get_academics_assignment() async
 {
   Database database_db = await database_open();
 
@@ -141,7 +141,7 @@ Future<List<AcademicsAssignmentData> database_insert_academics_assignment() asyn
   }
 }
 
-Future<List<AcademicsExamData> database_insert_academics_exam() async
+Future<List<AcademicsExamData> database_get_academics_exam() async
 {
   Database database_db = await database_open();
 
@@ -164,7 +164,7 @@ Future<List<AcademicsExamData> database_insert_academics_exam() async
   }
 }
 
-Future<List<AcademicsMarkData> database_insert_academics_mark() async
+Future<List<AcademicsMarkData> database_get_academics_mark() async
 {
   Database database_db = await database_open();
 
@@ -187,7 +187,7 @@ Future<List<AcademicsMarkData> database_insert_academics_mark() async
   }
 }
 
-Future<List<ActivityData> database_insert_activity() async
+Future<List<ActivityData> database_get_activity() async
 {
   Database database_db = await database_open();
 
@@ -210,7 +210,7 @@ Future<List<ActivityData> database_insert_activity() async
   }
 }
 
-Future<List<BodyMeasurementData> database_insert_body_measurement() async
+Future<List<BodyMeasurementData> database_get_body_measurement() async
 {
   Database database_db = await database_open();
 
@@ -232,7 +232,7 @@ Future<List<BodyMeasurementData> database_insert_body_measurement() async
   }
 }
 
-Future<List<MindMoodData> database_insert_mind_mood() async
+Future<List<MindMoodData> database_get_mind_mood() async
 {
   Database database_db = await database_open();
 
@@ -255,7 +255,7 @@ Future<List<MindMoodData> database_insert_mind_mood() async
   }
 }
 
-Future<List<NoteData> database_insert_note() async
+Future<List<NoteData> database_get_note() async
 {
   Database database_db = await database_open();
 
@@ -276,7 +276,7 @@ Future<List<NoteData> database_insert_note() async
   }
 }
 
-Future<List<NutritionData> database_insert_nutrition() async
+Future<List<NutritionData> database_get_nutrition() async
 {
   Database database_db = await database_open();
 
@@ -304,7 +304,7 @@ Future<List<NutritionData> database_insert_nutrition() async
   }
 }
 
-Future<List<SymptomData> database_insert_symptom() async
+Future<List<SymptomData> database_get_symptom() async
 {
   Database database_db = await database_open();
 
@@ -327,7 +327,7 @@ Future<List<SymptomData> database_insert_symptom() async
   }
 }
 
-Future<List<TimeData> database_insert_time() async
+Future<List<TimeData> database_get_time() async
 {
   Database database_db = await database_open();
 
@@ -348,7 +348,7 @@ Future<List<TimeData> database_insert_time() async
   }
 }
 
-Future<List<VitalsData> database_insert_vitals() async
+Future<List<VitalsData> database_get_vitals() async
 {
   Database database_db = await database_open();
 
@@ -370,7 +370,7 @@ Future<List<VitalsData> database_insert_vitals() async
   }
 }
 
-Future<List<WorkoutData> database_insert_workout() async
+Future<List<WorkoutData> database_get_workout() async
 {
   Database database_db = await database_open();
 

@@ -88,8 +88,8 @@ List<TimelineData> get_timeline_data()
 class AcademicsAbsentData
 {
   String reason;
-  String absent_date;
-  String entry_date;
+  DateTime absent_date;
+  DateTime entry_date;
   String entry_note;
 
   AcademicsAbsentData(this.reason, this.absent_date, this.entry_date, this.entry_note);
@@ -108,9 +108,9 @@ Future<List<AcademicsAbsentData>> database_get_academics_absent() async
     data_academics_absent_list.add(
       AcademicsAbsentData(
         data["reason"],
-        data["absent_date"],
-        data["entry_date"],
-        data["entry_note"],
+        DateTime.parse(data["absent_date"]),
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"]
       )
     );
   }
@@ -147,9 +147,9 @@ class AcademicsAssignmentData
   String type;
   String topic;
   int submitted;
-  String due_date;
-  String submission_date;
-  String entry_date;
+  DateTime due_date;
+  DateTime submission_date;
+  DateTime entry_date;
   String entry_note;
 
   AcademicsAssignmentData(this.subject, this.type, this.topic, this.submitted, this.due_date, this.submission_date, this.entry_date, this.entry_note);
@@ -172,9 +172,9 @@ Future<List<AcademicsAssignmentData>> database_get_academics_assignment() async
         data["type"],
         data["topic"],
         data["submitted"],
-        data["due_date"],
-        data["submission_date"],
-        data["entry_date"],
+        DateTime.parse(data["due_date"]),
+        DateTime.parse(data["submission_date"]),
+        DateTime.parse(data["entry_date"]),
         data["entry_note"],
       )
     );
@@ -209,6 +209,7 @@ Future<int> database_insert_academics_assignment(
       'entry_note':entry_note,
     }
   );
+  print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -218,9 +219,9 @@ class AcademicsExamData
 {
   String subject;
   String exam_type;
-  String exam_date;
+  DateTime exam_date;
   int duration;
-  String entry_date;
+  DateTime entry_date;
   String entry_note;
 
   AcademicsExamData(this.subject, this.exam_type, this.exam_date, this.duration, this.entry_date, this.entry_note);
@@ -240,10 +241,10 @@ Future<List<AcademicsExamData>> database_get_academics_exam() async
       AcademicsExamData(
         data["subject"],
         data["type"],
-        data["exam_date"],
+        DateTime.parse(data["exam_date"]),
         data["duration"],
-        data["entry_date"],
-        data["entry_note"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"]
       )
     );
   }
@@ -273,7 +274,7 @@ Future<int> database_insert_academics_exam(
       'entry_note':entry_note,
     }
   );
-
+  print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -284,7 +285,7 @@ class AcademicsMarkData
   String type;
   double marks;
   double marks_total;
-  String entry_date;
+  DateTime entry_date;
   String entry_note;
 
   AcademicsMarkData(this.subject, this.type, this.marks, this.marks_total, this.entry_date, this.entry_note);
@@ -306,8 +307,8 @@ Future<List<AcademicsMarkData>> database_get_academics_mark() async
         data["type"],
         data["marks"],
         data["marks_total"],
-        data["entry_date"],
-        data["entry_note"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"]
       )
     );
   }
@@ -337,7 +338,70 @@ Future<int> database_insert_academics_mark(
       'entry_note':entry_note,
     }
   );
+  print("Row index: ${row_index}");
+  return row_index;
+}
 
+// Activity
+class ActivityData{
+  String name;
+  int duration;
+  int distance;
+  double calories;
+  DateTime entry_date;
+  String entry_note;
+
+  ActivityData(this.name, this.duration, this.distance, this.calories, this.entry_date, this.entry_note);
+}
+
+Future<List<ActivityData>> database_get_activity() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_activity_map = await database_db.query('activity', columns: ['name', 'duration', 'distance', 'calories', 'entry_date', 'entry_note']);
+
+  List<ActivityData> data_activity_list = [];
+
+  for(var data in data_activity_map)
+  {
+    data_activity_list.add(
+      ActivityData(
+        data["name"],
+        data["duration"],
+        data["distance"],
+        data["calories"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"]
+      )
+    );
+  }
+
+  return data_activity_list;
+}
+
+Future<int> database_insert_activity(
+  String name,
+  int duration,
+  int distance,
+  double calories,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "activity",
+    {
+      'name':name,
+      'duration':duration,
+      'distance':distance,
+      'calories':calories,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+  print("Row index: ${row_index}");
   return row_index;
 }
 
