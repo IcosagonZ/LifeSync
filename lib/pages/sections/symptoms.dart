@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../components/recents_listtile_multiline.dart';
 import '../../components/recents_listtile_symptoms.dart';
+
 import '../../data/database.dart';
+import '../../data/iconmapper.dart';
 
 class Page_Symptoms extends StatefulWidget
 {
@@ -16,6 +18,30 @@ class Page_Symptoms extends StatefulWidget
 
 class Page_Symptoms_State extends State<Page_Symptoms>
 {
+  // Widget variables
+  List<SymptomData> symptom_data = [];
+  bool symptom_unresolved_present = false;
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async
+  {
+    List<SymptomData> symptom_data_result = await database_get_symptom();
+    bool symptom_unresolved_present_result = await database_symptom_unresolved_present();
+
+    setState(()
+    {
+      symptom_data = symptom_data_result;
+      symptom_unresolved_present = symptom_unresolved_present_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -108,7 +134,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: !symptom_unresolved_present || symptom_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -117,23 +143,21 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: symptom_unresolved_present && symptom_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(symptom_data.length, (index){
+                            final data = symptom_data[index];
                             int count = 0;
 
-                            if(data.item_subtitle.contains("unresolved"))
+                            if(data.resolved==0)
                             {
-                              final item_subtitle = data.item_subtitle.replaceAll(", unresolved", "");
-
                               final tile = RecentsListTileSymptoms(
-                                list_icon: Icon(data.item_icon),
-                                list_title: data.item_title,
-                                list_subtitle: item_subtitle,
-                                list_date: data.item_datetime,
+                                list_icon: Icon(iconmapper_geticon("Symptom")),
+                                list_title: data.name,
+                                list_subtitle: "Intensity ${data.intensity}",
+                                list_date: data.entry_date,
                               );
 
                               if(count>0)
@@ -173,7 +197,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: symptom_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -182,17 +206,17 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: symptom_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(symptom_data.length, (index){
+                            final data = symptom_data[index];
                             final tile = RecentsListTileMultiline(
-                              list_icon: Icon(data.item_icon),
-                              list_title: data.item_title,
-                              list_subtitle: data.item_subtitle,
-                              list_date: data.item_datetime,
+                              list_icon: Icon(iconmapper_geticon("Symptom")),
+                              list_title: data.name,
+                              list_subtitle: "Intensity ${data.intensity}",
+                              list_date: data.entry_date,
                             );
 
                             if(index>0)

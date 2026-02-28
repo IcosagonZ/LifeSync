@@ -637,6 +637,83 @@ Future<int> database_insert_nutrition(
   return row_index;
 }
 
+class SymptomData{
+  String name;
+  int intensity;
+  int resolved;
+  String end_date;
+  DateTime entry_date;
+  String entry_note;
+
+  SymptomData(this.name, this.intensity, this.resolved, this.end_date, this.entry_date, this.entry_note);
+}
+
+Future<List<SymptomData>> database_get_symptom() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_symptom_map = await database_db.query('symptom', columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
+
+  List<SymptomData> data_symptom_list = [];
+
+  for(var data in data_symptom_map)
+  {
+    data_symptom_list.add(
+      SymptomData(
+        data["name"],
+        data["intensity"],
+        data["resolved"],
+        data["end_date"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_symptom_list;
+}
+
+Future<int> database_insert_symptom(
+  String name,
+  int intensity,
+  int resolved,
+  String end_date,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "symptom",
+    {
+      'name':name,
+      'intensity':intensity,
+      'resolved':resolved,
+      'end_date':end_date,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+
+  return row_index;
+}
+
+Future<bool> database_symptom_unresolved_present() async
+{
+  List<SymptomData> symptom_data = await database_get_symptom();
+
+  for(var data in symptom_data)
+  {
+    if(data.resolved==0)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 // Data display for activity page
 List<TimelineData> get_activity_data()
 {

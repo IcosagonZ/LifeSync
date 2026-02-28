@@ -2488,6 +2488,58 @@ class Page_AddData_State extends State<Page_AddData>
                   });
                 }
               }
+
+              if(datatype_dropdown_chosen=="Symptom")
+              {
+                if(
+                  symptoms_name_controller.text.isEmpty
+                )
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Symptom is empty"));
+                }
+                else
+                {
+                  // Convert bool to int
+                  int _symptoms_resolved = 0;
+                  if(symptoms_resolved!= null)
+                  {
+                    if(symptoms_resolved ?? false)
+                    {
+                      _symptoms_resolved = 1;
+                    }
+                    else
+                    {
+                      _symptoms_resolved = 0;
+                    }
+                  }
+
+                  // Convert optional end date into String
+                  String _symptoms_end_date = "";
+                  if(symptoms_end_date!=null)
+                  {
+                    _symptoms_end_date = symptoms_end_date?.toIso8601String() ?? "";
+                  }
+
+                  database_insert_symptom(
+                    symptoms_name_controller.text,
+                    1,
+                    _symptoms_resolved,
+                    _symptoms_end_date,
+                    entry_date,
+                    general_notes_controller.text
+                  ).then((int row_index)
+                  {
+                    if(row_index==0)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    }
+                  });
+                }
+              }
             },
           )
         )

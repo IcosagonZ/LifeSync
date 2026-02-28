@@ -28,7 +28,8 @@ class Page_Nutrition_State extends State<Page_Nutrition>
     super.initState();
   }
 
-  Future<void> initData() async{
+  Future<void> initData() async
+  {
     List<NutritionData> nutrition_data_result = await database_get_nutrition();
 
     setState(()

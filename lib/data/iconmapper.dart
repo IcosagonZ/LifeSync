@@ -107,7 +107,7 @@ IconData iconmapper_geticon(String section, [String item = "None"])
     return Symbols.bedtime;
   }
 
-  if(section=="Symptoms")
+  if(section=="Symptom")
   {
     return Symbols.sick;
   }
