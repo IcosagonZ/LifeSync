@@ -64,7 +64,7 @@ for table in tables:
         if(column[1]=="text"):
             print("String ",end="")
         elif(column[1]=="real"):
-            print("Double ",end="")
+            print("double ",end="")
         elif(column[1]=="integer"):
             print("int ",end="")
         print(column[0],end=",\n")
@@ -164,8 +164,8 @@ Future<int> database_insert_academics_exam(
 Future<int> database_insert_academics_mark(
   String subject,
   String type,
-  Double marks,
-  Double marks_total,
+  double marks,
+  double marks_total,
   String entry_date,
   String entry_note,
 ) async
@@ -190,7 +190,7 @@ Future<int> database_insert_activity(
   String name,
   int duration,
   int distance,
-  Double calories,
+  double calories,
   String entry_date,
   String entry_note,
 ) async
@@ -213,7 +213,7 @@ Future<int> database_insert_activity(
 
 Future<int> database_insert_body_measurement(
   String type,
-  Double value,
+  double value,
   String unit,
   String entry_date,
   String entry_note,
@@ -284,12 +284,12 @@ Future<int> database_insert_nutrition(
   String name,
   String form,
   String type,
-  Double qty,
-  Double calories,
-  Double mass,
-  Double carbs,
-  Double protein,
-  Double fats,
+  double qty,
+  double calories,
+  double mass,
+  double carbs,
+  double protein,
+  double fats,
   String entry_date,
   String entry_note,
 ) async
@@ -388,9 +388,9 @@ Future<int> database_insert_workout(
   String name,
   String type,
   int duration,
-  Double calories,
+  double calories,
   int reps,
-  Double weight,
+  double weight,
   String entry_date,
   String entry_note,
 ) async

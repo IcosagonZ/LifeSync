@@ -2440,6 +2440,54 @@ class Page_AddData_State extends State<Page_AddData>
                   }
                 }
               }
+
+              if(datatype_dropdown_chosen=="Nutrition")
+              {
+                if(
+                  nutrition_name_controller.text.isEmpty ||
+                  nutrition_qty_controller.text.isEmpty ||
+                  nutrition_mass_controller.text.isEmpty ||
+                  nutrition_calories_controller.text.isEmpty ||
+                  nutrition_carbs_controller.text.isEmpty ||
+                  nutrition_proteins_controller.text.isEmpty ||
+                  nutrition_fats_controller.text.isEmpty ||
+                  nutrition_form_dropdown_chosen==null ||
+                  nutrition_type_dropdown_chosen==null ||
+                  !isNumeric(nutrition_qty_controller.text) ||
+                  !isNumeric(nutrition_mass_controller.text) ||
+                  !isNumeric(nutrition_mass_controller.text) ||
+                  !isNumeric(nutrition_calories_controller.text)
+                )
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing field"));
+                }
+                else
+                {
+                  database_insert_nutrition(
+                    nutrition_name_controller.text,
+                    nutrition_form_dropdown_chosen ?? "",
+                    nutrition_type_dropdown_chosen ?? "",
+                    double.parse(nutrition_qty_controller.text),
+                    double.parse(nutrition_calories_controller.text),
+                    double.parse(nutrition_mass_controller.text),
+                    double.parse(nutrition_carbs_controller.text),
+                    double.parse(nutrition_proteins_controller.text),
+                    double.parse(nutrition_fats_controller.text),
+                    entry_date,
+                    general_notes_controller.text
+                  ).then((int row_index)
+                  {
+                    if(row_index==0)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    }
+                  });
+                }
+              }
             },
           )
         )

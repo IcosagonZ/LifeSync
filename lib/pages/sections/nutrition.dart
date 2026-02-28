@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 //import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../components/recents_listtile_multiline.dart';
+
 import '../../data/database.dart';
+import '../../data/iconmapper.dart';
 
 class Page_Nutrition extends StatefulWidget
 {
@@ -15,6 +17,26 @@ class Page_Nutrition extends StatefulWidget
 
 class Page_Nutrition_State extends State<Page_Nutrition>
 {
+  // Widget variables
+  List<NutritionData> nutrition_data = [];
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async{
+    List<NutritionData> nutrition_data_result = await database_get_nutrition();
+
+    setState(()
+    {
+      nutrition_data = nutrition_data_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -42,7 +64,7 @@ class Page_Nutrition_State extends State<Page_Nutrition>
     final style_titlesmall = text_theme.titleSmall;
 
     // Widget variables
-    List<TimelineData> recents_data = get_nutrition_data();
+    //List<TimelineData> recents_data = get_nutrition_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -107,7 +129,7 @@ class Page_Nutrition_State extends State<Page_Nutrition>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: nutrition_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -116,17 +138,17 @@ class Page_Nutrition_State extends State<Page_Nutrition>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: nutrition_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(nutrition_data.length, (index){
+                            final data = nutrition_data[index];
                             final tile = RecentsListTileMultiline(
-                              list_icon: Icon(data.item_icon),
-                              list_title: data.item_title,
-                              list_subtitle: data.item_subtitle,
-                              list_date: data.item_datetime,
+                              list_icon: Icon(iconmapper_geticon("Nutrition")),
+                              list_title: data.name,
+                              list_subtitle: "${data.calories} cal",
+                              list_date: data.entry_date,
                             );
 
                             if(index>0)

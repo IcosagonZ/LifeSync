@@ -556,6 +556,87 @@ Future<int> database_insert_mind_mood(
   return row_index;
 }
 
+class NutritionData{
+  String name;
+  String form;
+  String type;
+  double qty;
+  double calories;
+  double mass;
+  double carbs;
+  double protein;
+  double fats;
+  DateTime entry_date;
+  String entry_note;
+
+  NutritionData(this.name, this.form, this.type, this.qty, this.calories, this.mass, this.carbs, this.protein, this.fats, this.entry_date, this.entry_note);
+}
+
+Future<List<NutritionData>> database_get_nutrition() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_nutrition_map = await database_db.query('nutrition', columns: ['name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note\n']);
+
+  List<NutritionData> data_nutrition_list = [];
+
+  for(var data in data_nutrition_map)
+  {
+    data_nutrition_list.add(
+      NutritionData(
+        data["name"],
+        data["form"],
+        data["type"],
+        data["qty"],
+        data["calories"],
+        data["mass"],
+        data["carbs"],
+        data["protein"],
+        data["fats"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_nutrition_list;
+}
+
+Future<int> database_insert_nutrition(
+  String name,
+  String form,
+  String type,
+  double qty,
+  double calories,
+  double mass,
+  double carbs,
+  double protein,
+  double fats,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "nutrition",
+    {
+      'name':name,
+      'form':form,
+      'type':type,
+      'qty':qty,
+      'calories':calories,
+      'mass':mass,
+      'carbs':carbs,
+      'protein':protein,
+      'fats':fats,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+  return row_index;
+}
+
 // Data display for activity page
 List<TimelineData> get_activity_data()
 {
