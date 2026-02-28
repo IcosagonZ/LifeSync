@@ -1,5 +1,7 @@
 # LifeSync
 
+![Milestone Progress](https://img.shields.io/github/milestones/progress/IcosagonZ/LifeSync/1)
+
 ## About
 
 LifeSyncAI is a student wellness app designed to analyze lifestlye habits and their influence on academic influence on students. This app integrates manually entered data like sleep duration, physical activity, study hours and grades with AI based food recognition for calorie estimation.
