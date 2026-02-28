@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 //import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'iconmapper.dart';
@@ -712,6 +712,126 @@ Future<bool> database_symptom_unresolved_present() async
   }
 
   return false;
+}
+
+class TimeData{
+  String event;
+  int duration;
+  DateTime entry_date;
+  String entry_note;
+
+  TimeData(this.event, this.duration, this.entry_date, this.entry_note);
+}
+
+class TimeDataGrouped{
+  String event;
+  int duration;
+
+  TimeDataGrouped(this.event, this.duration);
+}
+
+Future<List<TimeData>> database_get_time() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_time_map = await database_db.query(
+    'time',
+    columns: ['event', 'duration', 'entry_date', 'entry_note'],
+  );
+
+  List<TimeData> data_time_list = [];
+
+  for(var data in data_time_map)
+  {
+    data_time_list.add(
+      TimeData(
+        data["event"],
+        data["duration"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_time_list;
+}
+
+Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-mm-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_time_map = await database_db.query(
+    'time',
+    columns: ['event', 'duration', 'entry_date', 'entry_note'],
+    where: 'entry_date = ?',
+    whereArgs: [_target_date],
+  );
+
+  List<TimeData> data_time_list = [];
+
+  for(var data in data_time_map)
+  {
+    data_time_list.add(
+      TimeData(
+        data["event"],
+        data["duration"],
+        data["entry_date"],
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_time_list;
+}
+
+Future<List<TimeDataGrouped>> database_get_time_for_date_grouped(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_time_map = await database_db.query(
+    'time',
+    columns: ['event', 'sum(duration) as duration'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+    groupBy: 'event',
+  );
+
+  List<TimeDataGrouped> data_time_list = [];
+
+  for(var data in data_time_map)
+  {
+    data_time_list.add(
+      TimeDataGrouped(
+        data["event"],
+        data["duration"],
+      )
+    );
+  }
+
+  return data_time_list;
+}
+
+Future<int> database_insert_time(
+  String event,
+  int duration,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "time",
+    {
+      'event':event,
+      'duration':duration,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+  return row_index;
 }
 
 // Data display for activity page

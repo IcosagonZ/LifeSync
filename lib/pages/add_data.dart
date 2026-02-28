@@ -2540,6 +2540,41 @@ class Page_AddData_State extends State<Page_AddData>
                   });
                 }
               }
+
+              if(datatype_dropdown_chosen=="Time")
+              {
+                if(
+                  time_type_dropdown_chosen==null ||
+                  time_duration_hours_controller.text.isEmpty ||
+                  time_duration_minutes_controller.text.isEmpty ||
+                  !isNumeric(time_duration_hours_controller.text) ||
+                  !isNumeric(time_duration_minutes_controller.text)
+                )
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing field"));
+                }
+                else
+                {
+                  int duration = int.parse(time_duration_hours_controller.text) * 60 + int.parse(time_duration_minutes_controller.text);
+
+                  database_insert_time(
+                    time_type_dropdown_chosen ?? "",
+                    duration,
+                    entry_date,
+                    general_notes_controller.text
+                  ).then((int row_index)
+                  {
+                    if(row_index==0)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    }
+                  });
+                }
+              }
             },
           )
         )
