@@ -48,3 +48,8 @@ Front end will be made using Flutter for mobile friendly cross platform data ent
 2. <p>Amugongo LM, Kriebitz A, Boch A, Lütge C. Mobile Computer Vision-Based Applications for Food Recognition and Volume and Calorific Estimation: A Systematic Review. Healthcare (Basel). 2022 Dec 26;11(1):59. doi: 10.3390/healthcare11010059. PMID: 36611519; PMCID: PMC9818870</p>
 
 3. <p>S. M. J. Irfan, G. Dhivya, N. Raghavendran, M. C. Babu, T. Jasperline and R. Saravanakumar, "AI Personalized Mental Health Monitoring System using Machine Learning, and Natural Language Processing," 2025 International Conference on Data Science, Agents & Artificial Intelligence (ICDSAAI), Chennai, India, 2025, pp. 1-5, doi: 10.1109/ICDSAAI65575.2025.11011535</p>
+
+## Trademark and Attribution
+The name "LifeSync" and "LifeSyncAI" and its associated branding are the intellectual identity of IcosagonZ, you may not use these names, logos, or any derivative branding for any forks, redistributed versions or commercial implementations of this software without explicit written consent.
+Any fork must be clearly identified as a "Community Fork" and must be renamed to avoid user confusion and to maintain the structural integrity of the original "LifeSync" architecture.
+By forking or using this project or parts of it in any manner, you agree to these terms automatically.
