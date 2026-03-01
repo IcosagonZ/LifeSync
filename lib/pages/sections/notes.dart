@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../data/database.dart';
+
+import '../../components/recents_listtile_multiline.dart';
+
+import '../add_note.dart';
+
 class Page_Notes extends StatefulWidget
 {
   const Page_Notes({super.key});
@@ -12,6 +18,26 @@ class Page_Notes extends StatefulWidget
 
 class Page_Notes_State extends State<Page_Notes>
 {
+  // Widget variables
+  List<NoteData> note_data = [];
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async{
+    List<NoteData> note_data_result = await database_get_note();
+
+    setState(()
+    {
+      note_data = note_data_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -48,9 +74,74 @@ class Page_Notes_State extends State<Page_Notes>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Notes")
+            //Text("Notes"),
+            Card.outlined(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: note_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: note_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          spacing: 2,
+                          children: List.generate(note_data.length, (index){
+                            final data = note_data[index];
+                            final tile = RecentsListTileMultiline(
+                              list_icon: Icon(Symbols.notes),
+                              list_title: data.title,
+                              list_subtitle: "${data.content.length} chars",
+                              list_date: data.entry_date,
+                            );
+
+                            if(index>0)
+                            {
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
+                              );
+                            }
+                            else
+                            {
+                              return tile;
+                            }
+                          }),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
+            )
           ]
         )
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        tooltip: "Add data",
+        onPressed: () async {
+          print("Add data pressed");
+          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+          {
+            return const Page_AddNote();
+          }
+          ));
+          if(result!=null) // when returning
+          {
+            initData();
+          }
+        },
       ),
     );
   }

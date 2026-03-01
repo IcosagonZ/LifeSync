@@ -77,6 +77,18 @@ class Page_Overview_State extends State<Page_Overview>
             },
           ),
           IconButton(
+            icon: Icon(Icons.notes),
+            tooltip: "View notes",
+            onPressed: (){
+              print("View notes pressed");
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_Notes();
+              }
+              ));
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.timeline),
             tooltip: "Timeline",
             onPressed: (){

@@ -580,7 +580,7 @@ Future<List<NoteData>> database_get_note() async
         data["title"],
         data["content"],
         data["tags"],
-        data["entry_date"],
+        DateTime.parse(data["entry_date"]),
       )
     );
   }
