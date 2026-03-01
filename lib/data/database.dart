@@ -834,6 +834,63 @@ Future<int> database_insert_time(
   return row_index;
 }
 
+class VitalsData{
+  String type;
+  String value;
+  String unit;
+  DateTime entry_date;
+  String entry_note;
+
+  VitalsData(this.type, this.value, this.unit, this.entry_date, this.entry_note);
+}
+
+Future<List<VitalsData>> database_get_vitals() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_vitals_map = await database_db.query('vitals', columns: ['type', 'value', 'unit', 'entry_date', 'entry_note']);
+
+  List<VitalsData> data_vitals_list = [];
+
+  for(var data in data_vitals_map)
+  {
+    data_vitals_list.add(
+      VitalsData(
+        data["type"],
+        data["value"],
+        data["unit"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_vitals_list;
+}
+
+Future<int> database_insert_vitals(
+  String type,
+  String value,
+  String unit,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "vitals",
+    {
+      'type':type,
+      'value':value,
+      'unit':unit,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+  return row_index;
+}
+
 // Data display for activity page
 List<TimelineData> get_activity_data()
 {

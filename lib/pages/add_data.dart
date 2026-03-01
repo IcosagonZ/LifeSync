@@ -2575,6 +2575,173 @@ class Page_AddData_State extends State<Page_AddData>
                   });
                 }
               }
+
+              if(datatype_dropdown_chosen=="Vitals")
+              {
+                if(vital_name_dropdown_chosen==null)
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Choose vital data type"));
+                }
+                else
+                {
+                  if(vital_name_dropdown_chosen=="Body Temperature")
+                  {
+                    if(
+                      vital_bodytemperature_controller.text.isEmpty ||
+                      !isNumeric(vital_bodytemperature_controller.text)
+                    )
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing temperature data"));
+                    }
+                    else
+                    {
+                      database_insert_vitals(
+                        vital_name_dropdown_chosen ?? " ",
+                        vital_bodytemperature_controller.text,
+                        "C",
+                        entry_date,
+                        general_notes_controller.text,
+                      ).then((int row_index)
+                      {
+                        if(row_index==0)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                        }
+                        else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                        }
+                      });
+                    }
+                  }
+
+                  if(vital_name_dropdown_chosen=="Blood Oxygen")
+                  {
+                    if(
+                      vital_bloodoxygen_controller.text.isEmpty ||
+                      !isNumeric(vital_bloodoxygen_controller.text)
+                    )
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing blood oxygen data"));
+                    }
+                    else
+                    {
+                      database_insert_vitals(
+                        vital_name_dropdown_chosen ?? " ",
+                        vital_bloodoxygen_controller.text,
+                        "%",
+                        entry_date,
+                        general_notes_controller.text,
+                      ).then((int row_index)
+                      {
+                        if(row_index==0)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                        }
+                        else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                        }
+                      });
+                    }
+                  }
+
+                  if(vital_name_dropdown_chosen=="Blood Pressure")
+                  {
+                    if(
+                      vital_bloodpressure_systolic_controller.text.isEmpty ||
+                      !isNumeric(vital_bloodpressure_systolic_controller.text) ||
+                      vital_bloodpressure_diastolic_controller.text.isEmpty ||
+                      !isNumeric(vital_bloodpressure_diastolic_controller.text)
+                    )
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing blood oxygen data"));
+                    }
+                    else
+                    {
+                      database_insert_vitals(
+                        vital_name_dropdown_chosen ?? " ",
+                        "${vital_bloodpressure_systolic_controller.text}/${vital_bloodpressure_diastolic_controller.text}",
+                        "",
+                        entry_date,
+                        general_notes_controller.text,
+                      ).then((int row_index)
+                      {
+                        if(row_index==0)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                        }
+                        else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                        }
+                      });
+                    }
+                  }
+
+                  if(vital_name_dropdown_chosen=="Blood Sugar")
+                  {
+                    if(
+                      vital_bloodsugar_controller.text.isEmpty ||
+                      !isNumeric(vital_bloodsugar_controller.text)
+                    )
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing blood sugar data"));
+                    }
+                    else
+                    {
+                      database_insert_vitals(
+                        vital_name_dropdown_chosen ?? " ",
+                        vital_bloodsugar_controller.text,
+                        "mmol/L",
+                        entry_date,
+                        general_notes_controller.text,
+                      ).then((int row_index)
+                      {
+                        if(row_index==0)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                        }
+                        else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                        }
+                      });
+                    }
+                  }
+
+                  if(vital_name_dropdown_chosen=="Heartrate")
+                  {
+                    if(
+                      vital_heartrate_controller.text.isEmpty ||
+                      !isNumeric(vital_heartrate_controller.text)
+                    )
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Invalid/missing heartrate data"));
+                    }
+                    else
+                    {
+                      database_insert_vitals(
+                        vital_name_dropdown_chosen ?? " ",
+                        vital_heartrate_controller.text,
+                        "bpm",
+                        entry_date,
+                        general_notes_controller.text,
+                      ).then((int row_index)
+                      {
+                        if(row_index==0)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                        }
+                        else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                        }
+                      });
+                    }
+                  }
+                }
+              }
             },
           )
         )
