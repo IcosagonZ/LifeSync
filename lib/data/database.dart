@@ -556,6 +556,59 @@ Future<int> database_insert_mind_mood(
   return row_index;
 }
 
+class NoteData{
+  String title;
+  String content;
+  String tags;
+  DateTime entry_date;
+
+  NoteData(this.title, this.content, this.tags, this.entry_date);
+}
+
+Future<List<NoteData>> database_get_note() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_note_map = await database_db.query('note', columns: ['title', 'content', 'tags', 'entry_date']);
+
+  List<NoteData> data_note_list = [];
+
+  for(var data in data_note_map)
+  {
+    data_note_list.add(
+      NoteData(
+        data["title"],
+        data["content"],
+        data["tags"],
+        data["entry_date"],
+      )
+    );
+  }
+
+  return data_note_list;
+}
+
+Future<int> database_insert_note(
+  String title,
+  String content,
+  String tags,
+  String entry_date,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "note",
+    {
+      'title':title,
+      'content':content,
+      'tags':tags,
+      'entry_date':entry_date,
+    }
+  );
+  return row_index;
+}
+
 class NutritionData{
   String name;
   String form;
