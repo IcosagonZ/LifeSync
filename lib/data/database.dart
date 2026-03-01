@@ -891,6 +891,75 @@ Future<int> database_insert_vitals(
   return row_index;
 }
 
+class WorkoutData{
+  String name;
+  String type;
+  int duration;
+  double calories;
+  int reps;
+  double weight;
+  DateTime entry_date;
+  String entry_note;
+
+  WorkoutData(this.name, this.type, this.duration, this.calories, this.reps, this.weight, this.entry_date, this.entry_note);
+}
+
+Future<List<WorkoutData>> database_get_workout() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_workout_map = await database_db.query('workout', columns: ['name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note']);
+
+  List<WorkoutData> data_workout_list = [];
+
+  for(var data in data_workout_map)
+  {
+    data_workout_list.add(
+      WorkoutData(
+        data["name"],
+        data["type"],
+        data["duration"],
+        data["calories"],
+        data["reps"],
+        data["weight"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_workout_list;
+}
+
+Future<int> database_insert_workout(
+  String name,
+  String type,
+  int duration,
+  double calories,
+  int reps,
+  double weight,
+  String entry_date,
+  String entry_note,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "workout",
+    {
+      'name':name,
+      'type':type,
+      'duration':duration,
+      'calories':calories,
+      'reps':reps,
+      'weight':weight,
+      'entry_date':entry_date,
+      'entry_note':entry_note,
+    }
+  );
+  return row_index;
+}
+
 // Data display for activity page
 List<TimelineData> get_activity_data()
 {

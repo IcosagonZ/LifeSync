@@ -2742,6 +2742,56 @@ class Page_AddData_State extends State<Page_AddData>
                   }
                 }
               }
+
+              if(datatype_dropdown_chosen=="Workout")
+              {
+                if(
+                  workout_name_controller.text.isEmpty ||
+                  workout_type_controller.text.isEmpty ||
+                  workout_weight_controller.text.isEmpty ||
+                  workout_reps_controller.text.isEmpty ||
+                  workout_sets_controller.text.isEmpty ||
+                  workout_duration_hours_controller.text.isEmpty ||
+                  workout_duration_minutes_controller.text.isEmpty ||
+                  workout_calories_controller.text.isEmpty ||
+                  // Check if number
+                  !isNumeric(workout_weight_controller.text) ||
+                  !isNumeric(workout_reps_controller.text) ||
+                  !isNumeric(workout_sets_controller.text) ||
+                  !isNumeric(workout_duration_hours_controller.text) ||
+                  !isNumeric(workout_duration_minutes_controller.text) ||
+                  !isNumeric(workout_calories_controller.text)
+                )
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty/Invalid field"));
+                }
+                else
+                {
+                  int duration = int.parse(workout_duration_hours_controller.text) * 60 + int.parse(workout_duration_minutes_controller.text);
+                  int reps = int.parse(workout_sets_controller.text) * int.parse(workout_reps_controller.text);
+
+                  database_insert_workout(
+                    workout_name_controller.text,
+                    workout_type_controller.text,
+                    duration,
+                    double.parse(workout_calories_controller.text),
+                    reps,
+                    double.parse(workout_weight_controller.text),
+                    entry_date,
+                    general_notes_controller.text,
+                  ).then((int row_index)
+                  {
+                    if(row_index==0)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                    }
+                    else
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    }
+                  });
+                }
+              }
             },
           )
         )

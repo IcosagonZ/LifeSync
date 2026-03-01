@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 //import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../components/recents_listtile_multiline.dart';
+
 import '../../data/database.dart';
+import '../../data/iconmapper.dart';
 
 class Page_Workout extends StatefulWidget
 {
@@ -15,6 +17,27 @@ class Page_Workout extends StatefulWidget
 
 class Page_Workout_State extends State<Page_Workout>
 {
+  // Widget variables
+  List<WorkoutData> workout_data = [];
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async
+  {
+    List<WorkoutData> workout_data_result = await database_get_workout();
+
+    setState(()
+    {
+      workout_data = workout_data_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -117,7 +140,7 @@ class Page_Workout_State extends State<Page_Workout>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: workout_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -126,17 +149,17 @@ class Page_Workout_State extends State<Page_Workout>
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: workout_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(recents_data.length, (index){
-                            final data = recents_data[index];
+                          children: List.generate(workout_data.length, (index){
+                            final data = workout_data[index];
                             final tile = RecentsListTileMultiline(
-                              list_icon: Icon(data.item_icon),
-                              list_title: data.item_title,
-                              list_subtitle: data.item_subtitle,
-                              list_date: data.item_datetime,
+                              list_icon: Icon(iconmapper_geticon("Workout")),
+                              list_title: data.name,
+                              list_subtitle: "${data.reps} reps",
+                              list_date: data.entry_date,
                             );
 
                             if(index>0)
