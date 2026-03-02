@@ -67,6 +67,7 @@ class Page_AddData_State extends State<Page_AddData>
   final TextEditingController academics_exam_duration_hours_controller = TextEditingController();
   final TextEditingController academics_exam_duration_mins_controller = TextEditingController();
   DateTime academics_exam_date  = DateTime.now();
+  DateTime academics_exam_time  = DateTime.now();
 
   // Marks
   final TextEditingController academics_marks_controller = TextEditingController();
