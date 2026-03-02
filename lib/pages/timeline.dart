@@ -16,6 +16,25 @@ class Page_Timeline extends StatefulWidget
 
 class Page_Timeline_State extends State<Page_Timeline>
 {
+  // Widget variables
+  List<TimelineData> timeline_data = [];
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async{
+    List<TimelineData> timeline_data_result = await database_timeline_retrive();
+
+    setState(()
+    {
+      timeline_data = timeline_data_result;
+    });
+  }
 
   @override
   Widget build(BuildContext context)
@@ -40,7 +59,7 @@ class Page_Timeline_State extends State<Page_Timeline>
     List<String> list_common_months = [];
     List<String> list_common_years = [];
 
-    List<TimelineData> timeline_data = get_timeline_data();
+    //List<TimelineData> timeline_data = database_timeline_retrive();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,15 +74,15 @@ class Page_Timeline_State extends State<Page_Timeline>
               child: ListView(
                 children: timeline_data.map((data)
                 {
-                  String data_date_string = DateFormat('d/M/yyyy').format(data.item_datetime);
-                  String data_month_string = DateFormat('M/yyyy').format(data.item_datetime);
-                  String data_year_string = DateFormat('yyyy').format(data.item_datetime);
+                  String data_date_string = DateFormat('d/M/yyyy').format(data.date_time);
+                  String data_month_string = DateFormat('M/yyyy').format(data.date_time);
+                  String data_year_string = DateFormat('yyyy').format(data.date_time);
 
                   TimelineListTile data_tile = TimelineListTile(
-                    list_icon: Icon(data.item_icon),
-                    list_title: data.item_title,
-                    list_subtitle: data.item_subtitle,
-                    list_date: data.item_datetime,
+                    list_icon: Icon(data.icon),
+                    list_title: data.title,
+                    list_subtitle: data.subtitle,
+                    list_date: data.date_time,
                   );
 
                   // If other tile in day exist
@@ -94,7 +113,7 @@ class Page_Timeline_State extends State<Page_Timeline>
                             SizedBox(
                               width: 16,
                             ),
-                            Text(DateFormat('MMMM, d').format(data.item_datetime), style:style_titlemedium),
+                            Text(DateFormat('MMMM, d').format(data.date_time), style:style_titlemedium),
                           ]
                         ),
                         data_tile,
@@ -121,7 +140,7 @@ class Page_Timeline_State extends State<Page_Timeline>
                             SizedBox(
                               width: 16,
                             ),
-                            Text(DateFormat('MMMM').format(data.item_datetime), style:style_titlemedium),
+                            Text(DateFormat('MMMM').format(data.date_time), style:style_titlemedium),
                           ]
                         ),
                         SizedBox(
@@ -133,7 +152,7 @@ class Page_Timeline_State extends State<Page_Timeline>
                             SizedBox(
                               width: 16,
                             ),
-                            Text(DateFormat('MMMM, d').format(data.item_datetime), style:style_titlemedium),
+                            Text(DateFormat('MMMM, d').format(data.date_time), style:style_titlemedium),
                           ]
                         ),
                         data_tile,
@@ -162,7 +181,7 @@ class Page_Timeline_State extends State<Page_Timeline>
                               width: 16,
                               child: Divider()
                             ),
-                            Text(DateFormat('yyyy').format(data.item_datetime), style:style_headlinemedium),
+                            Text(DateFormat('yyyy').format(data.date_time), style:style_headlinemedium),
                             Expanded(
                               child: Divider()
                             ),
@@ -177,7 +196,7 @@ class Page_Timeline_State extends State<Page_Timeline>
                             SizedBox(
                               width: 16,
                             ),
-                            Text(DateFormat('MMMM').format(data.item_datetime), style:style_headlinesmall),
+                            Text(DateFormat('MMMM').format(data.date_time), style:style_headlinesmall),
                           ]
                         ),
                         SizedBox(
@@ -189,7 +208,7 @@ class Page_Timeline_State extends State<Page_Timeline>
                             SizedBox(
                               width: 16,
                             ),
-                            Text(DateFormat('MMMM, d').format(data.item_datetime), style:style_titlemedium),
+                            Text(DateFormat('MMMM, d').format(data.date_time), style:style_titlemedium),
                           ]
                         ),
                         data_tile,

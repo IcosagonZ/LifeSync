@@ -41,7 +41,8 @@ class Page_Sleep_State extends State<Page_Sleep>
     final style_titlesmall = text_theme.titleSmall;
 
     // Widget variables
-    List<TimelineData> recents_data = get_sleep_data();
+    List<TimelineData> recents_data = [];
+    //List<TimelineData> recents_data = get_sleep_data();
 
     return Scaffold(
       appBar: AppBar(
@@ -121,10 +122,10 @@ class Page_Sleep_State extends State<Page_Sleep>
                           children: recents_data.map((data)
                           {
                             return RecentsListTile(
-                              list_icon: Icon(data.item_icon),
-                              list_title: data.item_title,
-                              list_subtitle: data.item_subtitle,
-                              list_date: data.item_datetime,
+                              list_icon: Icon(data.icon),
+                              list_title: data.title,
+                              list_subtitle: data.subtitle,
+                              list_date: data.date_time,
                             );
                           }).toList(),
                         )

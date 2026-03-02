@@ -8,6 +8,32 @@ import 'iconmapper.dart';
 
 List<String> database_sql_commands = ['create table if not exists academics_absent (reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (name text, intensity integer, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
 
+// title, subtitle, datatype, datetime
+String database_sql_timeline = '''
+select name as title, duration || ' mins' as subtitle, 'Activity' as datatype, entry_date as date_time from activity
+union all
+select type as title, value || ' ' || unit as subtitle, 'Body Measurement' as datatype, entry_date as date_time from body_measurement
+union all
+select name as title, ' ' as subtitle, 'Mind' as datatype, entry_date as date_time from mind_mood
+union all
+select name as title, calories || ' cal' as subtitle, 'Nutrition' as datatype, entry_date as date_time from nutrition
+union all
+select name as title, ' ' as subtitle, 'Symptom' as datatype, entry_date as date_time from symptom
+union all
+select event as title, duration || ' mins' as subtitle, 'Time' as datatype, entry_date as date_time from time
+union all
+select type as title, value || ' ' || unit as subtitle, 'Vitals' as datatype, entry_date as date_time from vitals
+union all
+select name as title, duration || ' mins' as subtitle, 'Workout' as datatype, entry_date as date_time from workout
+/*
+select "Absent" as title, reason as subtitle, "Academics" as datatype, absent_date as date_time from academics_absent
+union all
+select "Assignment" as title, subject as subtitle, "Academics" as datatype, submission_date as date_time from academics_assignment
+union all
+*/
+order by entry_date desc;
+''';
+
 Future<String> database_path() async
 {
   var database_storage_path = await getDatabasesPath();
@@ -39,6 +65,38 @@ Future<Database> database_open() async
   return database_db;
 }
 
+Future<List<Map<String, dynamic>>> database_read(String query) async
+{
+  var database_storage_path = await getDatabasesPath();
+  String database_data_path =  join(database_storage_path, "lifesync.db");
+
+  Database database_db = await openDatabase
+  (
+    database_data_path,
+    version: 1,
+    onCreate: (Database db, int version) async
+    {
+      for (var database_sql_command in database_sql_commands)
+      {
+        await db.execute(database_sql_command);
+      }
+    },
+    onOpen: (Database db) async
+    {
+      for (var database_sql_command in database_sql_commands)
+      {
+        await db.execute(database_sql_command);
+      }
+    }
+  );
+
+  final List<Map<String, dynamic>> database_result = await database_db.rawQuery(query);
+
+  await database_db.close();
+
+  return database_result;
+}
+
 Future<void> database_delete() async
 {
   await deleteDatabase(await database_path());
@@ -46,15 +104,19 @@ Future<void> database_delete() async
 
 class TimelineData
 {
-  IconData item_icon;
-  String item_title;
-  String item_subtitle;
-  String item_datatype;
-  DateTime item_datetime;
+  IconData icon;
+  String title;
+  String subtitle;
+  String datatype;
+  DateTime date_time;
 
-  TimelineData(this.item_icon, this.item_title, this.item_subtitle, this.item_datatype, this.item_datetime);
+  TimelineData(this.icon, this.title, this.subtitle, this.datatype, this.date_time);
 }
 
+
+List<TimelineData> data_timeline = [];
+
+/*
 // Dummy data
 List<TimelineData> data_timeline_list = [
   TimelineData(iconmapper_geticon("Vitals", "Heartrate"), "Heartrate", "93 bpm", "Vitals", DateTime(2026, 5, 12, 12, 54)),
@@ -81,6 +143,32 @@ List<TimelineData> get_timeline_data()
 {
   print("Timeline data requested");
   return data_timeline_list;
+}*/
+
+Future<List<TimelineData>> database_timeline_retrive() async
+{
+  data_timeline = [];
+
+  final List<Map<String, dynamic>> database_result = await database_read(database_sql_timeline);
+
+  for (var row in database_result)
+  {
+    String heading = row["title"] as String;
+    String subtitle = row["subtitle"] as String;
+    String type = row["datatype"] as String;
+    String entry_date = row["date_time"] as String;
+
+    data_timeline.add(TimelineData
+    (
+      iconmapper_geticon(type),
+      heading,
+      subtitle,
+      type,
+      DateTime.parse(entry_date)
+    ));
+  }
+
+  return data_timeline;
 }
 
 // Academics
@@ -1013,6 +1101,7 @@ Future<int> database_insert_workout(
   return row_index;
 }
 
+/*
 // Data display for activity page
 List<TimelineData> get_activity_data()
 {
@@ -1116,3 +1205,4 @@ List<TimelineData> get_sleep_data()
 
   return data_sleep_list;
 }
+*/

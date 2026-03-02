@@ -62,10 +62,10 @@ class TimelineListTile extends StatelessWidget
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
-                  Text(list_subtitle)
                 ]
               ),
             ),
+            Text(list_subtitle),
             SizedBox(
               width: 16,
             ),

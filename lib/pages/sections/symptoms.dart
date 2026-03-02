@@ -69,7 +69,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
     final style_titlesmall = text_theme.titleSmall;
 
     // Widget variables
-    List<TimelineData> recents_data = get_symptoms_data();
+    //List<TimelineData> recents_data = get_symptoms_data();
 
     return Scaffold(
       appBar: AppBar(

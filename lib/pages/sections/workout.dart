@@ -65,7 +65,7 @@ class Page_Workout_State extends State<Page_Workout>
     final style_titlesmall = text_theme.titleSmall;
 
     // Widget variables
-    List<TimelineData> recents_data = get_workout_data();
+    //List<TimelineData> recents_data = get_workout_data();
 
     return Scaffold(
       appBar: AppBar(

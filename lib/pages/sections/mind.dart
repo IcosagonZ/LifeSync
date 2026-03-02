@@ -64,9 +64,6 @@ class Page_Mind_State extends State<Page_Mind>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget variables
-    List<TimelineData> recents_data = get_mind_data();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Mind"),
