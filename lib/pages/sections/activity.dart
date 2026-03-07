@@ -144,7 +144,7 @@ class Page_Activity_State extends State<Page_Activity>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("82"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),

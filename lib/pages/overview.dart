@@ -4,7 +4,8 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 // Data
 import '../data/database.dart';
-import '../helpers/../helpers/helper_string.dart';
+import '../helpers/helper_string.dart';
+import '../helpers/helper_calculate.dart';
 
 // Pages
 import 'timeline.dart';
@@ -52,6 +53,9 @@ class Page_Overview_State extends State<Page_Overview>
   int data_time_sleep = 0;
   int data_time_free = 0;
 
+  int data_latest_height = 0;
+  int data_latest_weight = 0;
+
   @override
   void initState()
   {
@@ -76,6 +80,9 @@ class Page_Overview_State extends State<Page_Overview>
     int data_time_sleep_result = await database_aggregate_time_sleep(data_timenow.subtract(Duration(days: 1)));
     int data_time_free_result = await database_aggregate_time_free(data_timenow);
 
+    int data_latest_height_result = await database_latest_body_height();
+    int data_latest_weight_result = await database_latest_body_weight();
+
     setState(()
     {
       activity_data_total_calories = activity_data_total_calories_result;
@@ -92,6 +99,9 @@ class Page_Overview_State extends State<Page_Overview>
       data_time_study = data_time_study_result;
       data_time_sleep = data_time_sleep_result;
       data_time_free = data_time_free_result;
+
+      data_latest_height = data_latest_height_result;
+      data_latest_weight = data_latest_weight_result;
     });
   }
 
@@ -591,7 +601,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("170 cm", style:style_headlinesmall),
+                      Text("$data_latest_height cm", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Height", style:style_titlesmall),
                     ]
@@ -600,7 +610,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("20", style:style_headlinesmall),
+                      Text("${helper_get_bmi(data_latest_height, data_latest_weight).toStringAsFixed(1)}", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("BMI", style:style_titlesmall),
                     ]
@@ -609,7 +619,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("62 kg", style:style_headlinesmall),
+                      Text("$data_latest_weight kg", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Weight", style:style_titlesmall),
                     ]

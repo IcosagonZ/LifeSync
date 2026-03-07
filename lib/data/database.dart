@@ -1499,3 +1499,34 @@ Future<int> database_aggregate_time_free(DateTime target_date) async
 
   return 0;
 }
+
+// Get latest
+Future<int> database_latest_body_height() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('''select value from body_measurement where type = ? order by entry_date desc''', ['Height']);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['value']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['value'] as num).toInt();
+  }
+
+  return 0;
+}
+
+Future<int> database_latest_body_weight() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('''select value from body_measurement where type = ? order by entry_date desc''', ['Weight']);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['value']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['value'] as num).toInt();
+  }
+
+  return 0;
+}

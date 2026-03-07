@@ -4,6 +4,7 @@ import '../../data/database.dart';
 import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile.dart';
+import '../../helpers/helper_calculate.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
 {
@@ -20,6 +21,9 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
 
   List<BodyMeasurementData> bodymeasurements_data = [];
 
+  int data_latest_height = 0;
+  int data_latest_weight = 0;
+
   @override
   void initState()
   {
@@ -31,9 +35,14 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
   Future<void> initData() async{
     List<BodyMeasurementData> bodymeasurements_data_result = await database_get_bodymeasurement();
 
+    int data_latest_height_result = await database_latest_body_height();
+    int data_latest_weight_result = await database_latest_body_weight();
+
     setState(()
     {
       bodymeasurements_data = bodymeasurements_data_result;
+      data_latest_height = data_latest_height_result;
+      data_latest_weight = data_latest_weight_result;
     });
   }
 
@@ -86,7 +95,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                               Expanded(
                                 child: Text("Height", style: TextStyle(color: color_primary))
                               ),
-                              Text("170 cm")
+                              Text("$data_latest_height cm")
                             ],
                           ),
                           SizedBox(height: 8),
@@ -95,7 +104,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                               Expanded(
                                 child: Text("Weight", style: TextStyle(color: color_primary))
                               ),
-                              Text("62 kg")
+                              Text("$data_latest_weight kg")
                             ],
                           )
                         ]
@@ -108,7 +117,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("21.2"),
+                          Text("${helper_get_bmi(data_latest_height, data_latest_weight).toStringAsFixed(1)}"),
                           Text("BMI", style: TextStyle(fontSize: 10)),
                         ]
                       ),
@@ -144,7 +153,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                             final tile = RecentsListTile(
                               list_icon: Icon(iconmapper_geticon("Body Measurements", data.measurement_type)),
                               list_title: data.measurement_type,
-                              list_subtitle: "${data.value} ${data.unit}",
+                              list_subtitle: "${data.value.toInt()} ${data.unit}",
                               list_date: data.entry_date,
                             );
 
