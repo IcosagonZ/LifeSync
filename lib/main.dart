@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
-import 'pages/overview.dart';
 
+import 'pages/overview.dart';
 import 'data/database.dart';
 
+import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+void printDatabasePath() async
+{
+  var path = await getDatabasesPath();
+  print("Path is $path");
+}
 
 void main()
 {
   // Database setup
   sqfliteFfiInit();
   databaseFactory = databaseFactoryFfi;
+
+  printDatabasePath();
 
   runApp(const MainApp());
 }

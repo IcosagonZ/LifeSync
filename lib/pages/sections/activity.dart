@@ -20,7 +20,14 @@ class Page_Activity extends StatefulWidget
 class Page_Activity_State extends State<Page_Activity>
 {
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<ActivityData> activity_data = [];
+
+  int activity_data_total_calories = 0;
+  int activity_data_total_distance = 0;
+  int activity_data_total_duration = 0;
+  int activity_data_total_steps = 0;
 
   @override
   void initState()
@@ -33,10 +40,18 @@ class Page_Activity_State extends State<Page_Activity>
   Future<void> initData() async
   {
     List<ActivityData> activity_data_result = await database_get_activity();
+    int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
+    int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
+    int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
+    int activity_data_total_steps_result = await database_aggregate_activity_steps(data_timenow);
 
     setState(()
     {
       activity_data = activity_data_result;
+      activity_data_total_calories = activity_data_total_calories_result;
+      activity_data_total_distance = activity_data_total_distance_result;
+      activity_data_total_duration = activity_data_total_duration_result;
+      activity_data_total_steps = activity_data_total_steps_result;
     });
   }
 
@@ -89,7 +104,16 @@ class Page_Activity_State extends State<Page_Activity>
                               Expanded(
                                 child: Text("Calories burned", style: TextStyle(color: color_primary))
                               ),
-                              Text("1700 cal")
+                              Text("$activity_data_total_calories cal"),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text("Active time", style: TextStyle(color: color_primary)),
+                              ),
+                              Text(helper_get_duration(activity_data_total_duration)),
                             ],
                           ),
                           SizedBox(height: 8),
@@ -98,7 +122,7 @@ class Page_Activity_State extends State<Page_Activity>
                               Expanded(
                                 child: Text("Steps", style: TextStyle(color: color_primary)),
                               ),
-                              Text("1700 steps"),
+                              Text("$activity_data_total_steps steps"),
                             ],
                           ),
                           SizedBox(height: 8),
@@ -107,7 +131,7 @@ class Page_Activity_State extends State<Page_Activity>
                               Expanded(
                                 child: Text("Distance", style: TextStyle(color: color_primary))
                               ),
-                              Text("1.5 km")
+                              Text(helper_get_distance(activity_data_total_distance))
                             ],
                           )
                         ]
@@ -157,7 +181,7 @@ class Page_Activity_State extends State<Page_Activity>
                             final tile = RecentsListTileMultiline(
                               list_icon: Icon(iconmapper_geticon("Activity", data.name)),
                               list_title: data.name,
-                              list_subtitle: "${helper_get_duration(data.duration)}, ${data.distance} km, ${data.calories} cal",
+                              list_subtitle: "${helper_get_duration(data.duration)}, ${helper_get_distance_single(data.distance)}, ${data.calories} cal",
                               list_date: data.entry_date,
                             );
 

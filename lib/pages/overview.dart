@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+// Data
+import '../data/database.dart';
+import '../helpers/../helpers/helper_string.dart';
+
 // Pages
 import 'timeline.dart';
 import 'settings.dart';
@@ -30,6 +34,40 @@ class Page_Overview extends StatefulWidget
 
 class Page_Overview_State extends State<Page_Overview>
 {
+  // Widget variables
+  DateTime data_timenow = DateTime.now();
+
+  int activity_data_total_calories = 0;
+  int activity_data_total_distance = 0;
+  int activity_data_total_duration = 0;
+
+  int activity_data_total_steps = 0;
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async
+  {
+    int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
+    int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
+    int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
+
+    int activity_data_total_steps_result = await database_aggregate_activity_steps(data_timenow);
+
+    setState(()
+    {
+      activity_data_total_calories = activity_data_total_calories_result;
+      activity_data_total_distance = activity_data_total_distance_result;
+      activity_data_total_duration = activity_data_total_duration_result;
+      activity_data_total_steps = activity_data_total_steps_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -349,7 +387,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("8 hrs", style:style_headlinesmall),
+                      Text("N/A hrs", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Slept", style:style_titlesmall),
                     ]
@@ -358,7 +396,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("2 hrs", style:style_headlinesmall),
+                      Text("N/A hrs", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Studied", style:style_titlesmall),
                     ]
@@ -367,7 +405,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("3 hrs", style:style_headlinesmall),
+                      Text("N/A hrs", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Free", style:style_titlesmall),
                     ]
@@ -408,7 +446,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("3124", style:style_headlinesmall),
+                      Text("$activity_data_total_steps", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Steps", style:style_titlesmall),
                     ]
@@ -417,7 +455,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("3.25 km", style:style_headlinesmall),
+                      Text(helper_get_distance_single(activity_data_total_distance), style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Moved", style:style_titlesmall),
                     ]
@@ -426,7 +464,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("54 mins", style:style_headlinesmall),
+                      Text(helper_get_duration_single(activity_data_total_duration), style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Active", style:style_titlesmall),
                     ]

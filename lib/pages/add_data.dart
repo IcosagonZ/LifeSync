@@ -2359,7 +2359,7 @@ class Page_AddData_State extends State<Page_AddData>
                   database_insert_activity(
                     activity_dropdown_chosen ?? "",
                     duration,
-                    int.parse(activity_distance_controller.text),
+                    (double.parse(activity_distance_controller.text)*1000).toInt(),
                     double.parse(activity_calories_controller.text),
                     entry_date,
                     general_notes_controller.text

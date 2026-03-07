@@ -1102,108 +1102,131 @@ Future<int> database_insert_workout(
   return row_index;
 }
 
-/*
-// Data display for activity page
-List<TimelineData> get_activity_data()
+// Aggregate data
+Future<int> database_aggregate_activity_calories(DateTime target_date) async
 {
-  print("Activity data requested");
-  List<TimelineData> data_activity_list = [];
+  Database database_db = await database_open();
 
-  for(var data in data_timeline_list)
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(calories) as total from activity where date(entry_date) = ?', [_target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    if(data.item_datatype=="Activity")
-    {
-      data_activity_list.add(data);
-    }
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
   }
 
-  return data_activity_list;
+  return 0;
 }
 
-// Data display for workout page
-List<TimelineData> get_workout_data()
+Future<int> database_aggregate_activity_distance(DateTime target_date) async
 {
-  print("Workout data requested");
-  List<TimelineData> data_workout_list = [];
+  Database database_db = await database_open();
 
-  for(var data in data_timeline_list)
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(distance) as total from activity where date(entry_date) = ?', [_target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    if(data.item_datatype=="Workout")
-    {
-      data_workout_list.add(data);
-    }
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
   }
 
-  return data_workout_list;
+  return 0;
 }
 
-// Data display for nutrition page
-List<TimelineData> get_nutrition_data()
-{
-  print("Nutrition data requested");
-  List<TimelineData> data_nutrition_list = [];
 
-  for(var data in data_timeline_list)
+Future<int> database_aggregate_activity_duration(DateTime target_date) async
+{
+  Database database_db = await database_open();
+
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(duration) as total from activity where date(entry_date) = ?', [_target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    if(data.item_datatype=="Nutrition")
-    {
-      data_nutrition_list.add(data);
-    }
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
   }
 
-  return data_nutrition_list;
+  return 0;
 }
 
-// Data display for symptoms page
-List<TimelineData> get_symptoms_data()
+Future<int> database_aggregate_activity_steps(DateTime target_date) async
 {
-  print("Symptoms data requested");
-  List<TimelineData> data_symptoms_list = [];
+  Database database_db = await database_open();
 
-  for(var data in data_timeline_list)
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  int duration = 0;
+  int distance = 0;
+
+  // Activities whose steps we should count
+  final List<String> activity_list = [
+    "Badminton",
+    "Baseball",
+    "Basketball",
+    "Cricket",
+    "Football",
+    "Golf",
+    "Handball",
+    "Hiking",
+    "Hockey",
+    "Kabbadi",
+    "Martial Arts",
+    "Mixed Martial Arts",
+    "Pickleball",
+    "Pool",
+    "Rugby",
+    "Running",
+    "Sprint",
+    "Volleyball",
+    //"Custom"
+  ];
+
+  String activity_placeholder = List.filled(activity_list.length, '?').join(', ');
+  List<dynamic> query_arguments = [...activity_list, _target_date];
+
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(duration) as total_duration, sum(distance) as total_distance from activity where name in ($activity_placeholder) and date(entry_date) = ?', query_arguments);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total_duration']!=null && data_aggregate.first['total_distance']!=null)
   {
-    if(data.item_datatype=="Symptoms")
-    {
-      data_symptoms_list.add(data);
-    }
+    duration = (data_aggregate.first['total_duration'] as num).toInt();
+    distance = (data_aggregate.first['total_distance'] as num).toInt();
   }
 
-  return data_symptoms_list;
-}
+  // Calculate steps
+  double speed = distance/(duration*60);
 
-// Data display for symptoms page
-List<TimelineData> get_mind_data()
-{
-  print("Mind data requested");
-  List<TimelineData> data_mind_list = [];
-
-  for(var data in data_timeline_list)
+  double stride_length = 0.71;
+  if(speed>=3)
   {
-    if(data.item_datatype=="Mind")
-    {
-      data_mind_list.add(data);
-    }
+    stride_length = 1.2;
+  }
+  else if(speed>=2)
+  {
+    stride_length = 1.05;
+  }
+  else if(speed>=1.5)
+  {
+    stride_length = 0.85;
+  }
+  else if(speed>=1.2)
+  {
+    stride_length = 0.71;
+  }
+  else
+  {
+    stride_length = 0.6;
   }
 
-  return data_mind_list;
+  double _steps = distance/stride_length;
+
+  int steps = _steps.toInt();
+
+  return steps;
 }
-
-// Sleep data
-List<TimelineData> get_sleep_data()
-{
-  print("Sleep data requested");
-  List<TimelineData> data_sleep_list = [];
-
-  List columns = ["Sleep"];
-
-  for(var data in data_timeline_list)
-  {
-    if(columns.contains(data.item_title))
-    {
-      data_sleep_list.add(data);
-    }
-  }
-
-  return data_sleep_list;
-}
-*/
