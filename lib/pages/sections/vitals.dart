@@ -18,14 +18,14 @@ class Page_Vitals extends StatefulWidget
 class Page_Vitals_State extends State<Page_Vitals>
 {
   // Dummy data
-  /*
+
   List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
   List<List<double>> data_bodytemperatures = [[0, 93],[1, 92],[2, 91],[3, 93],[4, 91],[5, 93],[6, 97]];
   List<List<double>> data_bloodpressure_systolic = [[0, 125],[1, 121],[2, 111],[3, 131],[4, 123],[5, 125],[6, 115]];
   List<List<double>> data_bloodpressure_diastolic = [[0, 75],[1, 77],[2, 74],[3, 84],[4, 73],[5, 73],[6, 78]];
   List<List<double>> data_bloodoxygen = [[0, 97],[1, 98],[2, 99],[3, 97],[4, 99],[5, 96],[6, 98]];
   List<List<double>> data_bloodsugar = [[0, 125],[1, 132],[2, 123],[3, 132],[4, 132],[5, 121],[6, 122]];
-  */
+
 
   // Widget variables
   List<VitalsData> vitals_data = [];
@@ -74,7 +74,7 @@ class Page_Vitals_State extends State<Page_Vitals>
     final style_titlesmall = text_theme.titleSmall;
 
 
-    /*
+
     Widget linechart_bottom_widgets(double value, TitleMeta meta) {
       TextStyle style = TextStyle(
         fontSize: 12,
@@ -197,7 +197,7 @@ class Page_Vitals_State extends State<Page_Vitals>
           )
         )
       );
-    }*/
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -304,8 +304,11 @@ class Page_Vitals_State extends State<Page_Vitals>
                   ]
                 )
               )
-            )
+            ),
+
             /*
+            SizedBox(height: 16),
+
             Text("History", style: style_headlinesmall),
             SizedBox(height: 16),
             Text("Heartrate", textAlign: TextAlign.start, style: style_titlelarge),
@@ -375,6 +378,7 @@ class Page_Vitals_State extends State<Page_Vitals>
               ]
             ),
             */
+
           ]
         )
       ),

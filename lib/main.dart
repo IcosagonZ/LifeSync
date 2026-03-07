@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'pages/overview.dart';
 
+import 'data/database.dart';
+
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main()

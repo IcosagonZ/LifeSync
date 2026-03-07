@@ -100,6 +100,7 @@ Future<List<Map<String, dynamic>>> database_read(String query) async
 Future<void> database_delete() async
 {
   await deleteDatabase(await database_path());
+  print("Deleted database");
 }
 
 class TimelineData
