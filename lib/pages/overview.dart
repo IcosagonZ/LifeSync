@@ -40,8 +40,13 @@ class Page_Overview_State extends State<Page_Overview>
   int activity_data_total_calories = 0;
   int activity_data_total_distance = 0;
   int activity_data_total_duration = 0;
-
   int activity_data_total_steps = 0;
+
+  int nutrition_data_total_calories = 0;
+  int workout_data_total_calories = 0;
+
+  int data_total_burned_calories = 0;
+  int data_calorie_deficit = 0;
 
   @override
   void initState()
@@ -56,8 +61,11 @@ class Page_Overview_State extends State<Page_Overview>
     int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
     int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
-
     int activity_data_total_steps_result = await database_aggregate_activity_steps(data_timenow);
+
+    int nutrition_data_total_calories_result = await database_aggregate_nutrition_calories(data_timenow);
+
+    int workout_data_total_calories_result = await database_aggregate_workout_calories(data_timenow);
 
     setState(()
     {
@@ -65,6 +73,12 @@ class Page_Overview_State extends State<Page_Overview>
       activity_data_total_distance = activity_data_total_distance_result;
       activity_data_total_duration = activity_data_total_duration_result;
       activity_data_total_steps = activity_data_total_steps_result;
+
+      nutrition_data_total_calories = nutrition_data_total_calories_result;
+      workout_data_total_calories = workout_data_total_calories_result;
+
+      data_total_burned_calories = activity_data_total_calories + workout_data_total_calories;
+      data_calorie_deficit = data_total_burned_calories - nutrition_data_total_calories;
     });
   }
 
@@ -505,7 +519,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("2103 cal", style:style_headlinesmall),
+                      Text("$nutrition_data_total_calories cal", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Consumed", style:style_titlesmall),
                     ]
@@ -514,7 +528,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("2512 cal", style:style_headlinesmall),
+                      Text("$data_total_burned_calories cal", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Burned", style:style_titlesmall),
                     ]
@@ -523,7 +537,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("409 cal", style:style_headlinesmall),
+                      Text("$data_calorie_deficit cal", style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Deficit", style:style_titlesmall),
                     ]

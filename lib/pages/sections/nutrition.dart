@@ -18,7 +18,11 @@ class Page_Nutrition extends StatefulWidget
 class Page_Nutrition_State extends State<Page_Nutrition>
 {
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<NutritionData> nutrition_data = [];
+
+  int nutrition_data_total_calories = 0;
 
   @override
   void initState()
@@ -30,11 +34,13 @@ class Page_Nutrition_State extends State<Page_Nutrition>
 
   Future<void> initData() async
   {
-    List<NutritionData> nutrition_data_result = await database_get_nutrition();
+    List<NutritionData> nutrition_data_result = await database_get_nutrition_for_date(data_timenow);
+    int nutrition_data_total_calories_result = await database_aggregate_nutrition_calories(data_timenow);
 
     setState(()
     {
       nutrition_data = nutrition_data_result;
+      nutrition_data_total_calories = nutrition_data_total_calories_result;
     });
   }
 
@@ -90,16 +96,16 @@ class Page_Nutrition_State extends State<Page_Nutrition>
                               Expanded(
                                 child: Text("Calories consumed", style: TextStyle(color: color_primary))
                               ),
-                              Text("1320 cal")
+                              Text("$nutrition_data_total_calories cal")
                             ],
                           ),
                           SizedBox(height: 8),
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Calorie deficit", style: TextStyle(color: color_primary)),
+                                child: Text("Calorie target", style: TextStyle(color: color_primary)),
                               ),
-                              Text("780 cal"),
+                              Text("2000 cal"),
                             ],
                           ),
                         ]
@@ -122,7 +128,7 @@ class Page_Nutrition_State extends State<Page_Nutrition>
               )
             ),
             SizedBox(height: 16),
-            Text("Recents", style: style_titlelarge),
+            Text("Today", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
               child: Padding(

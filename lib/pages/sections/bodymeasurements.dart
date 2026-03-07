@@ -16,6 +16,8 @@ class Page_BodyMeasurements extends StatefulWidget
 class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
 {
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<BodyMeasurementData> bodymeasurements_data = [];
 
   @override

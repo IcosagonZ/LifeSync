@@ -18,7 +18,6 @@ class Page_Vitals extends StatefulWidget
 class Page_Vitals_State extends State<Page_Vitals>
 {
   // Dummy data
-
   List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
   List<List<double>> data_bodytemperatures = [[0, 93],[1, 92],[2, 91],[3, 93],[4, 91],[5, 93],[6, 97]];
   List<List<double>> data_bloodpressure_systolic = [[0, 125],[1, 121],[2, 111],[3, 131],[4, 123],[5, 125],[6, 115]];
@@ -28,6 +27,8 @@ class Page_Vitals_State extends State<Page_Vitals>
 
 
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<VitalsData> vitals_data = [];
 
   @override
@@ -39,7 +40,7 @@ class Page_Vitals_State extends State<Page_Vitals>
   }
 
   Future<void> initData() async{
-    List<VitalsData> vitals_data_result = await database_get_vitals();
+    List<VitalsData> vitals_data_result = await database_get_vitals_for_date(data_timenow);
 
     setState(()
     {
@@ -222,7 +223,7 @@ class Page_Vitals_State extends State<Page_Vitals>
                               Expanded(
                                 child: Text("Status", style: TextStyle(color: color_primary))
                               ),
-                              Text("Nominal")
+                              Text("N/A")
                             ],
                           ),
                           SizedBox(height: 8),
@@ -231,7 +232,7 @@ class Page_Vitals_State extends State<Page_Vitals>
                               Expanded(
                                 child: Text("Stress", style: TextStyle(color: color_primary))
                               ),
-                              Text("Low")
+                              Text("N/A")
                             ],
                           )
                         ]
@@ -254,7 +255,7 @@ class Page_Vitals_State extends State<Page_Vitals>
               )
             ),
             SizedBox(height: 16),
-            Text("Recents", style: style_titlelarge),
+            Text("Today", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
               child: Padding(

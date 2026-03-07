@@ -39,7 +39,7 @@ class Page_Activity_State extends State<Page_Activity>
 
   Future<void> initData() async
   {
-    List<ActivityData> activity_data_result = await database_get_activity();
+    List<ActivityData> activity_data_result = await database_get_activity_for_date(data_timenow);
     int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
     int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
@@ -154,7 +154,7 @@ class Page_Activity_State extends State<Page_Activity>
               )
             ),
             SizedBox(height: 16),
-            Text("Recents", style: style_titlelarge),
+            Text("Today", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
               child: Padding(

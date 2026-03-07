@@ -18,7 +18,10 @@ class Page_Workout extends StatefulWidget
 class Page_Workout_State extends State<Page_Workout>
 {
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<WorkoutData> workout_data = [];
+  int workout_data_total_calories = 0;
 
   @override
   void initState()
@@ -30,11 +33,13 @@ class Page_Workout_State extends State<Page_Workout>
 
   Future<void> initData() async
   {
-    List<WorkoutData> workout_data_result = await database_get_workout();
+    List<WorkoutData> workout_data_result = await database_get_workout_for_date(data_timenow);
+    int workout_data_total_calories_result = await database_aggregate_workout_calories(data_timenow);
 
     setState(()
     {
       workout_data = workout_data_result;
+      workout_data_total_calories_result = workout_data_total_calories;
     });
   }
 
@@ -91,9 +96,10 @@ class Page_Workout_State extends State<Page_Workout>
                               Expanded(
                                 child: Text("Calories burned", style: TextStyle(color: color_primary))
                               ),
-                              Text("700 cal")
+                              Text("$workout_data_total_calories cal")
                             ],
                           ),
+                          /*
                           SizedBox(height: 8),
                           Row(
                             children: [
@@ -112,6 +118,7 @@ class Page_Workout_State extends State<Page_Workout>
                               Text("4/10")
                             ],
                           )
+                          */
                         ]
                       )
                     ),
@@ -122,7 +129,7 @@ class Page_Workout_State extends State<Page_Workout>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("82"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),
@@ -132,7 +139,7 @@ class Page_Workout_State extends State<Page_Workout>
               )
             ),
             SizedBox(height: 16),
-            Text("Recents", style: style_titlelarge),
+            Text("Today", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
               child: Padding(

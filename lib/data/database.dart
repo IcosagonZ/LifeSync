@@ -468,6 +468,37 @@ Future<List<ActivityData>> database_get_activity() async
   return data_activity_list;
 }
 
+Future<List<ActivityData>> database_get_activity_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_activity_map = await database_db.query(
+    'activity',
+    columns: ['name', 'duration', 'distance', 'calories', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
+
+  List<ActivityData> data_activity_list = [];
+
+  for(var data in data_activity_map)
+  {
+    data_activity_list.add(
+      ActivityData(
+        data["name"],
+        data["duration"],
+        data["distance"],
+        data["calories"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"]
+      )
+    );
+  }
+
+  return data_activity_list;
+}
+
 Future<int> database_insert_activity(
   String name,
   int duration,
@@ -577,6 +608,48 @@ Future<List<MindMoodData>> database_get_mind_mood() async
   Database database_db = await database_open();
 
   final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query('mind_mood', columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
+
+  List<MindMoodData> data_mind_mood_list = [];
+
+  for(var data in data_mind_mood_map)
+  {
+    // int to bool
+    bool _resolved = false;
+    if(data["resolved"]==1)
+    {
+      _resolved = true;
+    }
+    else
+    {
+      _resolved = false;
+    }
+
+    data_mind_mood_list.add(
+      MindMoodData(
+        data["name"],
+        data["intensity"],
+        _resolved,
+        DateTime.tryParse(data["end_date"]),
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_mind_mood_list;
+}
+
+Future<List<MindMoodData>> database_get_mind_mood_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query(
+    'mind_mood',
+    columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
 
   List<MindMoodData> data_mind_mood_list = [];
 
@@ -719,6 +792,42 @@ Future<List<NutritionData>> database_get_nutrition() async
   Database database_db = await database_open();
 
   final List<Map<String, dynamic>> data_nutrition_map = await database_db.query('nutrition', columns: ['name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note\n']);
+
+  List<NutritionData> data_nutrition_list = [];
+
+  for(var data in data_nutrition_map)
+  {
+    data_nutrition_list.add(
+      NutritionData(
+        data["name"],
+        data["form"],
+        data["type"],
+        data["qty"],
+        data["calories"],
+        data["mass"],
+        data["carbs"],
+        data["protein"],
+        data["fats"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_nutrition_list;
+}
+
+Future<List<NutritionData>> database_get_nutrition_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_nutrition_map = await database_db.query(
+    'nutrition',
+    columns: ['name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
 
   List<NutritionData> data_nutrition_list = [];
 
@@ -901,7 +1010,7 @@ Future<List<TimeData>> database_get_time() async
 Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
 {
   Database database_db = await database_open();
-  String _target_date = DateFormat('yyyy-mm-dd').format(target_date);
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
@@ -1009,6 +1118,35 @@ Future<List<VitalsData>> database_get_vitals() async
 
   return data_vitals_list;
 }
+Future<List<VitalsData>> database_get_vitals_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_vitals_map = await database_db.query(
+    'vitals',
+    columns: ['type', 'value', 'unit', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
+
+  List<VitalsData> data_vitals_list = [];
+
+  for(var data in data_vitals_map)
+  {
+    data_vitals_list.add(
+      VitalsData(
+        data["type"],
+        data["value"],
+        data["unit"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_vitals_list;
+}
 
 Future<int> database_insert_vitals(
   String type,
@@ -1051,6 +1189,39 @@ Future<List<WorkoutData>> database_get_workout() async
   Database database_db = await database_open();
 
   final List<Map<String, dynamic>> data_workout_map = await database_db.query('workout', columns: ['name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note']);
+
+  List<WorkoutData> data_workout_list = [];
+
+  for(var data in data_workout_map)
+  {
+    data_workout_list.add(
+      WorkoutData(
+        data["name"],
+        data["type"],
+        data["duration"],
+        data["calories"],
+        data["reps"],
+        data["weight"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_workout_list;
+}
+
+Future<List<WorkoutData>> database_get_workout_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_workout_map = await database_db.query(
+    'workout',
+    columns: ['name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
 
   List<WorkoutData> data_workout_list = [];
 
@@ -1136,7 +1307,6 @@ Future<int> database_aggregate_activity_distance(DateTime target_date) async
 
   return 0;
 }
-
 
 Future<int> database_aggregate_activity_duration(DateTime target_date) async
 {
@@ -1229,4 +1399,38 @@ Future<int> database_aggregate_activity_steps(DateTime target_date) async
   int steps = _steps.toInt();
 
   return steps;
+}
+
+Future<int> database_aggregate_nutrition_calories(DateTime target_date) async
+{
+  Database database_db = await database_open();
+
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(calories) as total from nutrition where date(entry_date) = ?', [_target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
+  }
+
+  return 0;
+}
+
+Future<int> database_aggregate_workout_calories(DateTime target_date) async
+{
+  Database database_db = await database_open();
+
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(calories) as total from workout where date(entry_date) = ?', [_target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
+  }
+
+  return 0;
 }
