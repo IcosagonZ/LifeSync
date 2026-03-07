@@ -245,7 +245,7 @@ class Page_Vitals_State extends State<Page_Vitals>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("85"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),

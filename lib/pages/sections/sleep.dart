@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../data/database.dart';
+import '../../helpers/helper_string.dart';
 import '../../components/recents_listtile.dart';
 
 class Page_Sleep extends StatefulWidget
@@ -14,6 +15,28 @@ class Page_Sleep extends StatefulWidget
 
 class Page_Sleep_State extends State<Page_Sleep>
 {
+  DateTime data_timenow = DateTime.now();
+  int data_time_sleep = 0;
+
+  @override
+  void initState()
+  {
+    initData();
+
+    super.initState();
+  }
+
+  Future<void> initData() async
+  {
+    // Get previous datas sleep data since entry_datetime = time person went to bed
+    int data_time_sleep_result = await database_aggregate_time_sleep(data_timenow.subtract(Duration(days: 1)));
+
+    setState(()
+    {
+      data_time_sleep = data_time_sleep_result;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -67,7 +90,7 @@ class Page_Sleep_State extends State<Page_Sleep>
                               Expanded(
                                 child: Text("Time slept", style: TextStyle(color: color_primary))
                               ),
-                              Text("7hrs 25 mins")
+                              Text(helper_get_duration(data_time_sleep))
                             ],
                           ),
                           SizedBox(height: 8),
@@ -89,7 +112,7 @@ class Page_Sleep_State extends State<Page_Sleep>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("89"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),

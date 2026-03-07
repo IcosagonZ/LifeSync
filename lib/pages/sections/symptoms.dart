@@ -94,7 +94,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                               Expanded(
                                 child: Text("Currently tracking", style: TextStyle(color: color_primary))
                               ),
-                              Text("1")
+                              Text("N/A")
                             ],
                           ),
                           SizedBox(height: 8),
@@ -103,7 +103,7 @@ class Page_Symptoms_State extends State<Page_Symptoms>
                               Expanded(
                                 child: Text("Severity", style: TextStyle(color: color_primary)),
                               ),
-                              Text("Very low"),
+                              Text("N/A"),
                             ],
                           ),
                         ]

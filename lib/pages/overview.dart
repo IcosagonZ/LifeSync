@@ -48,6 +48,10 @@ class Page_Overview_State extends State<Page_Overview>
   int data_total_burned_calories = 0;
   int data_calorie_deficit = 0;
 
+  int data_time_study = 0;
+  int data_time_sleep = 0;
+  int data_time_free = 0;
+
   @override
   void initState()
   {
@@ -67,6 +71,11 @@ class Page_Overview_State extends State<Page_Overview>
 
     int workout_data_total_calories_result = await database_aggregate_workout_calories(data_timenow);
 
+    int data_time_study_result = await database_aggregate_time_study(data_timenow);
+    // Get previous datas sleep data since entry_datetime = time person went to bed
+    int data_time_sleep_result = await database_aggregate_time_sleep(data_timenow.subtract(Duration(days: 1)));
+    int data_time_free_result = await database_aggregate_time_free(data_timenow);
+
     setState(()
     {
       activity_data_total_calories = activity_data_total_calories_result;
@@ -79,6 +88,10 @@ class Page_Overview_State extends State<Page_Overview>
 
       data_total_burned_calories = activity_data_total_calories + workout_data_total_calories;
       data_calorie_deficit = data_total_burned_calories - nutrition_data_total_calories;
+
+      data_time_study = data_time_study_result;
+      data_time_sleep = data_time_sleep_result;
+      data_time_free = data_time_free_result;
     });
   }
 
@@ -401,7 +414,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("N/A hrs", style:style_headlinesmall),
+                      Text(helper_get_duration_single(data_time_sleep), style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Slept", style:style_titlesmall),
                     ]
@@ -410,7 +423,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("N/A hrs", style:style_headlinesmall),
+                      Text(helper_get_duration_single(data_time_study), style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Studied", style:style_titlesmall),
                     ]
@@ -419,7 +432,7 @@ class Page_Overview_State extends State<Page_Overview>
                 Expanded(
                   child: Column(
                     children: [
-                      Text("N/A hrs", style:style_headlinesmall),
+                      Text(helper_get_duration_single(data_time_free), style:style_headlinesmall),
                       SizedBox(height: 8),
                       Text("Free", style:style_titlesmall),
                     ]

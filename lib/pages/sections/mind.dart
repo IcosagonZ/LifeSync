@@ -87,7 +87,7 @@ class Page_Mind_State extends State<Page_Mind>
                               Expanded(
                                 child: Text("Status", style: TextStyle(color: color_primary))
                               ),
-                              Text("Slightly stressed")
+                              Text("N/A")
                             ],
                           ),
                           SizedBox(height: 8),
@@ -96,7 +96,7 @@ class Page_Mind_State extends State<Page_Mind>
                               Expanded(
                                 child: Text("Severity", style: TextStyle(color: color_primary)),
                               ),
-                              Text("Moderate"),
+                              Text("N/A"),
                             ],
                           ),
                         ]
@@ -109,7 +109,7 @@ class Page_Mind_State extends State<Page_Mind>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("72"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),

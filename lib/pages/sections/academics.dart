@@ -98,7 +98,7 @@ class Page_Academics_State extends State<Page_Academics>
                               Expanded(
                                 child: Text("Performance", style: TextStyle(color: color_primary))
                               ),
-                              Text("Suboptimal")
+                              Text("N/A")
                             ],
                           ),
                           SizedBox(height: 8),
@@ -107,7 +107,7 @@ class Page_Academics_State extends State<Page_Academics>
                               Expanded(
                                 child: Text("Assignments", style: TextStyle(color: color_primary)),
                               ),
-                              Text("2/3"),
+                              Text("N/A"),
                             ],
                           ),
                           SizedBox(height: 8),
@@ -116,7 +116,7 @@ class Page_Academics_State extends State<Page_Academics>
                               Expanded(
                                 child: Text("Absent", style: TextStyle(color: color_primary)),
                               ),
-                              Text("3 days"),
+                              Text("N/A"),
                             ],
                           ),
                         ]
@@ -129,7 +129,7 @@ class Page_Academics_State extends State<Page_Academics>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("25"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),

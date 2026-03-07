@@ -1434,3 +1434,68 @@ Future<int> database_aggregate_workout_calories(DateTime target_date) async
 
   return 0;
 }
+
+Future<int> database_aggregate_time_study(DateTime target_date) async
+{
+  Database database_db = await database_open();
+
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(duration) as total from time where event = ? and date(entry_date) = ?', ["Study", _target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
+  }
+
+  return 0;
+}
+
+Future<int> database_aggregate_time_sleep(DateTime target_date) async
+{
+  Database database_db = await database_open();
+
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(duration) as total from time where event = ? and date(entry_date) = ?', ["Sleep", _target_date]);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
+  }
+
+  return 0;
+}
+
+Future<int> database_aggregate_time_free(DateTime target_date) async
+{
+  Database database_db = await database_open();
+
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<String> time_list = [
+    //"Sleep",
+    //"Study",
+    //"Food",
+    "Hobby",
+    "Gaming",
+    "Outing",
+    //"Commute",
+    "Entertainment",
+  ];
+
+  String query_placeholder = List.filled(time_list.length, '?').join(', ');
+  List<dynamic> query_arguments = [...time_list, _target_date];
+
+  final List<Map<String, dynamic>> data_aggregate = await database_db.rawQuery('select sum(duration) as total from time where event in ($query_placeholder) and date(entry_date) = ?', query_arguments);
+
+  if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
+  {
+    //print((data_aggregate.first['total'] as num).toInt());
+    return (data_aggregate.first['total'] as num).toInt();
+  }
+
+  return 0;
+}
