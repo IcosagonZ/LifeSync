@@ -8,6 +8,7 @@ import '../../data/database.dart';
 import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile.dart';
+import '../../components/graph_linechart.dart';
 
 class Page_Vitals extends StatefulWidget
 {
@@ -20,9 +21,9 @@ class Page_Vitals extends StatefulWidget
 class Page_Vitals_State extends State<Page_Vitals>
 {
   // Dummy data
-  List<GraphData> data_heartrates = [];
-  DateTime data_heartrate_date_start = DateTime.now().subtract(Duration(days: 7));
-  DateTime data_heartrate_date_end = DateTime.now();
+  //List<GraphData> data_heartrates = [];
+  DateTime date_start = DateTime.now().subtract(Duration(days: 7));
+  DateTime date_end = DateTime.now();
 
   //List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
   List<List<double>> data_bodytemperatures = [[0, 93],[1, 92],[2, 91],[3, 93],[4, 91],[5, 93],[6, 97]];
@@ -48,13 +49,13 @@ class Page_Vitals_State extends State<Page_Vitals>
   Future<void> initData() async{
     List<VitalsData> vitals_data_result = await database_get_vitals_for_date(data_timenow);
 
-    List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", data_heartrate_date_start, data_heartrate_date_end);
+    //List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", data_heartrate_date_start, data_heartrate_date_end);
 
     setState(()
     {
       vitals_data = vitals_data_result;
 
-      data_heartrates = data_heartrates_result;
+      //data_heartrates = data_heartrates_result;
     });
   }
 
@@ -83,116 +84,6 @@ class Page_Vitals_State extends State<Page_Vitals>
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
-
-    Widget linechart_side_widgets(double value, TitleMeta meta)
-    {
-      if(value==meta.max || value==meta.min)
-      {
-        return const SizedBox.shrink();
-      }
-
-      TextStyle style = TextStyle(
-        fontSize: 12,
-        color: color_primary,
-      );
-      return SideTitleWidget(
-        meta: meta,
-        child: Text((value.toInt()).toString(), style: style),
-      );
-    }
-
-    LineChartData linechartdata_widget(List<LineChartBarData> chartdata, List<dynamic> valuedata){
-      return LineChartData(
-        gridData: FlGridData(
-          show: false,
-          drawHorizontalLine: true,
-          drawVerticalLine: true,
-          horizontalInterval: 5,
-          verticalInterval: 1,
-          getDrawingHorizontalLine: (value) {
-            return FlLine(
-              color: color_onprimary,
-              strokeWidth: 1,
-            );
-          },
-          getDrawingVerticalLine: (value) {
-            return FlLine(
-              color: color_onprimary,
-              strokeWidth: 1,
-            );
-          },
-        ),
-        borderData: FlBorderData(
-          show: false,
-        ),
-        titlesData: FlTitlesData(
-          show: true,
-          rightTitles: const AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-              reservedSize: 24,
-            ),
-          ),
-          topTitles: const AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-              reservedSize: 22,
-            ),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 22,
-              interval: 1,
-              getTitlesWidget: (double value, TitleMeta meta)
-              {
-                DateTime entry_date = valuedata[value.toInt()].entry_date;
-                final String text = DateFormat('dd/MM').format(entry_date);
-
-                return SideTitleWidget(
-                  meta: meta,
-                  child: Text(text, style: TextStyle(fontSize: 10)),
-                );
-              },
-            ),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 24,
-              getTitlesWidget: linechart_side_widgets,
-            ),
-          )
-        ),
-        minX: 0,
-        maxX: valuedata.length.toDouble()-1,
-        lineBarsData: chartdata,
-        //backgroundColor: color_onsecondary,
-      );
-    }
-
-    Padding linechart_card(List<LineChartBarData> chartdata, List<dynamic> valuedata)
-    {
-      return Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              AspectRatio(
-                aspectRatio: 2,
-                child: Padding(
-                  padding: EdgeInsets.all(2),
-                  child: LineChart(
-                    linechartdata_widget(
-                      chartdata,
-                      valuedata
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -310,74 +201,13 @@ class Page_Vitals_State extends State<Page_Vitals>
             // Heartrate display
             Text("Heartrate", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
-            Card(
-              child: Column(
-                children: [
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: (){
-                          print("Back");
-                          setState((){
-                            data_heartrate_date_start = data_heartrate_date_start.subtract(Duration(days: 7));
-                            data_heartrate_date_end = data_heartrate_date_end.subtract(Duration(days: 7));
-                          });
-                          initState();
-                        },
-                        child: Text("<"),
-                      ),
-                      Text("${DateFormat('dd/MM').format(data_heartrate_date_end)} - ${DateFormat('dd/MM').format(data_heartrate_date_start)}", textAlign: TextAlign.center),
-                      TextButton(
-                        onPressed: (){
-                          print("Forward");
-                          setState((){
-                            data_heartrate_date_start = data_heartrate_date_start.add(Duration(days: 7));
-                            data_heartrate_date_end = data_heartrate_date_end.add(Duration(days: 7));
-                          });
-
-                          initState();
-                        },
-                        child: Text(">"),
-                      ),
-                    ]
-                  ),
-                  SizedBox(height: 8),
-                  Stack(
-                    children: [
-                      Visibility(
-                        visible: data_heartrates.length>=2,
-                        child: linechart_card(
-                          [
-                            LineChartBarData
-                            (
-                              spots: List.generate(data_heartrates.length, (index){
-                                final data = data_heartrates[index];
-                                return FlSpot(index.toDouble(), double.parse(data.value));
-                              }),
-                              isCurved: true,
-                              color: color_primary,
-                            )
-                          ],
-                          data_heartrates
-                        ),
-                      ),
-                      Visibility(
-                        visible: data_heartrates.length<2,
-                        child: Padding
-                        (
-                          padding: EdgeInsets.all(32),
-                          child: Center
-                          (
-                            child: Text("Not enough data available to plot graph")
-                          ),
-                        )
-                      )
-                    ]
-                  )
-                ]
-              )
+            GraphLineChart(
+              table_name: "vitals",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Heartrate",
+              date_start: date_start,
+              date_end: date_end,
             ),
           ]
         )
