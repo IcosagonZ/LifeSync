@@ -567,6 +567,41 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
   return data_bodymeasurements_list;
 }
 
+// Data display for body measurements page
+Future<List<BodyMeasurementData>> database_get_bodymeasurement_for_date(DateTime target_date) async
+{
+  print("Body measurements data requested");
+
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query(
+    'body_measurement',
+    columns: ['type', 'value', 'unit', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
+
+  List<BodyMeasurementData> data_bodymeasurements_list = [];
+
+  for(var data in data_bodymeasurements_map)
+  {
+    data_bodymeasurements_list.add(
+      BodyMeasurementData(
+        data["type"],
+        data["value"] as double,
+        data["unit"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"]
+      )
+    );
+  }
+
+  print("Found ${data_bodymeasurements_list.length} entries");
+
+  return data_bodymeasurements_list;
+}
+
 Future<int> database_insert_bodymeasurements(
   String measurement_type,
   String value,
@@ -1557,7 +1592,7 @@ Future<List<GraphData>> database_graphdata_retrive(String table_name, String col
 
   for (var row in database_result)
   {
-    String value = row["value"] as String;
+    String value = row["value"].toString();
     DateTime entry_date = DateTime.parse(row["entry_date"] as String);
     //print("$value, $entry_date");
     data_graphvalues.add(GraphData(value, entry_date));

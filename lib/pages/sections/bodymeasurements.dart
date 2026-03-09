@@ -4,6 +4,8 @@ import '../../data/database.dart';
 import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile.dart';
+import '../../components/graph_linechart.dart';
+
 import '../../helpers/helper_calculate.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
@@ -19,6 +21,9 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
   // Widget variables
   DateTime data_timenow = DateTime.now();
 
+  DateTime date_start = DateTime.now().subtract(Duration(days: 7));
+  DateTime date_end = DateTime.now();
+
   List<BodyMeasurementData> bodymeasurements_data = [];
 
   int data_latest_height = 0;
@@ -33,7 +38,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
   }
 
   Future<void> initData() async{
-    List<BodyMeasurementData> bodymeasurements_data_result = await database_get_bodymeasurement();
+    List<BodyMeasurementData> bodymeasurements_data_result = await database_get_bodymeasurement_for_date(data_timenow);
 
     int data_latest_height_result = await database_latest_body_height();
     int data_latest_weight_result = await database_latest_body_weight();
@@ -177,7 +182,37 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
                   ]
                 )
               )
-            )
+            ),
+            SizedBox(height: 16),
+
+            Text("History", style: style_headlinesmall),
+            SizedBox(height: 16),
+
+            // Weight display
+            Text("Weight", textAlign: TextAlign.start, style: style_titlelarge),
+            SizedBox(height: 16),
+            GraphLineChart(
+              table_name: "body_measurement",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Weight",
+              date_start: date_start,
+              date_end: date_end,
+            ),
+            SizedBox(height: 16),
+
+            // Height display
+            Text("Height", textAlign: TextAlign.start, style: style_titlelarge),
+            SizedBox(height: 16),
+            GraphLineChart(
+              table_name: "body_measurement",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Height",
+              date_start: date_start,
+              date_end: date_end,
+            ),
+            SizedBox(height: 16),
           ]
         )
       ),
