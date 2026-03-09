@@ -1553,7 +1553,7 @@ Future<List<GraphData>> database_graphdata_retrive(String table_name, String col
   // select value as value, entry_date from vitals where name = 'Heartrate' and entry_date between 2026-03-02 and 2026-03-09 order by entry_date asc
   final List<Map<String, dynamic>> database_result = await database_db.rawQuery('''select $column_name as value, entry_date from $table_name where $where_column = ? and date(entry_date) between date(?) and date(?) order by entry_date asc''', [ where_condition, _date_start, _date_end]);
 
-  print("Got ${database_result.length} rows");
+  //print("$table_name: got ${database_result.length} rows");
 
   for (var row in database_result)
   {

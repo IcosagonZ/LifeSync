@@ -211,6 +211,19 @@ class Page_Vitals_State extends State<Page_Vitals>
             ),
             SizedBox(height: 16),
 
+            // Blood pressure display
+            Text("Blood Pressure", textAlign: TextAlign.start, style: style_titlelarge),
+            SizedBox(height: 16),
+            GraphLineChart(
+              table_name: "vitals",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Blood Pressure",
+              date_start: date_start,
+              date_end: date_end,
+            ),
+            SizedBox(height: 16),
+
             // Body Temperature display
             Text("Body Temperature", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),

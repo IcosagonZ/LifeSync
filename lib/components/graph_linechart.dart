@@ -50,7 +50,7 @@ LineChartData linechartdata_widget(List<LineChartBarData> chartdata, List<dynami
       rightTitles: const AxisTitles(
         sideTitles: SideTitles(
           showTitles: false,
-          reservedSize: 24,
+          reservedSize: 32,
         ),
       ),
       topTitles: const AxisTitles(
@@ -79,7 +79,7 @@ LineChartData linechartdata_widget(List<LineChartBarData> chartdata, List<dynami
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 24,
+          reservedSize: 32,
           getTitlesWidget: linechart_side_widgets,
         ),
       )
@@ -123,8 +123,6 @@ class GraphLineChart_State extends State<GraphLineChart>
   // Widget variables
   DateTime data_timenow = DateTime.now();
 
-  List<VitalsData> vitals_data = [];
-
   @override
   void initState()
   {
@@ -142,6 +140,34 @@ class GraphLineChart_State extends State<GraphLineChart>
       data_chart = data_chart_result;
     });
   }
+
+  List<FlSpot> chart_spot_retrive(List<GraphData> data_chart, int line_index)
+  {
+    return List.generate(data_chart.length, (index)
+    {
+      final data = data_chart[index];
+      final value = data.value;
+
+      // To process blood pressure 120/80
+      if(value.contains("/"))
+      {
+        final parts = value.split("/").map((s) => s.trim()).toList();
+        if(parts.length==2 && line_index<2)
+        {
+          try
+          {
+            return FlSpot(index.toDouble(), double.parse(parts[line_index]));
+          }
+          catch (e)
+          {
+            return FlSpot(index.toDouble(), 0.0);
+          }
+        }
+      }
+      return FlSpot(index.toDouble(), double.parse(data.value));
+    });
+  }
+
 
   @override
   Widget build(BuildContext context)
@@ -169,6 +195,31 @@ class GraphLineChart_State extends State<GraphLineChart>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
+
+
+    List<LineChartBarData> linechartbardata_retrive(List<GraphData> data_chart)
+    {
+      List<LineChartBarData> linechartbardata_list = [];
+
+      linechartbardata_list.add(LineChartBarData
+      (
+        spots: chart_spot_retrive(data_chart, 0),
+        isCurved: true,
+        color: color_primary,
+      ));
+
+      if(widget.where_value=="Blood Pressure")
+      {
+        linechartbardata_list.add(LineChartBarData
+        (
+          spots: chart_spot_retrive(data_chart, 1),
+          isCurved: true,
+          color: color_primary,
+        ));
+      }
+
+      return linechartbardata_list;
+    }
 
     return Card(
       child: Column(
@@ -219,17 +270,7 @@ class GraphLineChart_State extends State<GraphLineChart>
                           padding: EdgeInsets.all(2),
                           child: LineChart(
                             linechartdata_widget(
-                              [
-                                LineChartBarData
-                                (
-                                  spots: List.generate(data_chart.length, (index){
-                                    final data = data_chart[index];
-                                    return FlSpot(index.toDouble(), double.parse(data.value));
-                                  }),
-                                 isCurved: true,
-                                 color: color_primary,
-                                )
-                              ],
+                              linechartbardata_retrive(data_chart),
                               data_chart
                             ),
                           ),
