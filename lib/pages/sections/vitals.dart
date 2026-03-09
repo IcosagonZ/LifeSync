@@ -21,6 +21,9 @@ class Page_Vitals_State extends State<Page_Vitals>
 {
   // Dummy data
   List<GraphData> data_heartrates = [];
+  DateTime data_heartrate_date_start = DateTime.now().subtract(Duration(days: 7));
+  DateTime data_heartrate_date_end = DateTime.now();
+
   //List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
   List<List<double>> data_bodytemperatures = [[0, 93],[1, 92],[2, 91],[3, 93],[4, 91],[5, 93],[6, 97]];
   List<List<double>> data_bloodpressure_systolic = [[0, 125],[1, 121],[2, 111],[3, 131],[4, 123],[5, 125],[6, 115]];
@@ -45,7 +48,7 @@ class Page_Vitals_State extends State<Page_Vitals>
   Future<void> initData() async{
     List<VitalsData> vitals_data_result = await database_get_vitals_for_date(data_timenow);
 
-    List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", DateTime.now().subtract(Duration(days: 7)), DateTime.now());
+    List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", data_heartrate_date_start, data_heartrate_date_end);
 
     setState(()
     {
@@ -168,14 +171,11 @@ class Page_Vitals_State extends State<Page_Vitals>
       );
     }
 
-    Card linechart_card(List<LineChartBarData> chartdata, List<dynamic> valuedata)
+    Padding linechart_card(List<LineChartBarData> chartdata, List<dynamic> valuedata)
     {
-      return
-      Card(
-        child: Padding(
+      return Padding(
           padding: EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AspectRatio(
                 aspectRatio: 2,
@@ -191,7 +191,6 @@ class Page_Vitals_State extends State<Page_Vitals>
               ),
             ],
           )
-        )
       );
     }
 
@@ -311,39 +310,74 @@ class Page_Vitals_State extends State<Page_Vitals>
             // Heartrate display
             Text("Heartrate", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
-            Stack(
-              children: [
-                Visibility(
-                  visible: data_heartrates.length>=2,
-                  child: linechart_card(
-                    [
-                      LineChartBarData
-                      (
-                        spots: List.generate(data_heartrates.length, (index){
-                          final data = data_heartrates[index];
-                          return FlSpot(index.toDouble(), double.parse(data.value));
-                        }),
-                        isCurved: true,
-                        color: color_primary,
-                      )
-                    ],
-                    data_heartrates
-                  ),
-                ),
-                Visibility(
-                  visible: data_heartrates.length<2,
-                  child: Card.outlined(
-                    child: Padding
-                    (
-                      padding: EdgeInsets.all(16),
-                      child: Center
-                      (
-                        child: Text("Not enough data available to plot graph")
+            Card(
+              child: Column(
+                children: [
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: (){
+                          print("Back");
+                          setState((){
+                            data_heartrate_date_start = data_heartrate_date_start.subtract(Duration(days: 7));
+                            data_heartrate_date_end = data_heartrate_date_end.subtract(Duration(days: 7));
+                          });
+                          initState();
+                        },
+                        child: Text("<"),
                       ),
-                    )
+                      Text("${DateFormat('dd/MM').format(data_heartrate_date_end)} - ${DateFormat('dd/MM').format(data_heartrate_date_start)}", textAlign: TextAlign.center),
+                      TextButton(
+                        onPressed: (){
+                          print("Forward");
+                          setState((){
+                            data_heartrate_date_start = data_heartrate_date_start.add(Duration(days: 7));
+                            data_heartrate_date_end = data_heartrate_date_end.add(Duration(days: 7));
+                          });
+
+                          initState();
+                        },
+                        child: Text(">"),
+                      ),
+                    ]
+                  ),
+                  SizedBox(height: 8),
+                  Stack(
+                    children: [
+                      Visibility(
+                        visible: data_heartrates.length>=2,
+                        child: linechart_card(
+                          [
+                            LineChartBarData
+                            (
+                              spots: List.generate(data_heartrates.length, (index){
+                                final data = data_heartrates[index];
+                                return FlSpot(index.toDouble(), double.parse(data.value));
+                              }),
+                              isCurved: true,
+                              color: color_primary,
+                            )
+                          ],
+                          data_heartrates
+                        ),
+                      ),
+                      Visibility(
+                        visible: data_heartrates.length<2,
+                        child: Padding
+                        (
+                          padding: EdgeInsets.all(32),
+                          child: Center
+                          (
+                            child: Text("Not enough data available to plot graph")
+                          ),
+                        )
+                      )
+                    ]
                   )
-                )
-              ]
+                ]
+              )
             ),
           ]
         )
