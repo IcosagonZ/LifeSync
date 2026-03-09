@@ -2,6 +2,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'package:fl_chart/fl_chart.dart';
 //import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'iconmapper.dart';
@@ -1529,4 +1531,37 @@ Future<int> database_latest_body_weight() async
   }
 
   return 0;
+}
+
+// Graph data
+class GraphData{
+  String value;
+  DateTime entry_date;
+
+  GraphData(this.value, this.entry_date);
+}
+
+Future<List<GraphData>> database_graphdata_retrive(String table_name, String column_name, String where_column, String where_condition, DateTime date_start, DateTime date_end) async
+{
+  List<GraphData> data_graphvalues = [];
+
+  String _date_start = DateFormat('yyyy-MM-dd').format(date_start);
+  String _date_end = DateFormat('yyyy-MM-dd').format(date_end);
+
+  Database database_db = await database_open();
+
+  // select value as value, entry_date from vitals where name = 'Heartrate' and entry_date between 2026-03-02 and 2026-03-09 order by entry_date asc
+  final List<Map<String, dynamic>> database_result = await database_db.rawQuery('''select $column_name as value, entry_date from $table_name where $where_column = ? and date(entry_date) between date(?) and date(?) order by entry_date asc''', [ where_condition, _date_start, _date_end]);
+
+  print("Got ${database_result.length} rows");
+
+  for (var row in database_result)
+  {
+    String value = row["value"] as String;
+    DateTime entry_date = DateTime.parse(row["entry_date"] as String);
+    //print("$value, $entry_date");
+    data_graphvalues.add(GraphData(value, entry_date));
+  }
+
+  return data_graphvalues;
 }

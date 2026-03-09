@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import 'package:intl/intl.dart';
+
 import '../../data/database.dart';
 import '../../data/iconmapper.dart';
 
@@ -18,7 +20,8 @@ class Page_Vitals extends StatefulWidget
 class Page_Vitals_State extends State<Page_Vitals>
 {
   // Dummy data
-  List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
+  List<GraphData> data_heartrates = [];
+  //List<List<double>> data_heartrates = [[0, 90],[1, 93],[2, 91],[3, 84],[4, 97],[5, 85],[6, 87]];
   List<List<double>> data_bodytemperatures = [[0, 93],[1, 92],[2, 91],[3, 93],[4, 91],[5, 93],[6, 97]];
   List<List<double>> data_bloodpressure_systolic = [[0, 125],[1, 121],[2, 111],[3, 131],[4, 123],[5, 125],[6, 115]];
   List<List<double>> data_bloodpressure_diastolic = [[0, 75],[1, 77],[2, 74],[3, 84],[4, 73],[5, 73],[6, 78]];
@@ -42,9 +45,13 @@ class Page_Vitals_State extends State<Page_Vitals>
   Future<void> initData() async{
     List<VitalsData> vitals_data_result = await database_get_vitals_for_date(data_timenow);
 
+    List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", DateTime.now().subtract(Duration(days: 7)), DateTime.now());
+
     setState(()
     {
       vitals_data = vitals_data_result;
+
+      data_heartrates = data_heartrates_result;
     });
   }
 
@@ -74,34 +81,13 @@ class Page_Vitals_State extends State<Page_Vitals>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-
-
-    Widget linechart_bottom_widgets(double value, TitleMeta meta) {
-      TextStyle style = TextStyle(
-        fontSize: 12,
-        color: color_primary,
-      );
-      String text = switch (value.toInt())
+    Widget linechart_side_widgets(double value, TitleMeta meta)
+    {
+      if(value==meta.max || value==meta.min)
       {
-        0 => 'MON',
-        1 => 'TUE',
-        2 => 'WED',
-        3 => 'THU',
-        4 => 'FRI',
-        5 => 'SAT',
-        6 => 'SUN',
-        _ => '',
-      };
-      return SideTitleWidget(
-        meta: meta,
-        child: Transform.rotate(
-          angle: -0.7854, // 45 degree
-          child: Text(text, style: style),
-        ),
-      );
-    }
+        return const SizedBox.shrink();
+      }
 
-    Widget linechart_side_widgets(double value, TitleMeta meta) {
       TextStyle style = TextStyle(
         fontSize: 12,
         color: color_primary,
@@ -112,7 +98,7 @@ class Page_Vitals_State extends State<Page_Vitals>
       );
     }
 
-    LineChartData linechartdata_widget(List<LineChartBarData> chartdata){
+    LineChartData linechartdata_widget(List<LineChartBarData> chartdata, List<dynamic> valuedata){
       return LineChartData(
         gridData: FlGridData(
           show: false,
@@ -141,7 +127,7 @@ class Page_Vitals_State extends State<Page_Vitals>
           rightTitles: const AxisTitles(
             sideTitles: SideTitles(
               showTitles: false,
-              reservedSize: 32,
+              reservedSize: 24,
             ),
           ),
           topTitles: const AxisTitles(
@@ -155,26 +141,34 @@ class Page_Vitals_State extends State<Page_Vitals>
               showTitles: true,
               reservedSize: 22,
               interval: 1,
-              getTitlesWidget: linechart_bottom_widgets,
+              getTitlesWidget: (double value, TitleMeta meta)
+              {
+                DateTime entry_date = valuedata[value.toInt()].entry_date;
+                final String text = DateFormat('dd/MM').format(entry_date);
+
+                return SideTitleWidget(
+                  meta: meta,
+                  child: Text(text, style: TextStyle(fontSize: 10)),
+                );
+              },
             ),
           ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 32,
-              interval: 2,
+              reservedSize: 24,
               getTitlesWidget: linechart_side_widgets,
             ),
           )
         ),
         minX: 0,
-        maxX: 6,
+        maxX: valuedata.length.toDouble()-1,
         lineBarsData: chartdata,
-        backgroundColor: color_onsecondary,
+        //backgroundColor: color_onsecondary,
       );
     }
 
-    Card linechart_card(List<LineChartBarData> chartdata)
+    Card linechart_card(List<LineChartBarData> chartdata, List<dynamic> valuedata)
     {
       return
       Card(
@@ -186,10 +180,11 @@ class Page_Vitals_State extends State<Page_Vitals>
               AspectRatio(
                 aspectRatio: 2,
                 child: Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(2),
                   child: LineChart(
                     linechartdata_widget(
-                      chartdata
+                      chartdata,
+                      valuedata
                     ),
                   ),
                 ),
@@ -307,79 +302,49 @@ class Page_Vitals_State extends State<Page_Vitals>
               )
             ),
 
-            /*
+
             SizedBox(height: 16),
 
             Text("History", style: style_headlinesmall),
             SizedBox(height: 16),
+
+            // Heartrate display
             Text("Heartrate", textAlign: TextAlign.start, style: style_titlelarge),
             SizedBox(height: 16),
-            linechart_card(
-              [
-                LineChartBarData(
-                  spots: data_heartrates.map((data)
-                  {
-                    return FlSpot(data[0], data[1]);
-                  }).toList(),
-                  isCurved: true,
-                  color: color_primary,
-                )
-              ]
-            ),
-            Text("Blood Sugar", textAlign: TextAlign.start, style: style_titlelarge),
-            SizedBox(height: 16),
-            linechart_card(
-              [
-                LineChartBarData(
-                  spots: data_bloodsugar.map((data)
-                  {
-                    return FlSpot(data[0], data[1]);
-                  }).toList(),
-                  isCurved: true,
-                  color: color_primary,
-                )
-              ]
-            ),
-            SizedBox(height: 16),
-            Text("Blood Oxygen", textAlign: TextAlign.start, style: style_titlelarge),
-            SizedBox(height: 16),
-            linechart_card(
-              [
-                LineChartBarData(
-                  spots: data_bloodpressure_systolic.map((data)
-                  {
-                    return FlSpot(data[0], data[1]);
-                  }).toList(),
-                  isCurved: true,
-                  color: color_primary,
+            Stack(
+              children: [
+                Visibility(
+                  visible: data_heartrates.length>=2,
+                  child: linechart_card(
+                    [
+                      LineChartBarData
+                      (
+                        spots: List.generate(data_heartrates.length, (index){
+                          final data = data_heartrates[index];
+                          return FlSpot(index.toDouble(), double.parse(data.value));
+                        }),
+                        isCurved: true,
+                        color: color_primary,
+                      )
+                    ],
+                    data_heartrates
+                  ),
                 ),
-                LineChartBarData(
-                  spots: data_bloodpressure_diastolic.map((data)
-                  {
-                    return FlSpot(data[0], data[1]);
-                  }).toList(),
-                  isCurved: true,
-                  color: color_primary,
-                ),
-              ]
-            ),
-            SizedBox(height: 16),
-            Text("Body Temperature", textAlign: TextAlign.start, style: style_titlelarge),
-            SizedBox(height: 16),
-            linechart_card(
-              [
-                LineChartBarData(
-                  spots: data_bodytemperatures.map((data)
-                  {
-                    return FlSpot(data[0], data[1]);
-                  }).toList(),
-                  isCurved: true,
-                  color: color_primary,
+                Visibility(
+                  visible: data_heartrates.length<2,
+                  child: Card.outlined(
+                    child: Padding
+                    (
+                      padding: EdgeInsets.all(16),
+                      child: Center
+                      (
+                        child: Text("Not enough data available to plot graph")
+                      ),
+                    )
+                  )
                 )
               ]
             ),
-            */
-
           ]
         )
       ),
