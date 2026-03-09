@@ -209,6 +209,46 @@ class Page_Vitals_State extends State<Page_Vitals>
               date_start: date_start,
               date_end: date_end,
             ),
+            SizedBox(height: 16),
+
+            // Body Temperature display
+            Text("Body Temperature", textAlign: TextAlign.start, style: style_titlelarge),
+            SizedBox(height: 16),
+            GraphLineChart(
+              table_name: "vitals",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Body Temperature",
+              date_start: date_start,
+              date_end: date_end,
+            ),
+            SizedBox(height: 16),
+
+            // Blood Oxygen display
+            Text("Blood Oxygen", textAlign: TextAlign.start, style: style_titlelarge),
+            SizedBox(height: 16),
+            GraphLineChart(
+              table_name: "vitals",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Blood Oxygen",
+              date_start: date_start,
+              date_end: date_end,
+            ),
+            SizedBox(height: 16),
+
+            // Blood Sugar display
+            Text("Blood Sugar", textAlign: TextAlign.start, style: style_titlelarge),
+            SizedBox(height: 16),
+            GraphLineChart(
+              table_name: "vitals",
+              column_name: "value",
+              where_column: "type",
+              where_value: "Blood Sugar",
+              date_start: date_start,
+              date_end: date_end,
+            ),
+            SizedBox(height: 16),
           ]
         )
       ),
