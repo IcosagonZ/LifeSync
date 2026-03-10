@@ -1,0 +1,15 @@
+class NutritionData{
+  String name;
+  String form;
+  String type;
+  double qty;
+  double calories;
+  double mass;
+  double carbs;
+  double protein;
+  double fats;
+  DateTime entry_date;
+  String entry_note;
+
+  NutritionData(this.name, this.form, this.type, this.qty, this.calories, this.mass, this.carbs, this.protein, this.fats, this.entry_date, this.entry_note);
+}
