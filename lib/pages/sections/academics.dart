@@ -4,6 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../data/database.dart';
+import '../../data/models/academics_absent.dart';
+import '../../data/models/academics_assignment.dart';
+import '../../data/models/academics_exam.dart';
+import '../../data/models/academics_mark.dart';
+
 
 import '../../components/recents_listtile_single_text.dart';
 import '../../components/recents_listtile_multiline.dart';

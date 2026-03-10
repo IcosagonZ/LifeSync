@@ -3,6 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../data/database.dart';
+import '../../data/models/time.dart';
+
 import '../../data/iconmapper.dart';
 
 import '../../helpers/helper_string.dart';

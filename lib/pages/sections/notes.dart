@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../data/database.dart';
-
-import '../../components/recents_listtile_multiline.dart';
+import '../../data/models/note.dart';
 
 import '../add_note.dart';
+import '../../components/recents_listtile_multiline.dart';
+
 
 class Page_Notes extends StatefulWidget
 {

@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'note.g.dart';
+
+@JsonSerializable()
 class NoteData{
   String title;
   String content;
@@ -5,4 +10,7 @@ class NoteData{
   DateTime entry_date;
 
   NoteData(this.title, this.content, this.tags, this.entry_date);
+
+  factory NoteData.fromJson(Map<String, dynamic> json) => _$NoteDataFromJson(json);
+  Map<String, dynamic> toJson() => _$NoteDataToJson(this);
 }

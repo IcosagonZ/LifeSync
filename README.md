@@ -41,6 +41,10 @@ Front end will be made using Flutter for mobile friendly cross platform data ent
 - Material Symbols Icons
 - Intl
 
+## Running
+- Run using `flutter run`
+- Update generated code using `dart run build_runner clean` and 
+
 ## References
 
 1. <p>Syed Khaliq, Y. Jayasurya Reddy, and Y. Sriyukth Chowdary, “Food Calorie Estimation Using Deep Learning and Computer Vision,” International Journal of Engineering Technology Research & Management (IJETRM), vol. 9, no. 4, pp. 1–3, April 2025, ISSN 2456-9348, doi:10.5281/zenodo.15119775</p>

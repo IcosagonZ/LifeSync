@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../data/database.dart';
-import '../../data/iconmapper.dart';
+import '../../data/models/activity.dart';
 
+import '../../data/iconmapper.dart';
 import '../../helpers/helper_string.dart';
 
 import '../../components/recents_listtile_multiline.dart';

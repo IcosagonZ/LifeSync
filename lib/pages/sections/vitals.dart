@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
-
-import 'package:intl/intl.dart';
 
 import '../../data/backend.dart';
 import '../../data/database.dart';
+import '../../data/models/vitals.dart';
+
 import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile.dart';

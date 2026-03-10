@@ -5,7 +5,6 @@ import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import 'package:json_annotation/json_annotation.dart';
 //import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'iconmapper.dart';

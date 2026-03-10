@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../../data/database.dart';
+import '../../data/models/symptom.dart';
+
+import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile_multiline.dart';
 import '../../components/recents_listtile_symptoms.dart';
 
-import '../../data/database.dart';
-import '../../data/iconmapper.dart';
 
 class Page_Symptoms extends StatefulWidget
 {

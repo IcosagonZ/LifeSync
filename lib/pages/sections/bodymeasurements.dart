@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../data/database.dart';
+import '../../data/models/body_measurement.dart';
+
 import '../../data/iconmapper.dart';
+import '../../helpers/helper_calculate.dart';
 
 import '../../components/recents_listtile.dart';
 import '../../components/graph_linechart.dart';
 
-import '../../helpers/helper_calculate.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
 {

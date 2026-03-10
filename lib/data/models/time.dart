@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'time.g.dart';
+
+@JsonSerializable()
 class TimeData{
   String event;
   int duration;
@@ -5,4 +10,7 @@ class TimeData{
   String entry_note;
 
   TimeData(this.event, this.duration, this.entry_date, this.entry_note);
+
+  factory TimeData.fromJson(Map<String, dynamic> json) => _$TimeDataFromJson(json);
+  Map<String, dynamic> toJson() => _$TimeDataToJson(this);
 }
