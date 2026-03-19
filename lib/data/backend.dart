@@ -1,5 +1,6 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
 
 String backend_url = "http://127.0.0.1:8000/";
 
@@ -47,6 +48,68 @@ void backend_test() async
   }
 }
 
+// Image upload
+class NutritionImageResponse{
+  String status;
+
+  String name;
+  String calories;
+
+  NutritionImageResponse(this.status, this.name, this.calories);
+}
+
+Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
+{
+  print("Backend: Image upload");
+
+  final url = Uri.parse("${backend_url}upload/nutrition");
+
+  var request = http.MultipartRequest("POST", url);
+  var stream = http.ByteStream(image.openRead());
+  var length = await image.length();
+  var filename = image.path.split("/").last;
+
+  var multipart_file = http.MultipartFile(
+    "file_upload",
+    stream,
+    length,
+    filename: filename,
+  );
+
+  request.files.add(multipart_file);
+
+  var response_streamed = await request.send();
+  var response = await http.Response.fromStream(response_streamed);
+
+  final response_json = jsonDecode(response.body);
+
+  if(response.statusCode==200)
+  {
+    print("Backend: Success");
+    return NutritionImageResponse(
+      response_json["status"],
+      response_json["nutrition_name"],
+      response_json["nutrition_calories"].toString()
+    );
+    //print("Backend>Response: ${response.statusCode}");
+    //print("Backend>Response: ${response.body}");
+  }
+  else
+  {
+    {
+      print("Backend: Error");
+      print("Backend>Status code: ${response.statusCode}");
+      print("Backend>Response: ${response.body}");
+    }
+  }
+
+  return NutritionImageResponse(
+    response.statusCode.toString(),
+    "N/A",
+    "N/A"
+  );
+}
+
 class RecommendationData{
   String title;
   String subtitle;
@@ -76,7 +139,7 @@ class BackendMLData{
   BackendMLData(this.response_code, this.response_body, this.type, this.score, this.recommendations, this.insights);
 }
 
-Future<BackendMLData> backend_send(List<dynamic> data, String url_trail) async
+Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) async
 {
   print("Backend: Sending data (length ${data.length})");
 
