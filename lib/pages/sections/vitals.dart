@@ -37,10 +37,10 @@ class Page_Vitals_State extends State<Page_Vitals>
 
   Future<void> initData() async{
     List<VitalsData> vitals_data_result = await database_get_vitals_for_date(data_timenow);
-    List<VitalsData> vitals_data_all_result = await database_get_vitals();
+    //List<VitalsData> vitals_data_all_result = await database_get_vitals();
 
     //backend_test();
-    backend_send(vitals_data_all_result);
+   // backend_send(vitals_data_all_result);
 
     //List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", data_heartrate_date_start, data_heartrate_date_end);
 

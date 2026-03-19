@@ -51,7 +51,9 @@ void backend_send(List<dynamic> data) async
 {
   print("Backend: Sending data (length ${data.length})");
 
-  final url = Uri.parse("${backend_url}/data/vitals");
+  final url = Uri.parse("${backend_url}data/vitals");
+
+  print("Backend: URL is ${url}");
 
   final response = await http.post(
     url,
@@ -77,5 +79,4 @@ void backend_send(List<dynamic> data) async
       print("Backend>Response: ${response.body}");
     }
   }
-  //print(data_encoded);
 }
