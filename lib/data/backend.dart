@@ -20,12 +20,62 @@ dynamic server_getresponse(String url) async
 void backend_test() async
 {
   print("Backend: Testing");
-  var response_decoded = await server_getresponse("${backend_url}client/version/0.1.1");
+  //var response_decoded = await server_getresponse("${backend_url}client/version/0.1.1");
+  final url = Uri.parse("${backend_url}client/version");
+
+  final response = await http.post(
+    url,
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode(
+      {
+        "version":"0.1.1"
+      }
+    ),
+  );
+
+  if(response.statusCode==200)
+  {
+    print("Backend: Success");
+    print("Backend>Response: ${response.body}");
+  }
+  else
+  {
+    {
+      print("Backend: Error");
+      print("Backend>Status code: ${response.statusCode}");
+    }
+  }
 }
 
 void backend_send(List<dynamic> data) async
 {
   print("Backend: Sending data (length ${data.length})");
-  var data_encoded = jsonEncode(data);
-  print(data_encoded);
+
+  final url = Uri.parse("${backend_url}/data/vitals");
+
+  final response = await http.post(
+    url,
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode(
+      {
+        "version":"0.1.1",
+        "data": data,
+      }
+    ),
+  );
+
+  if(response.statusCode==200)
+  {
+    print("Backend: Success");
+    print("Backend>Response: ${response.body}");
+  }
+  else
+  {
+    {
+      print("Backend: Error");
+      print("Backend>Status code: ${response.statusCode}");
+      print("Backend>Response: ${response.body}");
+    }
+  }
+  //print(data_encoded);
 }
