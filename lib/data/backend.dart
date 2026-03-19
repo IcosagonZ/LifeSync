@@ -47,11 +47,40 @@ void backend_test() async
   }
 }
 
-void backend_send(List<dynamic> data) async
+class RecommendationData{
+  String title;
+  String subtitle;
+  String description;
+
+  RecommendationData(this.title, this.subtitle, this.description);
+}
+
+class InsightData{
+  String title;
+  String subtitle;
+  String description;
+
+  InsightData(this.title, this.subtitle, this.description);
+}
+
+class BackendMLData{
+  int response_code;
+  String response_body;
+
+  String type;
+  int score;
+
+  List<RecommendationData> recommendations;
+  List<InsightData> insights;
+
+  BackendMLData(this.response_code, this.response_body, this.type, this.score, this.recommendations, this.insights);
+}
+
+Future<BackendMLData> backend_send(List<dynamic> data, String url_trail) async
 {
   print("Backend: Sending data (length ${data.length})");
 
-  final url = Uri.parse("${backend_url}data/vitals");
+  final url = Uri.parse("${backend_url}recommendations/${url_trail}");
 
   print("Backend: URL is ${url}");
 
@@ -69,7 +98,56 @@ void backend_send(List<dynamic> data) async
   if(response.statusCode==200)
   {
     print("Backend: Success");
-    print("Backend>Response: ${response.body}");
+
+    int response_score = -1;
+    String response_type = "N/A";
+
+    List<RecommendationData> response_recommendations = [];
+    List<InsightData> response_insights = [];
+
+    bool isDecoded = false;
+
+    try
+    {
+      final response_decoded = jsonDecode(response.body);
+      //print(response_decoded);
+
+      response_type = response_decoded["type"];
+      response_score = response_decoded["score"];
+
+      for(var recommendation in response_decoded["recommendation"])
+      {
+        response_recommendations.add(
+          RecommendationData(recommendation[0], recommendation[1], recommendation[2])
+        );
+      }
+
+      for(var insight in response_decoded["insight"])
+      {
+        response_insights.add(
+          InsightData(insight[0], insight[1], insight[2])
+        );
+      }
+
+      isDecoded = true;
+    }
+    catch(e)
+    {
+      print("Backend: Error decoding JSON");
+      print("Backend>Error: ${e}");
+    }
+
+    if(isDecoded)
+    {
+      return BackendMLData(
+        response.statusCode,
+        response.body,
+        response_type,
+        response_score,
+        response_recommendations,
+        response_insights
+      );
+    }
   }
   else
   {
@@ -79,4 +157,13 @@ void backend_send(List<dynamic> data) async
       print("Backend>Response: ${response.body}");
     }
   }
+
+  return BackendMLData(
+    response.statusCode,
+    response.body,
+    "N/A",
+    -1,
+    [],
+    [],
+  );
 }

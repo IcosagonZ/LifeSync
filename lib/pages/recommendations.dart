@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../data/database.dart';
+import '../data/backend.dart';
+
+import '../data/models/academics_absent.dart';
+import '../data/models/academics_assignment.dart';
+import '../data/models/academics_exam.dart';
+import '../data/models/academics_mark.dart';
+
+import '../data/models/activity.dart';
+import '../data/models/body_measurement.dart';
+import '../data/models/mind_mood.dart';
+import '../data/models/nutrition.dart';
+import '../data/models/symptom.dart';
+import '../data/models/time.dart';
+import '../data/models/vitals.dart';
+import '../data/models/workout.dart';
 
 import '../../components/recents_listtile_single_text.dart';
 
@@ -14,6 +30,31 @@ class Page_Recommendations extends StatefulWidget
 
 class Page_Recommendations_State extends State<Page_Recommendations>
 {
+  List recommendation_list = [];
+  List insight_list = [];
+
+  var update_status = {
+    "nutrition":-1,
+    "workout":-1,
+  };
+
+  Future<void> updateData() async
+  {
+    List<NutritionData> nutrition_data = await database_get_nutrition();
+
+    BackendMLData nutrition_response = await backend_send(nutrition_data, "nutrition");
+    update_status["nutrition"] = nutrition_response.score;
+
+    setState(()
+    {
+      recommendation_list.clear();
+      insight_list.clear();
+
+      recommendation_list.addAll(nutrition_response.recommendations);
+      insight_list.addAll(nutrition_response.insights);
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -45,6 +86,16 @@ class Page_Recommendations_State extends State<Page_Recommendations>
     return Scaffold(
       appBar: AppBar(
         title: Text("Recommendations"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            tooltip: "Refresh",
+            onPressed: (){
+              print("Refresh pressed");
+              updateData();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -65,7 +116,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
                               Expanded(
                                 child: Text("Daily Goals", style: TextStyle(color: color_primary))
                               ),
-                              Text("14/15")
+                              Text("N/A")
                             ],
                           ),
                           SizedBox(height: 8),
@@ -74,7 +125,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
                               Expanded(
                                 child: Text("Weekly Goals", style: TextStyle(color: color_primary))
                               ),
-                              Text("7/10")
+                              Text("N/A")
                             ],
                           )
                         ]
@@ -87,7 +138,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("85"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),
@@ -100,50 +151,102 @@ class Page_Recommendations_State extends State<Page_Recommendations>
             Text("Recommendations", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
-              child: Column(
-                spacing: 2,
-                children: [
-                  RecentsListTileSingleText(
-                    list_title: "Diet",
-                    list_subtitle: "Reduce Sodium",
-                  ),
-                  Divider(height: 1),
-                  RecentsListTileSingleText(
-                    list_title: "Activity",
-                    list_subtitle: "Walk more than 2 hrs",
-                  ),
-                  Divider(height: 1),
-                  RecentsListTileSingleText(
-                    list_title: "Diet",
-                    list_subtitle: "Drink more water",
-                  ),
-                  Divider(height: 1),
-                  RecentsListTileSingleText(
-                    list_title: "Diet",
-                    list_subtitle: "Eat more leafy vegetables",
-                  ),
-                ]
-              ),
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: recommendation_list.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: recommendation_list.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          spacing: 2,
+                          children: List.generate(recommendation_list.length, (index){
+                            final data = recommendation_list[index];
+                            final tile = RecentsListTileSingleText(
+                              list_title: data.title,
+                              list_subtitle: data.subtitle,
+                            );
+
+                            if(index>0)
+                            {
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
+                              );
+                            }
+                            else
+                            {
+                              return tile;
+                            }
+                          }),
+                        )
+                      )
+                    ),
+                  ]
+                )
+              )
             ),
             SizedBox(height: 16),
             Text("Insights", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
-              child: Column(
-                spacing: 2,
-                children: [
-                  RecentsListTileSingleText(
-                    list_title: "Academics",
-                    list_subtitle: "Better grades than last semester",
-                  ),
-                  Divider(height: 1),
-                  RecentsListTileSingleText(
-                    list_title: "Mood",
-                    list_subtitle: "Lower stress than usual",
-                  ),
-                ]
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: insight_list.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: insight_list.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          spacing: 2,
+                          children: List.generate(insight_list.length, (index){
+                            final data = insight_list[index];
+                            final tile = RecentsListTileSingleText(
+                              list_title: data.title,
+                              list_subtitle: data.subtitle,
+                            );
+
+                            if(index>0)
+                            {
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
+                              );
+                            }
+                            else
+                            {
+                              return tile;
+                            }
+                          }),
+                        )
+                      )
+                    ),
+                  ]
+                )
               )
-            )
+            ),
           ]
         )
       ),

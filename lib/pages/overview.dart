@@ -11,6 +11,7 @@ import '../helpers/helper_calculate.dart';
 import 'timeline.dart';
 import 'settings.dart';
 import 'add_data.dart';
+import 'recommendations.dart';
 
 // Page sections
 import 'sections/academics.dart';
@@ -171,6 +172,18 @@ class Page_Overview_State extends State<Page_Overview>
               Navigator.push(context, MaterialPageRoute(builder: (context)
               {
                 return const Page_Timeline();
+              }
+              ));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.lightbulb),
+            tooltip: "Recommendations",
+            onPressed: (){
+              print("Recommendations pressed");
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_Recommendations();
               }
               ));
             },
