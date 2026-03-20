@@ -33,9 +33,11 @@ class Page_Recommendations_State extends State<Page_Recommendations>
   List recommendation_list = [];
   List insight_list = [];
 
+  DateTime data_date = DateTime.now();
+
   var section_scores = {
     "academics_absent":-1,
-    //"academics_assignment":-1,
+    "academics_assignment":-1,
     //"academics_exam":-1,
     "academics_mark":-1,
     "activity":-1,
@@ -50,27 +52,32 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
   Future<void> updateData() async
   {
+
     List<AcademicsAbsentData> academics_absent_data = await database_get_academics_absent();
     BackendMLData academics_absent_response = await backend_send_data(academics_absent_data, "academics/absent");
     section_scores["academics_absent"] = academics_absent_response.score;
+
+    List<AcademicsAssignmentData> academics_assignment_data = await database_get_academics_assignment();
+    BackendMLData academics_assignment_response = await backend_send_data(academics_assignment_data, "academics/assignment");
+    section_scores["academics_assignment"] = academics_assignment_response.score;
 
     List<AcademicsMarkData> academics_mark_data = await database_get_academics_mark();
     BackendMLData academics_mark_response = await backend_send_data(academics_absent_data, "academics/mark");
     section_scores["academics_mark"] = academics_mark_response.score;
 
-    List<ActivityData> activity_data = await database_get_activity();
+    List<ActivityData> activity_data = await database_get_activity_for_date(data_date);
     BackendMLData activity_response = await backend_send_data(activity_data, "activity");
     section_scores["activity"] = activity_response.score;
 
-    List<BodyMeasurementData> bodymeasurement_data = await database_get_bodymeasurement();
+    List<BodyMeasurementData> bodymeasurement_data = await database_get_bodymeasurement_for_date(data_date);
     BackendMLData bodymeasurement_response = await backend_send_data(activity_data, "bodymeasurement");
     section_scores["bodymeasurement"] = bodymeasurement_response.score;
 
-    List<MindMoodData> mind_mood_data = await database_get_mind_mood();
+    List<MindMoodData> mind_mood_data = await database_get_mind_mood_for_date(data_date);
     BackendMLData mind_mood_response = await backend_send_data(activity_data, "mind/mood");
     section_scores["mind_mood"] = mind_mood_response.score;
 
-    List<NutritionData> nutrition_data = await database_get_nutrition();
+    List<NutritionData> nutrition_data = await database_get_nutrition_for_date(data_date);
     BackendMLData nutrition_response = await backend_send_data(nutrition_data, "nutrition");
     section_scores["nutrition"] = nutrition_response.score;
 
@@ -78,15 +85,15 @@ class Page_Recommendations_State extends State<Page_Recommendations>
     BackendMLData symptom_response = await backend_send_data(activity_data, "symptom");
     section_scores["symptom"] = symptom_response.score;
 
-    List<TimeData> time_data = await database_get_time();
+    List<TimeData> time_data = await database_get_time_for_date(data_date);
     BackendMLData time_response = await backend_send_data(activity_data, "time");
     section_scores["time"] = time_response.score;
 
-    List<VitalsData> vitals_data = await database_get_vitals();
+    List<VitalsData> vitals_data = await database_get_vitals_for_date(data_date);
     BackendMLData vitals_response = await backend_send_data(activity_data, "vitals");
     section_scores["vitals"] = vitals_response.score;
 
-    List<WorkoutData> workout_data = await database_get_workout();
+    List<WorkoutData> workout_data = await database_get_workout_for_date(data_date);
     BackendMLData workout_response = await backend_send_data(activity_data, "workout");
     section_scores["workout"] = workout_response.score;
 
