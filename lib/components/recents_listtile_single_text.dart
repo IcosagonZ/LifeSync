@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../pages/add_data.dart';
+
 class RecentsListTileSingleText extends StatelessWidget
 {
   //final Icon list_icon;
   final String list_title;
   final String list_subtitle;
 
+  final String datatype;
+  final int id;
+
   const RecentsListTileSingleText({
     Key? key,
     //required this.list_icon,
     required this.list_title,
-    required this.list_subtitle
+    required this.list_subtitle,
+
+    required this.id,
+    required this.datatype,
   }) : super (key: key);
 
   @override
@@ -40,63 +48,41 @@ class RecentsListTileSingleText extends StatelessWidget
     final style_titlesmall = text_theme.titleSmall;
 
 
-    return Padding(
-      padding: EdgeInsets.all(2),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 16,
-          ),
-          /*
-          list_icon,
-          SizedBox(
-            width: 16,
-          ),*/
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
-                //Text(list_subtitle)
-              ]
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 16,
             ),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          /*
-          Text(DateFormat('dd/M/yy').format(list_date)),
-          SizedBox(
-            width: 8,
-          ),
-          Text(DateFormat('h:mm a').format(list_date)),
-          */
-          Text(list_subtitle),
-          SizedBox(width: 8),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              PopupMenuItem(
-                child: Text("View"),
-                onTap: (){
-                  print("View tapped");
-                },
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
+                  //Text(list_subtitle)
+                ]
               ),
-              PopupMenuItem(
-                child: Text("Edit"),
-                onTap: (){
-                  print("Edit tapped");
-                },
-              ),
-              PopupMenuItem(
-                child: Text("Remove"),
-                onTap: (){
-                  print("Remove tapped");
-                },
-              ),
-            ],
-          )
-        ]
-      )
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            Text(list_subtitle),
+          ]
+        )
+      ),
+      onTap: (){
+        print("Tapped id:$id data_type:$datatype");
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context){
+            return const Page_AddData();
+          },
+          settings: RouteSettings(
+            arguments: [id, datatype],
+          ),
+        ));
+      },
     );
   }
 }

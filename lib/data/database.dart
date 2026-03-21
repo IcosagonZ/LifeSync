@@ -231,6 +231,7 @@ Future<int> database_insert_academics_absent(
   String absent_date,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -242,7 +243,9 @@ Future<int> database_insert_academics_absent(
       'absent_date':absent_date,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;
@@ -323,6 +326,7 @@ Future<int> database_insert_academics_assignment(
   String submission_date,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -338,7 +342,9 @@ Future<int> database_insert_academics_assignment(
       'submission_date':submission_date,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;
@@ -415,6 +421,7 @@ Future<int> database_insert_academics_exam(
   int duration,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -428,7 +435,9 @@ Future<int> database_insert_academics_exam(
       'duration':duration,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;
@@ -504,6 +513,7 @@ Future<int> database_insert_academics_mark(
   double marks_total,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -517,7 +527,9 @@ Future<int> database_insert_academics_mark(
       'marks_total':marks_total,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;

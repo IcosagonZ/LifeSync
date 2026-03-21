@@ -33,7 +33,8 @@ extension AddDataButton on Page_AddData_State{
                 academics_absent_reason_controller.text,
                 academics_absent_date.toIso8601String(),
                 entry_date,
-                general_notes_controller.text
+                general_notes_controller.text,
+                dataId
               ).then((int row_index)
               {
                 if(row_index==0)
@@ -77,7 +78,8 @@ extension AddDataButton on Page_AddData_State{
                 academics_assignment_due_date.toIso8601String(),
                 academics_assignment_submission_date.toIso8601String(),
                 entry_date,
-                general_notes_controller.text
+                general_notes_controller.text,
+                dataId
               ).then((int row_index)
               {
                 if(row_index==0)
@@ -117,7 +119,8 @@ extension AddDataButton on Page_AddData_State{
                 academics_exam_date.toIso8601String(),
                 duration,
                 entry_date,
-                general_notes_controller.text
+                general_notes_controller.text,
+                dataId
               ).then((int row_index)
               {
                 if(row_index==0)
@@ -153,7 +156,8 @@ extension AddDataButton on Page_AddData_State{
                 double.parse(academics_marks_controller.text),
                 double.parse(academics_marks_total_controller.text),
                 entry_date,
-                general_notes_controller.text
+                general_notes_controller.text,
+                dataId
               ).then((int row_index)
               {
                 if(row_index==0)

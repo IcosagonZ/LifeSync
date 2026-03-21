@@ -9,9 +9,7 @@ import '../../data/models/academics_assignment.dart';
 import '../../data/models/academics_exam.dart';
 import '../../data/models/academics_mark.dart';
 
-
 import '../../components/recents_listtile_single_text.dart';
-import '../../components/recents_listtile_multiline.dart';
 
 class Page_Academics extends StatefulWidget
 {
@@ -171,6 +169,8 @@ class Page_Academics_State extends State<Page_Academics>
                               //list_icon: Icon(Symbols.cognition_2),
                               list_title: data.subject,
                               list_subtitle: "${data.exam_type} ${DateFormat('dd/M/yy').format(data.exam_date)}",
+                              id: data.id,
+                              datatype: "academics_exam",
                             );
 
                             if(index>0)
@@ -221,6 +221,8 @@ class Page_Academics_State extends State<Page_Academics>
                             final tile = RecentsListTileSingleText(
                               list_title: data.subject,
                               list_subtitle: "${data.type}, ${data.topic} ${DateFormat('dd/M/yy').format(data.due_date)}",
+                              id: data.id,
+                              datatype: "academics_assignment",
                             );
 
                             if(index>0)
@@ -272,6 +274,8 @@ class Page_Academics_State extends State<Page_Academics>
                             final tile = RecentsListTileSingleText(
                               list_title: data.subject,
                               list_subtitle: "${data.type} ${data.marks}/${data.marks_total}",
+                              id: data.id,
+                              datatype: "academics_mark",
                             );
 
                             if(index>0)
@@ -323,6 +327,8 @@ class Page_Academics_State extends State<Page_Academics>
                             final tile = RecentsListTileSingleText(
                               list_title: data.reason,
                               list_subtitle: "${data.entry_note} ${DateFormat('dd/M/yy').format(data.absent_date)}",
+                              id: data.id,
+                              datatype: "academics_absent",
                             );
 
                             if(index>0)
