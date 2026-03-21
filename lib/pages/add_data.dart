@@ -4,6 +4,21 @@ import '../data/database.dart';
 
 import 'misc/nutrition_image_recognition.dart';
 
+// Model files (data class) for use by modify_data part
+import '../data/models/academics_absent.dart';
+import '../data/models/academics_assignment.dart';
+import '../data/models/academics_exam.dart';
+import '../data/models/academics_mark.dart';
+import '../data/models/activity.dart';
+import '../data/models/body_measurement.dart';
+import '../data/models/mind_mood.dart';
+import '../data/models/note.dart';
+import '../data/models/nutrition.dart';
+import '../data/models/symptom.dart';
+import '../data/models/time.dart';
+import '../data/models/vitals.dart';
+import '../data/models/workout.dart';
+
 // Widget parts
 part 'add_data_parts/academics_absent.part.dart';
 part 'add_data_parts/academics_assignment.part.dart';
@@ -17,7 +32,9 @@ part 'add_data_parts/symptom.part.dart';
 part 'add_data_parts/time.part.dart';
 part 'add_data_parts/vitals.part.dart';
 part 'add_data_parts/workout.part.dart';
+
 part 'add_data_parts/add_data_button.part.dart';
+part 'add_data_parts/modify_data.part.dart';
 
 class Page_AddData extends StatefulWidget
 {
@@ -29,6 +46,10 @@ class Page_AddData extends StatefulWidget
 
 class Page_AddData_State extends State<Page_AddData>
 {
+  // Misc variables
+  bool isInitialized = false;
+  int dataId = -1;
+
   // Datatype variables
   final List<String> datatype_dropdown_options = [
     "Academics", // Contains 4 subcategories
@@ -166,6 +187,15 @@ class Page_AddData_State extends State<Page_AddData>
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
+
+    final _arguments = ModalRoute.of(context)?.settings.arguments;
+    // If we are modifying existing data
+    if(!isInitialized && _arguments!=null){
+      final arguments = _arguments as List;
+      isInitialized = true;
+      dataId = arguments[0];
+      modifyData(arguments);
+    }
 
     return Scaffold(
       appBar: AppBar(

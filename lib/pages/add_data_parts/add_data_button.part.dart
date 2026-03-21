@@ -184,7 +184,8 @@ extension AddDataButton on Page_AddData_State{
               mind_mood_resolved ?? false,
               mind_mood_end_date?.toIso8601String() ?? "",
               entry_date,
-              general_notes_controller.text
+              general_notes_controller.text,
+              dataId,
             ).then((int row_index)
             {
               if(row_index==0)

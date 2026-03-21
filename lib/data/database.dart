@@ -910,6 +910,7 @@ Future<int> database_insert_mind_mood(
   String end_date,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -925,6 +926,8 @@ Future<int> database_insert_mind_mood(
     _resolved = 0;
   }
 
+  print("Replacing {$id}");
+
   int row_index = await database_db.insert(
     "mind_mood",
     {
@@ -934,7 +937,9 @@ Future<int> database_insert_mind_mood(
       'end_date': end_date,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;
@@ -1650,7 +1655,8 @@ Future<int> database_insert_workout(
       'weight':weight,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   return row_index;
 }
