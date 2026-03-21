@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../pages/add_data.dart';
 
 class TimelineListTile extends StatelessWidget
 {
@@ -43,8 +44,6 @@ class TimelineListTile extends StatelessWidget
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-
-
     return Card(
       child: Padding(
         padding: EdgeInsets.all(8),
@@ -70,28 +69,6 @@ class TimelineListTile extends StatelessWidget
               width: 16,
             ),
             Text(DateFormat('h:mm a').format(list_date)),
-            PopupMenuButton(
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  child: Text("View"),
-                  onTap: (){
-                    print("View tapped");
-                  },
-                ),
-                PopupMenuItem(
-                  child: Text("Edit"),
-                  onTap: (){
-                    print("Edit tapped");
-                  },
-                ),
-                PopupMenuItem(
-                  child: Text("Remove"),
-                  onTap: (){
-                    print("Remove tapped");
-                  },
-                ),
-              ],
-            )
           ]
         )
       )

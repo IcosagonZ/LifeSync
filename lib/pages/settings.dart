@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+import '../data/database.dart';
+
+import '../components/dialog_confirmation.dart';
 
 class Page_Settings extends StatefulWidget
 {
@@ -48,7 +51,23 @@ class Page_Settings_State extends State<Page_Settings>
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
-            Text("Settings")
+            Row(
+              children: [
+                Expanded(
+                  child: Text("Delete database"),
+                ),
+                IconButton(
+                  icon: Icon(Symbols.delete),
+                  onPressed: () async {
+                    final confirm = await dialog_confirmation_show(context, "Delete database", "Are you sure ?");
+                    if(confirm==true)
+                    {
+                      database_delete();
+                    }
+                  },
+                )
+              ],
+            )
           ]
         )
       ),
