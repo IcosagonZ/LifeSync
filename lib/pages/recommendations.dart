@@ -205,26 +205,11 @@ class Page_Recommendations_State extends State<Page_Recommendations>
                     child: Center(
                       child: Column(
                         children: List.generate(recommendation_list.length, (index){
-                          final data = recommendation_list[index];
-                          final tile = ListTile3LineExpandable(
-                            list_title: data.title,
-                            list_subtitle: data.subtitle,
-                            list_description: data.description
+                          return ListTile3LineExpandable(
+                            list_title: recommendation_list[index].title,
+                            list_subtitle: recommendation_list[index].subtitle,
+                            list_description: recommendation_list[index].description
                           );
-
-                          if(index>0)
-                          {
-                            return Column(
-                              children: [
-                                //Divider(height: 1),
-                                tile,
-                              ]
-                            );
-                          }
-                          else
-                          {
-                            return tile;
-                          }
                         }),
                       )
                     )
@@ -236,50 +221,32 @@ class Page_Recommendations_State extends State<Page_Recommendations>
             Text("Insights", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
-              child: Padding(
-                padding: EdgeInsets.all(2),
-                child: Stack(
-                  children: [
-                    Visibility(
-                      visible: insight_list.isEmpty,
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                          child: Text("No data available")
-                        ),
-                      )
-                    ),
-                    Visibility(
-                      visible: insight_list.isNotEmpty,
+              child: Stack(
+                children: [
+                  Visibility(
+                    visible: insight_list.isEmpty,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
                       child: Center(
-                        child: Column(
-                          spacing: 2,
-                          children: List.generate(insight_list.length, (index){
-                            final data = insight_list[index];
-                            final tile = RecentsListTileSingleText(
-                              list_title: data.title,
-                              list_subtitle: data.subtitle,
-                            );
-
-                            if(index>0)
-                            {
-                              return Column(
-                                children: [
-                                  Divider(height: 1),
-                                  tile,
-                                ]
-                              );
-                            }
-                            else
-                            {
-                              return tile;
-                            }
-                          }),
-                        )
+                        child: Text("No data available")
+                      ),
+                    )
+                  ),
+                  Visibility(
+                    visible: insight_list.isNotEmpty,
+                    child: Center(
+                      child: Column(
+                        children: List.generate(insight_list.length, (index){
+                          return ListTile3LineExpandable(
+                            list_title: insight_list[index].title,
+                            list_subtitle: insight_list[index].subtitle,
+                            list_description: insight_list[index].description
+                          );
+                        }),
                       )
-                    ),
-                  ]
-                )
+                    )
+                  ),
+                ]
               )
             ),
           ]
