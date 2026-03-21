@@ -143,7 +143,7 @@ Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) as
 {
   print("Backend: Sending data (length ${data.length})");
 
-  final url = Uri.parse("${backend_url}recommendations/${url_trail}");
+  final url = Uri.parse("${backend_url}${url_trail}");
 
   print("Backend: URL is ${url}");
 
@@ -156,6 +156,94 @@ Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) as
         "data": data,
       }
     ),
+  );
+
+  if(response.statusCode==200)
+  {
+    print("Backend: Success");
+
+    int response_score = -1;
+    String response_type = "N/A";
+
+    List<RecommendationData> response_recommendations = [];
+    List<InsightData> response_insights = [];
+
+    bool isDecoded = false;
+
+    try
+    {
+      final response_decoded = jsonDecode(response.body);
+      //print(response_decoded);
+
+      response_type = response_decoded["type"];
+      response_score = response_decoded["score"];
+
+      for(var recommendation in response_decoded["recommendation"])
+      {
+        response_recommendations.add(
+          RecommendationData(recommendation[0], recommendation[1], recommendation[2])
+        );
+      }
+
+      for(var insight in response_decoded["insight"])
+      {
+        response_insights.add(
+          InsightData(insight[0], insight[1], insight[2])
+        );
+      }
+
+      isDecoded = true;
+    }
+    catch(e)
+    {
+      print("Backend: Error decoding JSON");
+      print("Backend>Error: ${e}");
+    }
+
+    if(isDecoded)
+    {
+      return BackendMLData(
+        response.statusCode,
+        response.body,
+        response_type,
+        response_score,
+        response_recommendations,
+        response_insights
+      );
+    }
+  }
+  else
+  {
+    {
+      print("Backend: Error");
+      print("Backend>Status code: ${response.statusCode}");
+      print("Backend>Response: ${response.body}");
+    }
+  }
+
+  return BackendMLData(
+    response.statusCode,
+    response.body,
+    "N/A",
+    -1,
+    [],
+    [],
+  );
+}
+
+
+Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_trail) async
+{
+  print("Backend: Sending data (length ${data.length})");
+
+  final url = Uri.parse("${backend_url}${url_trail}");
+
+  print("Backend: URL is ${url}");
+
+  final response = await http.post(
+    url,
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode(data),
   );
 
   if(response.statusCode==200)

@@ -54,75 +54,41 @@ class Page_Recommendations_State extends State<Page_Recommendations>
   {
 
     List<AcademicsAbsentData> academics_absent_data = await database_get_academics_absent();
-    BackendMLData academics_absent_response = await backend_send_data(academics_absent_data, "academics/absent");
-    section_scores["academics_absent"] = academics_absent_response.score;
-
     List<AcademicsAssignmentData> academics_assignment_data = await database_get_academics_assignment();
-    BackendMLData academics_assignment_response = await backend_send_data(academics_assignment_data, "academics/assignment");
-    section_scores["academics_assignment"] = academics_assignment_response.score;
-
     List<AcademicsMarkData> academics_mark_data = await database_get_academics_mark();
-    BackendMLData academics_mark_response = await backend_send_data(academics_absent_data, "academics/mark");
-    section_scores["academics_mark"] = academics_mark_response.score;
-
-    List<ActivityData> activity_data = await database_get_activity_for_date(data_date);
-    BackendMLData activity_response = await backend_send_data(activity_data, "activity");
-    section_scores["activity"] = activity_response.score;
-
     List<BodyMeasurementData> bodymeasurement_data = await database_get_bodymeasurement_for_date(data_date);
-    BackendMLData bodymeasurement_response = await backend_send_data(activity_data, "bodymeasurement");
-    section_scores["bodymeasurement"] = bodymeasurement_response.score;
-
     List<MindMoodData> mind_mood_data = await database_get_mind_mood_for_date(data_date);
-    BackendMLData mind_mood_response = await backend_send_data(activity_data, "mind/mood");
-    section_scores["mind_mood"] = mind_mood_response.score;
-
+    List<ActivityData> activity_data = await database_get_activity_for_date(data_date);
     List<NutritionData> nutrition_data = await database_get_nutrition_for_date(data_date);
-    BackendMLData nutrition_response = await backend_send_data(nutrition_data, "nutrition");
-    section_scores["nutrition"] = nutrition_response.score;
-
     List<SymptomData> symptom_data = await database_get_symptom();
-    BackendMLData symptom_response = await backend_send_data(activity_data, "symptom");
-    section_scores["symptom"] = symptom_response.score;
-
     List<TimeData> time_data = await database_get_time_for_date(data_date);
-    BackendMLData time_response = await backend_send_data(activity_data, "time");
-    section_scores["time"] = time_response.score;
-
     List<VitalsData> vitals_data = await database_get_vitals_for_date(data_date);
-    BackendMLData vitals_response = await backend_send_data(activity_data, "vitals");
-    section_scores["vitals"] = vitals_response.score;
-
     List<WorkoutData> workout_data = await database_get_workout_for_date(data_date);
-    BackendMLData workout_response = await backend_send_data(activity_data, "workout");
-    section_scores["workout"] = workout_response.score;
+
+    Map<String,dynamic> section_data = {
+      "version":"0.1.1",
+      "academics_absent_data":academics_absent_data,
+      "academics_assignment_data":academics_assignment_data,
+      "academics_mark_data":academics_mark_data,
+      "bodymeasurement_data":bodymeasurement_data,
+      "mind_mood_data":mind_mood_data,
+      "activity_data":activity_data,
+      "nutrition_data":nutrition_data,
+      "symptom_data":symptom_data,
+      "time_data":time_data,
+      "vitals_data":vitals_data,
+      "workout_data":workout_data,
+    };
+
+    BackendMLData backend_data = await backend_send_map(section_data, "recommendations/all");
 
     setState(()
     {
       recommendation_list.clear();
       insight_list.clear();
 
-      recommendation_list.addAll(academics_absent_response.recommendations);
-      recommendation_list.addAll(academics_mark_response.recommendations);
-      recommendation_list.addAll(activity_response.recommendations);
-      recommendation_list.addAll(bodymeasurement_response.recommendations);
-      recommendation_list.addAll(mind_mood_response.recommendations);
-      recommendation_list.addAll(nutrition_response.recommendations);
-      recommendation_list.addAll(symptom_response.recommendations);
-      recommendation_list.addAll(time_response.recommendations);
-      recommendation_list.addAll(vitals_response.recommendations);
-      recommendation_list.addAll(workout_response.recommendations);
-
-      insight_list.addAll(academics_absent_response.insights);
-      insight_list.addAll(academics_mark_response.insights);
-      insight_list.addAll(activity_response.insights);
-      insight_list.addAll(bodymeasurement_response.insights);
-      insight_list.addAll(mind_mood_response.insights);
-      insight_list.addAll(nutrition_response.insights);
-      insight_list.addAll(symptom_response.insights);
-      insight_list.addAll(time_response.insights);
-      insight_list.addAll(vitals_response.insights);
-      insight_list.addAll(workout_response.insights);
+      recommendation_list.addAll(backend_data.recommendations);
+      insight_list.addAll(backend_data.insights);
     });
   }
 
