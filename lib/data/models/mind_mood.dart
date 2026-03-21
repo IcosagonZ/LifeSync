@@ -5,6 +5,7 @@ part 'mind_mood.g.dart';
 @JsonSerializable()
 class MindMoodData
 {
+  int id;
   String name;
   String intensity;
   bool resolved;
@@ -12,7 +13,7 @@ class MindMoodData
   DateTime entry_date;
   String entry_note;
 
-  MindMoodData(this.name, this.intensity, this.resolved, this.end_date, this.entry_date, this.entry_note);
+  MindMoodData(this.id, this.name, this.intensity, this.resolved, this.end_date, this.entry_date, this.entry_note);
 
   factory MindMoodData.fromJson(Map<String, dynamic> json) => _$MindMoodDataFromJson(json);
   Map<String, dynamic> toJson() => _$MindMoodDataToJson(this);

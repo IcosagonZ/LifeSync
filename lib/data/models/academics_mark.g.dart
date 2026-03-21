@@ -8,6 +8,7 @@ part of 'academics_mark.dart';
 
 AcademicsMarkData _$AcademicsMarkDataFromJson(Map<String, dynamic> json) =>
     AcademicsMarkData(
+      (json['id'] as num).toInt(),
       json['subject'] as String,
       json['type'] as String,
       (json['marks'] as num).toDouble(),
@@ -18,6 +19,7 @@ AcademicsMarkData _$AcademicsMarkDataFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AcademicsMarkDataToJson(AcademicsMarkData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'subject': instance.subject,
       'type': instance.type,
       'marks': instance.marks,

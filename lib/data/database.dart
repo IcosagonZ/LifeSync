@@ -32,25 +32,25 @@ List<String> database_sql_commands = ['create table if not exists academics_abse
 
 // title, subtitle, datatype, datetime
 String database_sql_timeline = '''
-select name as title, duration || ' mins' as subtitle, 'Activity' as datatype, entry_date as date_time from activity
+select id, name as title, duration || ' mins' as subtitle, 'activity' as datatype, entry_date as date_time from activity
 union all
-select type as title, value || ' ' || unit as subtitle, 'Body Measurement' as datatype, entry_date as date_time from body_measurement
+select id, type as title, value || ' ' || unit as subtitle, 'body_measurement' as datatype, entry_date as date_time from body_measurement
 union all
-select name as title, ' ' as subtitle, 'Mind' as datatype, entry_date as date_time from mind_mood
+select id, name as title, ' ' as subtitle, 'mind_mood' as datatype, entry_date as date_time from mind_mood
 union all
-select name as title, calories || ' cal' as subtitle, 'Nutrition' as datatype, entry_date as date_time from nutrition
+select id, name as title, calories || ' cal' as subtitle, 'nutrition' as datatype, entry_date as date_time from nutrition
 union all
-select name as title, ' ' as subtitle, 'Symptom' as datatype, entry_date as date_time from symptom
+select id, name as title, ' ' as subtitle, 'symptom' as datatype, entry_date as date_time from symptom
 union all
-select event as title, duration || ' mins' as subtitle, 'Time' as datatype, entry_date as date_time from time
+select id, event as title, duration || ' mins' as subtitle, 'time' as datatype, entry_date as date_time from time
 union all
-select type as title, value || ' ' || unit as subtitle, 'Vitals' as datatype, entry_date as date_time from vitals
+select id, type as title, value || ' ' || unit as subtitle, 'vitals' as datatype, entry_date as date_time from vitals
 union all
-select name as title, duration || ' mins' as subtitle, 'Workout' as datatype, entry_date as date_time from workout
+select id, name as title, duration || ' mins' as subtitle, 'workout' as datatype, entry_date as date_time from workout
 /*
-select "Absent" as title, reason as subtitle, "Academics" as datatype, absent_date as date_time from academics_absent
+select id, "Absent" as title, reason as subtitle, "academics_absent" as datatype, absent_date as date_time from academics_absent
 union all
-select "Assignment" as title, subject as subtitle, "Academics" as datatype, submission_date as date_time from academics_assignment
+select id, "Assignment" as title, subject as subtitle, "academics_assignment" as datatype, submission_date as date_time from academics_assignment
 union all
 */
 order by entry_date desc;
@@ -127,15 +127,16 @@ Future<void> database_delete() async
 
 class TimelineData
 {
+  int id;
+
   IconData icon;
   String title;
   String subtitle;
   String datatype;
   DateTime date_time;
 
-  TimelineData(this.icon, this.title, this.subtitle, this.datatype, this.date_time);
+  TimelineData(this.id, this.icon, this.title, this.subtitle, this.datatype, this.date_time);
 }
-
 
 List<TimelineData> data_timeline = [];
 
@@ -147,6 +148,7 @@ Future<List<TimelineData>> database_timeline_retrive() async
 
   for (var row in database_result)
   {
+    int id = row["id"] as int;
     String heading = row["title"] as String;
     String subtitle = row["subtitle"] as String;
     String type = row["datatype"] as String;
@@ -154,6 +156,7 @@ Future<List<TimelineData>> database_timeline_retrive() async
 
     data_timeline.add(TimelineData
     (
+      id,
       iconmapper_geticon(type),
       heading,
       subtitle,
@@ -171,7 +174,7 @@ Future<List<AcademicsAbsentData>> database_get_academics_absent() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_academics_absent_map = await database_db.query('academics_absent', columns: ['reason', 'absent_date', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_academics_absent_map = await database_db.query('academics_absent', columns: ['id', 'reason', 'absent_date', 'entry_date', 'entry_note']);
 
   List<AcademicsAbsentData> data_academics_absent_list = [];
 
@@ -179,6 +182,7 @@ Future<List<AcademicsAbsentData>> database_get_academics_absent() async
   {
     data_academics_absent_list.add(
       AcademicsAbsentData(
+        data["id"],
         data["reason"],
         DateTime.parse(data["absent_date"]),
         DateTime.parse(data["entry_date"]),
@@ -217,7 +221,7 @@ Future<List<AcademicsAssignmentData>> database_get_academics_assignment() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_academics_assignment_map = await database_db.query('academics_assignment', columns: ['subject', 'type', 'topic', 'submitted', 'due_date', 'submission_date', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_academics_assignment_map = await database_db.query('academics_assignment', columns: ['id', 'subject', 'type', 'topic', 'submitted', 'due_date', 'submission_date', 'entry_date', 'entry_note']);
 
   List<AcademicsAssignmentData> data_academics_assignment_list = [];
 
@@ -225,6 +229,7 @@ Future<List<AcademicsAssignmentData>> database_get_academics_assignment() async
   {
     data_academics_assignment_list.add(
       AcademicsAssignmentData(
+        data["id"],
         data["subject"],
         data["type"],
         data["topic"],
@@ -276,7 +281,7 @@ Future<List<AcademicsExamData>> database_get_academics_exam() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_academics_exam_map = await database_db.query('academics_exam', columns: ['subject', 'type', 'exam_date', 'duration', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_academics_exam_map = await database_db.query('academics_exam', columns: ['id', 'subject', 'type', 'exam_date', 'duration', 'entry_date', 'entry_note']);
 
   List<AcademicsExamData> data_academics_exam_list = [];
 
@@ -284,6 +289,7 @@ Future<List<AcademicsExamData>> database_get_academics_exam() async
   {
     data_academics_exam_list.add(
       AcademicsExamData(
+        data["id"],
         data["subject"],
         data["type"],
         DateTime.parse(data["exam_date"]),
@@ -328,7 +334,7 @@ Future<List<AcademicsMarkData>> database_get_academics_mark() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_academics_mark_map = await database_db.query('academics_mark', columns: ['subject', 'type', 'marks', 'marks_total', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_academics_mark_map = await database_db.query('academics_mark', columns: ['id', 'subject', 'type', 'marks', 'marks_total', 'entry_date', 'entry_note']);
 
   List<AcademicsMarkData> data_academics_mark_list = [];
 
@@ -336,6 +342,7 @@ Future<List<AcademicsMarkData>> database_get_academics_mark() async
   {
     data_academics_mark_list.add(
       AcademicsMarkData(
+        data["id"],
         data["subject"],
         data["type"],
         data["marks"],
@@ -380,7 +387,7 @@ Future<List<ActivityData>> database_get_activity() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_activity_map = await database_db.query('activity', columns: ['name', 'duration', 'distance', 'calories', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_activity_map = await database_db.query('activity', columns: ['id', 'name', 'duration', 'distance', 'calories', 'entry_date', 'entry_note']);
 
   List<ActivityData> data_activity_list = [];
 
@@ -388,6 +395,7 @@ Future<List<ActivityData>> database_get_activity() async
   {
     data_activity_list.add(
       ActivityData(
+        data["id"],
         data["name"],
         data["duration"],
         data["distance"],
@@ -408,7 +416,7 @@ Future<List<ActivityData>> database_get_activity_for_date(DateTime target_date) 
 
   final List<Map<String, dynamic>> data_activity_map = await database_db.query(
     'activity',
-    columns: ['name', 'duration', 'distance', 'calories', 'entry_date', 'entry_note'],
+    columns: ['id', 'name', 'duration', 'distance', 'calories', 'entry_date', 'entry_note'],
     where: 'date(entry_date) = ?',
     whereArgs: [_target_date],
   );
@@ -419,6 +427,7 @@ Future<List<ActivityData>> database_get_activity_for_date(DateTime target_date) 
   {
     data_activity_list.add(
       ActivityData(
+        data["id"],
         data["name"],
         data["duration"],
         data["distance"],
@@ -467,7 +476,7 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
 
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query('body_measurement', columns: ['type', 'value', 'unit', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query('body_measurement', columns: ['id', 'type', 'value', 'unit', 'entry_date', 'entry_note']);
 
   List<BodyMeasurementData> data_bodymeasurements_list = [];
 
@@ -475,6 +484,7 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
   {
     data_bodymeasurements_list.add(
       BodyMeasurementData(
+        data["id"],
         data["type"],
         data["value"] as double,
         data["unit"],
@@ -499,7 +509,7 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement_for_date(DateTime
 
   final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query(
     'body_measurement',
-    columns: ['type', 'value', 'unit', 'entry_date', 'entry_note'],
+    columns: ['id', 'type', 'value', 'unit', 'entry_date', 'entry_note'],
     where: 'date(entry_date) = ?',
     whereArgs: [_target_date],
   );
@@ -510,6 +520,7 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement_for_date(DateTime
   {
     data_bodymeasurements_list.add(
       BodyMeasurementData(
+        data["id"],
         data["type"],
         data["value"] as double,
         data["unit"],
@@ -555,7 +566,7 @@ Future<List<MindMoodData>> database_get_mind_mood() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query('mind_mood', columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query('mind_mood', columns: ['id', 'name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
 
   List<MindMoodData> data_mind_mood_list = [];
 
@@ -574,6 +585,7 @@ Future<List<MindMoodData>> database_get_mind_mood() async
 
     data_mind_mood_list.add(
       MindMoodData(
+        data["id"],
         data["name"],
         data["intensity"],
         _resolved,
@@ -594,7 +606,7 @@ Future<List<MindMoodData>> database_get_mind_mood_for_date(DateTime target_date)
 
   final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query(
     'mind_mood',
-    columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note'],
+    columns: ['id', 'name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note'],
     where: 'date(entry_date) = ?',
     whereArgs: [_target_date],
   );
@@ -616,6 +628,7 @@ Future<List<MindMoodData>> database_get_mind_mood_for_date(DateTime target_date)
 
     data_mind_mood_list.add(
       MindMoodData(
+        data["id"],
         data["name"],
         data["intensity"],
         _resolved,
@@ -671,7 +684,7 @@ Future<List<NoteData>> database_get_note() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_note_map = await database_db.query('note', columns: ['title', 'content', 'tags', 'entry_date']);
+  final List<Map<String, dynamic>> data_note_map = await database_db.query('note', columns: ['id', 'title', 'content', 'tags', 'entry_date']);
 
   List<NoteData> data_note_list = [];
 
@@ -679,6 +692,7 @@ Future<List<NoteData>> database_get_note() async
   {
     data_note_list.add(
       NoteData(
+        data["id"],
         data["title"],
         data["content"],
         data["tags"],
@@ -717,7 +731,7 @@ Future<List<NutritionData>> database_get_nutrition() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_nutrition_map = await database_db.query('nutrition', columns: ['name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note\n']);
+  final List<Map<String, dynamic>> data_nutrition_map = await database_db.query('nutrition', columns: ['id', 'name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note\n']);
 
   List<NutritionData> data_nutrition_list = [];
 
@@ -725,6 +739,7 @@ Future<List<NutritionData>> database_get_nutrition() async
   {
     data_nutrition_list.add(
       NutritionData(
+        data["id"],
         data["name"],
         data["form"],
         data["type"],
@@ -750,7 +765,7 @@ Future<List<NutritionData>> database_get_nutrition_for_date(DateTime target_date
 
   final List<Map<String, dynamic>> data_nutrition_map = await database_db.query(
     'nutrition',
-    columns: ['name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note'],
+    columns: ['id', 'name', 'form', 'type', 'qty', 'calories', 'mass', 'carbs', 'protein', 'fats', 'entry_date', 'entry_note'],
     where: 'date(entry_date) = ?',
     whereArgs: [_target_date],
   );
@@ -761,6 +776,7 @@ Future<List<NutritionData>> database_get_nutrition_for_date(DateTime target_date
   {
     data_nutrition_list.add(
       NutritionData(
+        data["id"],
         data["name"],
         data["form"],
         data["type"],
@@ -820,7 +836,7 @@ Future<List<SymptomData>> database_get_symptom() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_symptom_map = await database_db.query('symptom', columns: ['name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_symptom_map = await database_db.query('symptom', columns: ['id', 'name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']);
 
   List<SymptomData> data_symptom_list = [];
 
@@ -828,6 +844,7 @@ Future<List<SymptomData>> database_get_symptom() async
   {
     data_symptom_list.add(
       SymptomData(
+        data["id"],
         data["name"],
         data["intensity"],
         data["resolved"],
@@ -895,7 +912,7 @@ Future<List<TimeData>> database_get_time() async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
   );
 
   List<TimeData> data_time_list = [];
@@ -904,6 +921,7 @@ Future<List<TimeData>> database_get_time() async
   {
     data_time_list.add(
       TimeData(
+        data["id"],
         data["event"],
         data["duration"],
         DateTime.parse(data["entry_date"]),
@@ -922,7 +940,7 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
     where: 'entry_date = ?',
     whereArgs: [_target_date],
   );
@@ -933,6 +951,7 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
   {
     data_time_list.add(
       TimeData(
+        data["id"],
         data["event"],
         data["duration"],
         data["entry_date"],
@@ -997,7 +1016,7 @@ Future<List<VitalsData>> database_get_vitals() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_vitals_map = await database_db.query('vitals', columns: ['type', 'value', 'unit', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_vitals_map = await database_db.query('vitals', columns: ['id', 'type', 'value', 'unit', 'entry_date', 'entry_note']);
 
   List<VitalsData> data_vitals_list = [];
 
@@ -1005,6 +1024,7 @@ Future<List<VitalsData>> database_get_vitals() async
   {
     data_vitals_list.add(
       VitalsData(
+        data["id"],
         data["type"],
         data["value"],
         data["unit"],
@@ -1023,7 +1043,7 @@ Future<List<VitalsData>> database_get_vitals_for_date(DateTime target_date) asyn
 
   final List<Map<String, dynamic>> data_vitals_map = await database_db.query(
     'vitals',
-    columns: ['type', 'value', 'unit', 'entry_date', 'entry_note'],
+    columns: ['id', 'type', 'value', 'unit', 'entry_date', 'entry_note'],
     where: 'date(entry_date) = ?',
     whereArgs: [_target_date],
   );
@@ -1034,6 +1054,7 @@ Future<List<VitalsData>> database_get_vitals_for_date(DateTime target_date) asyn
   {
     data_vitals_list.add(
       VitalsData(
+        data["id"],
         data["type"],
         data["value"],
         data["unit"],
@@ -1075,7 +1096,7 @@ Future<List<WorkoutData>> database_get_workout() async
 {
   Database database_db = await database_open();
 
-  final List<Map<String, dynamic>> data_workout_map = await database_db.query('workout', columns: ['name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note']);
+  final List<Map<String, dynamic>> data_workout_map = await database_db.query('workout', columns: ['id', 'name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note']);
 
   List<WorkoutData> data_workout_list = [];
 
@@ -1083,6 +1104,7 @@ Future<List<WorkoutData>> database_get_workout() async
   {
     data_workout_list.add(
       WorkoutData(
+        data["id"],
         data["name"],
         data["type"],
         data["duration"],
@@ -1105,7 +1127,7 @@ Future<List<WorkoutData>> database_get_workout_for_date(DateTime target_date) as
 
   final List<Map<String, dynamic>> data_workout_map = await database_db.query(
     'workout',
-    columns: ['name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note'],
+    columns: ['id', 'name', 'type', 'duration', 'calories', 'reps', 'weight', 'entry_date', 'entry_note'],
     where: 'date(entry_date) = ?',
     whereArgs: [_target_date],
   );
@@ -1116,6 +1138,7 @@ Future<List<WorkoutData>> database_get_workout_for_date(DateTime target_date) as
   {
     data_workout_list.add(
       WorkoutData(
+        data["id"],
         data["name"],
         data["type"],
         data["duration"],

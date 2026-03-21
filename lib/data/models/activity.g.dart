@@ -7,6 +7,7 @@ part of 'activity.dart';
 // **************************************************************************
 
 ActivityData _$ActivityDataFromJson(Map<String, dynamic> json) => ActivityData(
+  (json['id'] as num).toInt(),
   json['name'] as String,
   (json['duration'] as num).toInt(),
   (json['distance'] as num).toInt(),
@@ -17,6 +18,7 @@ ActivityData _$ActivityDataFromJson(Map<String, dynamic> json) => ActivityData(
 
 Map<String, dynamic> _$ActivityDataToJson(ActivityData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'duration': instance.duration,
       'distance': instance.distance,

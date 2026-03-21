@@ -7,6 +7,7 @@ part of 'vitals.dart';
 // **************************************************************************
 
 VitalsData _$VitalsDataFromJson(Map<String, dynamic> json) => VitalsData(
+  (json['id'] as num).toInt(),
   json['type'] as String,
   json['value'] as String,
   json['unit'] as String,
@@ -16,6 +17,7 @@ VitalsData _$VitalsDataFromJson(Map<String, dynamic> json) => VitalsData(
 
 Map<String, dynamic> _$VitalsDataToJson(VitalsData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'type': instance.type,
       'value': instance.value,
       'unit': instance.unit,

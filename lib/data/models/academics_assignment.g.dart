@@ -9,6 +9,7 @@ part of 'academics_assignment.dart';
 AcademicsAssignmentData _$AcademicsAssignmentDataFromJson(
   Map<String, dynamic> json,
 ) => AcademicsAssignmentData(
+  (json['id'] as num).toInt(),
   json['subject'] as String,
   json['type'] as String,
   json['topic'] as String,
@@ -22,6 +23,7 @@ AcademicsAssignmentData _$AcademicsAssignmentDataFromJson(
 Map<String, dynamic> _$AcademicsAssignmentDataToJson(
   AcademicsAssignmentData instance,
 ) => <String, dynamic>{
+  'id': instance.id,
   'subject': instance.subject,
   'type': instance.type,
   'topic': instance.topic,

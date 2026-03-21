@@ -7,6 +7,7 @@ part of 'time.dart';
 // **************************************************************************
 
 TimeData _$TimeDataFromJson(Map<String, dynamic> json) => TimeData(
+  (json['id'] as num).toInt(),
   json['event'] as String,
   (json['duration'] as num).toInt(),
   DateTime.parse(json['entry_date'] as String),
@@ -14,6 +15,7 @@ TimeData _$TimeDataFromJson(Map<String, dynamic> json) => TimeData(
 );
 
 Map<String, dynamic> _$TimeDataToJson(TimeData instance) => <String, dynamic>{
+  'id': instance.id,
   'event': instance.event,
   'duration': instance.duration,
   'entry_date': instance.entry_date.toIso8601String(),

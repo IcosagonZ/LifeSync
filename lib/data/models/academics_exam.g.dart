@@ -8,6 +8,7 @@ part of 'academics_exam.dart';
 
 AcademicsExamData _$AcademicsExamDataFromJson(Map<String, dynamic> json) =>
     AcademicsExamData(
+      (json['id'] as num).toInt(),
       json['subject'] as String,
       json['exam_type'] as String,
       DateTime.parse(json['exam_date'] as String),
@@ -18,6 +19,7 @@ AcademicsExamData _$AcademicsExamDataFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AcademicsExamDataToJson(AcademicsExamData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'subject': instance.subject,
       'exam_type': instance.exam_type,
       'exam_date': instance.exam_date.toIso8601String(),

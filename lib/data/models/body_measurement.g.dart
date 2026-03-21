@@ -8,6 +8,7 @@ part of 'body_measurement.dart';
 
 BodyMeasurementData _$BodyMeasurementDataFromJson(Map<String, dynamic> json) =>
     BodyMeasurementData(
+      (json['id'] as num).toInt(),
       json['measurement_type'] as String,
       (json['value'] as num).toDouble(),
       json['unit'] as String,
@@ -18,6 +19,7 @@ BodyMeasurementData _$BodyMeasurementDataFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$BodyMeasurementDataToJson(
   BodyMeasurementData instance,
 ) => <String, dynamic>{
+  'id': instance.id,
   'measurement_type': instance.measurement_type,
   'value': instance.value,
   'unit': instance.unit,

@@ -42,8 +42,8 @@ Front end will be made using Flutter for mobile friendly cross platform data ent
 - Intl
 
 ## Running
+- Update generated code using `dart run build_runner clean` and `dart run build_runner build`
 - Run using `flutter run`
-- Update generated code using `dart run build_runner clean` and 
 
 ## References
 

@@ -7,6 +7,7 @@ part of 'mind_mood.dart';
 // **************************************************************************
 
 MindMoodData _$MindMoodDataFromJson(Map<String, dynamic> json) => MindMoodData(
+  (json['id'] as num).toInt(),
   json['name'] as String,
   json['intensity'] as String,
   json['resolved'] as bool,
@@ -17,6 +18,7 @@ MindMoodData _$MindMoodDataFromJson(Map<String, dynamic> json) => MindMoodData(
 
 Map<String, dynamic> _$MindMoodDataToJson(MindMoodData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'intensity': instance.intensity,
       'resolved': instance.resolved,

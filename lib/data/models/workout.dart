@@ -3,7 +3,9 @@ import 'package:json_annotation/json_annotation.dart';
 part 'workout.g.dart';
 
 @JsonSerializable()
-class WorkoutData{
+class WorkoutData
+{
+  int id;
   String name;
   String type;
   int duration;
@@ -13,7 +15,7 @@ class WorkoutData{
   DateTime entry_date;
   String entry_note;
 
-  WorkoutData(this.name, this.type, this.duration, this.calories, this.reps, this.weight, this.entry_date, this.entry_note);
+  WorkoutData(this.id, this.name, this.type, this.duration, this.calories, this.reps, this.weight, this.entry_date, this.entry_note);
 
   factory WorkoutData.fromJson(Map<String, dynamic> json) => _$WorkoutDataFromJson(json);
   Map<String, dynamic> toJson() => _$WorkoutDataToJson(this);

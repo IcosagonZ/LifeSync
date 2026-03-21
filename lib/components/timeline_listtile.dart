@@ -10,12 +10,18 @@ class TimelineListTile extends StatelessWidget
   final String list_subtitle;
   final DateTime list_date;
 
+  final int id;
+  final String datatype;
+
   const TimelineListTile({
     Key? key,
     required this.list_icon,
     required this.list_title,
     required this.list_subtitle,
     required this.list_date,
+
+    required this.id,
+    required this.datatype,
   }) : super (key: key);
 
   @override
@@ -45,32 +51,37 @@ class TimelineListTile extends StatelessWidget
     final style_titlesmall = text_theme.titleSmall;
 
     return Card(
-      child: Padding(
-        padding: EdgeInsets.all(8),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 8,
-            ),
-            list_icon,
-            SizedBox(
-              width: 16,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
-                ]
+      child: InkWell(
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 8,
               ),
-            ),
-            Text(list_subtitle),
-            SizedBox(
-              width: 16,
-            ),
-            Text(DateFormat('h:mm a').format(list_date)),
-          ]
-        )
+              list_icon,
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
+                  ]
+                ),
+              ),
+              Text(list_subtitle),
+              SizedBox(
+                width: 16,
+              ),
+              Text(DateFormat('h:mm a').format(list_date)),
+            ]
+          )
+        ),
+        onTap: (){
+          print("Tapped id:$id data_type:$datatype");
+        }
       )
       /*
       child: ListTile(

@@ -8,6 +8,7 @@ part of 'nutrition.dart';
 
 NutritionData _$NutritionDataFromJson(Map<String, dynamic> json) =>
     NutritionData(
+      (json['id'] as num).toInt(),
       json['name'] as String,
       json['form'] as String,
       json['type'] as String,
@@ -23,6 +24,7 @@ NutritionData _$NutritionDataFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$NutritionDataToJson(NutritionData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'form': instance.form,
       'type': instance.type,

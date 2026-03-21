@@ -8,6 +8,7 @@ part of 'academics_absent.dart';
 
 AcademicsAbsentData _$AcademicsAbsentDataFromJson(Map<String, dynamic> json) =>
     AcademicsAbsentData(
+      (json['id'] as num).toInt(),
       json['reason'] as String,
       DateTime.parse(json['absent_date'] as String),
       DateTime.parse(json['entry_date'] as String),
@@ -17,6 +18,7 @@ AcademicsAbsentData _$AcademicsAbsentDataFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$AcademicsAbsentDataToJson(
   AcademicsAbsentData instance,
 ) => <String, dynamic>{
+  'id': instance.id,
   'reason': instance.reason,
   'absent_date': instance.absent_date.toIso8601String(),
   'entry_date': instance.entry_date.toIso8601String(),

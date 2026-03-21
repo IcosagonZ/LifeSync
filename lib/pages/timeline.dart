@@ -79,6 +79,8 @@ class Page_Timeline_State extends State<Page_Timeline>
                   String data_year_string = DateFormat('yyyy').format(data.date_time);
 
                   TimelineListTile data_tile = TimelineListTile(
+                    id: data.id,
+                    datatype: data.datatype,
                     list_icon: Icon(data.icon),
                     list_title: data.title,
                     list_subtitle: data.subtitle,

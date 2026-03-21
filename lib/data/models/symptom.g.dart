@@ -7,6 +7,7 @@ part of 'symptom.dart';
 // **************************************************************************
 
 SymptomData _$SymptomDataFromJson(Map<String, dynamic> json) => SymptomData(
+  (json['id'] as num).toInt(),
   json['name'] as String,
   (json['intensity'] as num).toInt(),
   (json['resolved'] as num).toInt(),
@@ -17,6 +18,7 @@ SymptomData _$SymptomDataFromJson(Map<String, dynamic> json) => SymptomData(
 
 Map<String, dynamic> _$SymptomDataToJson(SymptomData instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'intensity': instance.intensity,
       'resolved': instance.resolved,
