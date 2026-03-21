@@ -19,6 +19,7 @@ import '../data/models/vitals.dart';
 import '../data/models/workout.dart';
 
 import '../../components/recents_listtile_single_text.dart';
+import '../../components/listtile_3_line_expandable.dart';
 
 class Page_Recommendations extends StatefulWidget
 {
@@ -188,50 +189,47 @@ class Page_Recommendations_State extends State<Page_Recommendations>
             Text("Recommendations", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
-              child: Padding(
-                padding: EdgeInsets.all(2),
-                child: Stack(
-                  children: [
-                    Visibility(
-                      visible: recommendation_list.isEmpty,
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                          child: Text("No data available")
-                        ),
-                      )
-                    ),
-                    Visibility(
-                      visible: recommendation_list.isNotEmpty,
+              child: Stack(
+                children: [
+                  Visibility(
+                    visible: recommendation_list.isEmpty,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
                       child: Center(
-                        child: Column(
-                          spacing: 2,
-                          children: List.generate(recommendation_list.length, (index){
-                            final data = recommendation_list[index];
-                            final tile = RecentsListTileSingleText(
-                              list_title: data.title,
-                              list_subtitle: data.subtitle,
-                            );
+                        child: Text("No data available")
+                      ),
+                    )
+                  ),
+                  Visibility(
+                    visible: recommendation_list.isNotEmpty,
+                    child: Center(
+                      child: Column(
+                        children: List.generate(recommendation_list.length, (index){
+                          final data = recommendation_list[index];
+                          final tile = ListTile3LineExpandable(
+                            list_title: data.title,
+                            list_subtitle: data.subtitle,
+                            list_description: data.description
+                          );
 
-                            if(index>0)
-                            {
-                              return Column(
-                                children: [
-                                  Divider(height: 1),
-                                  tile,
-                                ]
-                              );
-                            }
-                            else
-                            {
-                              return tile;
-                            }
-                          }),
-                        )
+                          if(index>0)
+                          {
+                            return Column(
+                              children: [
+                                //Divider(height: 1),
+                                tile,
+                              ]
+                            );
+                          }
+                          else
+                          {
+                            return tile;
+                          }
+                        }),
                       )
-                    ),
-                  ]
-                )
+                    )
+                  ),
+                ]
               )
             ),
             SizedBox(height: 16),

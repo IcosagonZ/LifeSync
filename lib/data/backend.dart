@@ -147,84 +147,99 @@ Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) as
 
   print("Backend: URL is ${url}");
 
-  final response = await http.post(
-    url,
-    headers: {"Content-Type": "application/json"},
-    body: jsonEncode(
-      {
-        "version":"0.1.1",
-        "data": data,
-      }
-    ),
-  );
-
-  if(response.statusCode==200)
+  try
   {
-    print("Backend: Success");
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(
+        {
+          "version":"0.1.1",
+          "data": data,
+        }
+      ),
+    );
 
-    int response_score = -1;
-    String response_type = "N/A";
 
-    List<RecommendationData> response_recommendations = [];
-    List<InsightData> response_insights = [];
-
-    bool isDecoded = false;
-
-    try
+    if(response.statusCode==200)
     {
-      final response_decoded = jsonDecode(response.body);
-      //print(response_decoded);
+      print("Backend: Success");
 
-      response_type = response_decoded["type"];
-      response_score = response_decoded["score"];
+      int response_score = -1;
+      String response_type = "N/A";
 
-      for(var recommendation in response_decoded["recommendation"])
+      List<RecommendationData> response_recommendations = [];
+      List<InsightData> response_insights = [];
+
+      bool isDecoded = false;
+
+      try
       {
-        response_recommendations.add(
-          RecommendationData(recommendation[0], recommendation[1], recommendation[2])
-        );
+        final response_decoded = jsonDecode(response.body);
+        //print(response_decoded);
+
+        response_type = response_decoded["type"];
+        response_score = response_decoded["score"];
+
+        for(var recommendation in response_decoded["recommendation"])
+        {
+          response_recommendations.add(
+            RecommendationData(recommendation[0], recommendation[1], recommendation[2])
+          );
+        }
+
+        for(var insight in response_decoded["insight"])
+        {
+          response_insights.add(
+            InsightData(insight[0], insight[1], insight[2])
+          );
+        }
+
+        isDecoded = true;
+      }
+      catch(e)
+      {
+        print("Backend: Error decoding JSON");
+        print("Backend>Error: ${e}");
       }
 
-      for(var insight in response_decoded["insight"])
+      if(isDecoded)
       {
-        response_insights.add(
-          InsightData(insight[0], insight[1], insight[2])
+        return BackendMLData(
+          response.statusCode,
+          response.body,
+          response_type,
+          response_score,
+          response_recommendations,
+          response_insights
         );
       }
-
-      isDecoded = true;
     }
-    catch(e)
+    else
     {
-      print("Backend: Error decoding JSON");
-      print("Backend>Error: ${e}");
-    }
-
-    if(isDecoded)
-    {
-      return BackendMLData(
-        response.statusCode,
-        response.body,
-        response_type,
-        response_score,
-        response_recommendations,
-        response_insights
-      );
+      {
+        print("Backend: Error");
+        print("Backend>Status code: ${response.statusCode}");
+        print("Backend>Response: ${response.body}");
+      }
     }
   }
-  else
+  catch(e)
   {
-    {
-      print("Backend: Error");
-      print("Backend>Status code: ${response.statusCode}");
-      print("Backend>Response: ${response.body}");
-    }
+    return BackendMLData(
+      -1,
+      "$e",
+      "ERROR",
+      -1,
+      [],
+      [],
+    );
   }
 
   return BackendMLData(
-    response.statusCode,
-    response.body,
-    "N/A",
+    -1,
+    "Unknown error",
+    "ERROR",
     -1,
     [],
     [],
@@ -240,79 +255,93 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
 
   print("Backend: URL is ${url}");
 
-  final response = await http.post(
-    url,
-    headers: {"Content-Type": "application/json"},
-    body: jsonEncode(data),
-  );
-
-  if(response.statusCode==200)
+  try
   {
-    print("Backend: Success");
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(data),
+    );
 
-    int response_score = -1;
-    String response_type = "N/A";
-
-    List<RecommendationData> response_recommendations = [];
-    List<InsightData> response_insights = [];
-
-    bool isDecoded = false;
-
-    try
+    if(response.statusCode==200)
     {
-      final response_decoded = jsonDecode(response.body);
-      //print(response_decoded);
+      print("Backend: Success");
 
-      response_type = response_decoded["type"];
-      response_score = response_decoded["score"];
+      int response_score = -1;
+      String response_type = "N/A";
 
-      for(var recommendation in response_decoded["recommendation"])
+      List<RecommendationData> response_recommendations = [];
+      List<InsightData> response_insights = [];
+
+      bool isDecoded = false;
+
+      try
       {
-        response_recommendations.add(
-          RecommendationData(recommendation[0], recommendation[1], recommendation[2])
-        );
+        final response_decoded = jsonDecode(response.body);
+        //print(response_decoded);
+
+        response_type = response_decoded["type"];
+        response_score = response_decoded["score"];
+
+        for(var recommendation in response_decoded["recommendation"])
+        {
+          response_recommendations.add(
+            RecommendationData(recommendation[0], recommendation[1], recommendation[2])
+          );
+        }
+
+        for(var insight in response_decoded["insight"])
+        {
+          response_insights.add(
+            InsightData(insight[0], insight[1], insight[2])
+          );
+        }
+
+        isDecoded = true;
+      }
+      catch(e)
+      {
+        print("Backend: Error decoding JSON");
+        print("Backend>Error: ${e}");
       }
 
-      for(var insight in response_decoded["insight"])
+      if(isDecoded)
       {
-        response_insights.add(
-          InsightData(insight[0], insight[1], insight[2])
+        return BackendMLData(
+          response.statusCode,
+          response.body,
+          response_type,
+          response_score,
+          response_recommendations,
+          response_insights
         );
       }
-
-      isDecoded = true;
     }
-    catch(e)
+    else
     {
-      print("Backend: Error decoding JSON");
-      print("Backend>Error: ${e}");
-    }
-
-    if(isDecoded)
-    {
-      return BackendMLData(
-        response.statusCode,
-        response.body,
-        response_type,
-        response_score,
-        response_recommendations,
-        response_insights
-      );
+      {
+        print("Backend: Error");
+        print("Backend>Status code: ${response.statusCode}");
+        print("Backend>Response: ${response.body}");
+      }
     }
   }
-  else
+  catch(e)
   {
-    {
-      print("Backend: Error");
-      print("Backend>Status code: ${response.statusCode}");
-      print("Backend>Response: ${response.body}");
-    }
+    return BackendMLData(
+      -1,
+      "$e",
+      "ERROR",
+      -1,
+      [],
+      [],
+    );
   }
 
   return BackendMLData(
-    response.statusCode,
-    response.body,
-    "N/A",
+    -1,
+    "Unknown error",
+    "ERROR",
     -1,
     [],
     [],
