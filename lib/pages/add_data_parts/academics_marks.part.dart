@@ -1,5 +1,9 @@
 part of '../add_data.dart';
 
+// Marks
+final TextEditingController academics_marks_controller = TextEditingController();
+final TextEditingController academics_marks_total_controller = TextEditingController();
+
 extension AcademicsMarksWidget on Page_AddData_State{
   Widget getAcademicsMarksWidget(){
     return

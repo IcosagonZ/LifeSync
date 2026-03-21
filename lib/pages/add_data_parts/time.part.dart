@@ -1,5 +1,21 @@
 part of '../add_data.dart';
 
+// Time widgets
+final TextEditingController time_duration_hours_controller = TextEditingController();
+final TextEditingController time_duration_minutes_controller = TextEditingController();
+
+final List<String> time_type_options = [
+  "Sleep",
+  "Study",
+  "Food",
+  "Hobby",
+  "Gaming",
+  "Outing",
+  "Commute",
+  "Entertainment",
+];
+String? time_type_dropdown_chosen;
+
 extension TimeWidget on Page_AddData_State{
   Widget getTimeWidget(){
     return Visibility(

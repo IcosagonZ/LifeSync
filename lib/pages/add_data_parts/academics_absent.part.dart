@@ -1,5 +1,9 @@
 part of '../add_data.dart';
 
+// Absent
+final TextEditingController academics_absent_reason_controller = TextEditingController();
+DateTime academics_absent_date = DateTime.now();
+
 extension AcademicsAbsentWidget on Page_AddData_State{
   Widget getAcademicsAbsentWidget(){
     return

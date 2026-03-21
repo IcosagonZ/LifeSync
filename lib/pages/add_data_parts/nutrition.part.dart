@@ -1,5 +1,30 @@
 part of '../add_data.dart';
 
+// Nutrition widgets
+final TextEditingController nutrition_name_controller = TextEditingController();
+final TextEditingController nutrition_qty_controller = TextEditingController(text: "1");
+final TextEditingController nutrition_mass_controller = TextEditingController();
+final TextEditingController nutrition_calories_controller = TextEditingController();
+final TextEditingController nutrition_carbs_controller = TextEditingController(text: "0");
+final TextEditingController nutrition_proteins_controller = TextEditingController(text: "0");
+final TextEditingController nutrition_fats_controller = TextEditingController(text: "0");
+
+final List<String> nutrition_form_options = [
+  "Drink",
+  "Solid Food",
+  "Supplement",
+];
+String? nutrition_form_dropdown_chosen;
+
+final List<String> nutrition_type_options = [
+  "Breakfast",
+  "Lunch",
+  "Dinner",
+  "Snacks",
+  "Brunch",
+];
+String? nutrition_type_dropdown_chosen;
+
 extension NutritionWidget on Page_AddData_State{
   Widget getNutritionWidget(){
     return Visibility(

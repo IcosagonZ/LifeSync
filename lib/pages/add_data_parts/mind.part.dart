@@ -1,5 +1,17 @@
 part of '../add_data.dart';
 
+// Mind widgets
+final TextEditingController mind_mood_name_controller = TextEditingController();
+bool? mind_mood_resolved;
+DateTime? mind_mood_end_date;
+
+final List<String> mind_mood_intensity_dropdown_options = [
+  "Light",
+  "Moderate",
+  "Severe",
+];
+String? mind_mood_intensity_dropdown_chosen;
+
 extension MindWidget on Page_AddData_State{
   Widget getMindWidget(){
     return Visibility(

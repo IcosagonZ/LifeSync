@@ -1,5 +1,11 @@
 part of '../add_data.dart';
 
+// Exam
+final TextEditingController academics_exam_duration_hours_controller = TextEditingController();
+final TextEditingController academics_exam_duration_mins_controller = TextEditingController();
+DateTime academics_exam_date  = DateTime.now();
+DateTime academics_exam_time  = DateTime.now();
+
 extension AcademicsExamWidget on Page_AddData_State{
   Widget getAcademicsExamWidget(){
     return

@@ -1,5 +1,15 @@
 part of '../add_data.dart';
 
+// Workout widgets
+final TextEditingController workout_name_controller = TextEditingController();
+final TextEditingController workout_type_controller = TextEditingController();
+final TextEditingController workout_weight_controller = TextEditingController(text: "0");
+final TextEditingController workout_reps_controller = TextEditingController();
+final TextEditingController workout_sets_controller = TextEditingController();
+final TextEditingController workout_duration_hours_controller = TextEditingController();
+final TextEditingController workout_duration_minutes_controller = TextEditingController();
+final TextEditingController workout_calories_controller = TextEditingController();
+
 extension WorkoutWidget on Page_AddData_State{
   Widget getWorkoutWidget(){
     return Visibility(

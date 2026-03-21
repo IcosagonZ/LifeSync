@@ -1,5 +1,24 @@
 part of '../add_data.dart';
 
+// Vital widgets
+final TextEditingController vital_bodytemperature_controller = TextEditingController();
+final TextEditingController vital_bloodoxygen_controller = TextEditingController();
+final TextEditingController vital_bloodsugar_controller = TextEditingController();
+
+final TextEditingController vital_bloodpressure_systolic_controller = TextEditingController();
+final TextEditingController vital_bloodpressure_diastolic_controller = TextEditingController();
+
+final TextEditingController vital_heartrate_controller = TextEditingController();
+
+final List<String> vital_name_options = [
+  "Body Temperature",
+  "Blood Oxygen",
+  "Blood Pressure",
+  "Blood Sugar",
+  "Heartrate"
+];
+String? vital_name_dropdown_chosen;
+
 extension VitalsWidget on Page_AddData_State{
   Widget getVitalsWidget(){
     return Visibility(

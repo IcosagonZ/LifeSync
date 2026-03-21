@@ -1,5 +1,15 @@
 part of '../add_data.dart';
 
+// Body measurement widgets
+final TextEditingController bodymeasurement_height_controller = TextEditingController();
+final TextEditingController bodymeasurement_weight_controller = TextEditingController();
+
+final List<String> bodymeasurement_dropdown_options = [
+  "Height",
+  "Weight",
+];
+String? bodymeasurement_dropdown_chosen;
+
 extension BodyMeasurementsWidget on Page_AddData_State{
   Widget getBodyMeasurementsWidget(){
     return Visibility(

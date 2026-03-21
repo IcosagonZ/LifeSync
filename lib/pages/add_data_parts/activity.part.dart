@@ -1,5 +1,47 @@
 part of '../add_data.dart';
 
+// Activity controllers
+//final TextEditingController activity_name_controller = TextEditingController();
+final TextEditingController activity_type_controller = TextEditingController();
+final TextEditingController activity_duration_hours_controller = TextEditingController();
+final TextEditingController activity_duration_minutes_controller = TextEditingController();
+final TextEditingController activity_calories_controller = TextEditingController();
+final TextEditingController activity_distance_controller = TextEditingController(text: "0");
+
+final List<String> activity_dropdown_options = [
+  "Badminton",
+  "Baseball",
+  "Basketball",
+  "Cricket",
+  "Cycling",
+  "Downhill Skiing",
+  "Electric Bike",
+  "Football",
+  "Golf",
+  "Handball",
+  "Hiking",
+  "Hockey",
+  "Ice Skating",
+  "Kabbadi",
+  "Kayaking",
+  "Kite Surfing",
+  "Martial Arts",
+  "Mixed Martial Arts",
+  "Motorsports",
+  "Pickleball",
+  "Pool",
+  "Roller Skating",
+  "Rugby",
+  "Running",
+  "Sailing",
+  "Skateboarding",
+  "Sprint",
+  "Surfing",
+  "Volleyball",
+  "Custom"
+];
+String? activity_dropdown_chosen;
+
 extension ActivityWidget on Page_AddData_State{
   Widget getActivityWidget(){
     return

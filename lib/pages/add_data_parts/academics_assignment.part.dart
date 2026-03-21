@@ -1,5 +1,11 @@
 part of '../add_data.dart';
 
+// Assignment
+final TextEditingController academics_assignment_topic_controller = TextEditingController();
+DateTime academics_assignment_due_date  = DateTime.now();
+DateTime academics_assignment_submission_date  = DateTime.now();
+bool? academics_assignment_submitted;
+
 extension AcademicsAssignmentWidget on Page_AddData_State{
   Widget getAcademicsAssignmentWidget(){
     return Visibility(

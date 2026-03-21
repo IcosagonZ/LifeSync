@@ -1,5 +1,17 @@
 part of '../add_data.dart';
 
+// Symptoms
+final TextEditingController symptoms_name_controller = TextEditingController();
+bool? symptoms_resolved;
+DateTime? symptoms_end_date;
+
+final List<String> symptoms_intensity_dropdown_options = [
+  "Light",
+  "Moderate",
+  "Severe",
+];
+String? symptoms_intensity_dropdown_chosen;
+
 extension SymptomWidget on Page_AddData_State{
   Widget getSymptomWidget(){
     return Visibility(
