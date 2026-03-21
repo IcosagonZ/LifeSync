@@ -50,27 +50,27 @@ final Map<String, IconData> activity_mapping = {
 
 IconData iconmapper_geticon(String section, [String item = "None"])
 {
-  if(section=="Academics Exam")
+  if(section=="academics_exam")
   {
     return Symbols.quiz;
   }
 
-  if(section=="Academics Assignment")
+  if(section=="academics_assignment")
   {
     return Symbols.assignment;
   }
 
-  if(section=="Academics Mark")
+  if(section=="academics_mark")
   {
     return Symbols.leaderboard;
   }
 
-  if(section=="Academics Absent")
+  if(section=="academics_absent")
   {
     return Symbols.location_away;
   }
 
-  if(section=="Activity")
+  if(section=="activity")
   {
     if(activity_mapping.containsKey(item)){
       return activity_mapping[item] ?? Symbols.sports;
@@ -81,7 +81,7 @@ IconData iconmapper_geticon(String section, [String item = "None"])
     }
   }
 
-  if(section=="Body Measurements")
+  if(section=="body_measurements")
   {
     if(bodymeasurements_mapping.containsKey(item)){
       return bodymeasurements_mapping[item] ?? Symbols.user_attributes;
@@ -92,32 +92,32 @@ IconData iconmapper_geticon(String section, [String item = "None"])
     }
   }
 
-  if(section=="Mind")
+  if(section=="mind_mood")
   {
     return Symbols.cognition_2;
   }
 
-  if(section=="Nutrition")
+  if(section=="nutrition")
   {
     return Symbols.fastfood;
   }
 
-  if(section=="Sleep")
+  if(section=="sleep")
   {
     return Symbols.bedtime;
   }
 
-  if(section=="Symptom")
+  if(section=="symptom")
   {
     return Symbols.sick;
   }
 
-  if(section=="Time")
+  if(section=="time")
   {
     return Symbols.schedule;
   }
 
-  if(section=="Vitals")
+  if(section=="vitals")
   {
     if(vitals_mapping.containsKey(item)){
       return vitals_mapping[item] ?? Symbols.ecg_heart;
@@ -128,7 +128,7 @@ IconData iconmapper_geticon(String section, [String item = "None"])
     }
   }
 
-  if(section=="Workout")
+  if(section=="workout")
   {
     return Symbols.exercise;
   }
