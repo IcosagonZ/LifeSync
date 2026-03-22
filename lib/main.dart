@@ -7,6 +7,8 @@ import 'pages/login.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
+
 void printDatabasePath() async
 {
   var path = await getDatabasesPath();
@@ -36,6 +38,9 @@ class MainApp extends StatelessWidget
       theme: ThemeData.dark(), // make it user changable
       debugShowCheckedModeBanner: false,
       home: Page_Overview(),
+      navigatorObservers: [
+        routeObserver
+      ],
     );
   }
 }

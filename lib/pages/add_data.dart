@@ -429,6 +429,7 @@ class Page_AddData_State extends State<Page_AddData>
                         print("Delete data pressed");
                         final result = await database_delete_row_from_id(dataType, dataId);
                         print("Deleted $result rows");
+                        Navigator.pop(context, "refresh");
                       },
                     ),
                     SizedBox(height: 16),

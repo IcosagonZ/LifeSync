@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../main.dart';
 import '../components/timeline_listtile.dart';
 
 import '../data/database.dart';
@@ -14,8 +15,16 @@ class Page_Timeline extends StatefulWidget
   State<Page_Timeline> createState() => Page_Timeline_State();
 }
 
-class Page_Timeline_State extends State<Page_Timeline>
+class Page_Timeline_State extends State<Page_Timeline> with RouteAware
 {
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
   // Widget variables
   List<TimelineData> timeline_data = [];
 
@@ -27,13 +36,21 @@ class Page_Timeline_State extends State<Page_Timeline>
     super.initState();
   }
 
-  Future<void> initData() async{
+  Future<void> initData() async
+  {
     List<TimelineData> timeline_data_result = await database_timeline_retrive();
 
     setState(()
     {
       timeline_data = timeline_data_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override
@@ -59,7 +76,17 @@ class Page_Timeline_State extends State<Page_Timeline>
     List<String> list_common_months = [];
     List<String> list_common_years = [];
 
-    //List<TimelineData> timeline_data = database_timeline_retrive();
+    // Refresh data on request
+    final _arguments = ModalRoute.of(context)?.settings.arguments;
+    if(_arguments!=null){
+      final arguments = _arguments as String;
+      print(arguments);
+      if(arguments=="refresh")
+      {
+        print("refresh");
+        initData();
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
