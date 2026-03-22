@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../pages/add_data.dart';
+import '../pages/add_note.dart';
 
 class RecentsListTileMultiline extends StatelessWidget
 {
@@ -78,7 +79,7 @@ class RecentsListTileMultiline extends StatelessWidget
         )
       ),
       onTap: (){
-        if(id!=-1)
+        if(id!=-1 && datatype!="note")
         {
           Navigator.push(context, MaterialPageRoute(
             builder: (context){
@@ -86,6 +87,17 @@ class RecentsListTileMultiline extends StatelessWidget
             },
             settings: RouteSettings(
               arguments: [id, datatype],
+            ),
+          ));
+        }
+        else if(id!=-1 && datatype=="note")
+        {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context){
+              return const Page_AddNote();
+            },
+            settings: RouteSettings(
+              arguments: id,
             ),
           ));
         }

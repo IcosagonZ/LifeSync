@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import 'sections/notes.dart';
 
 import '../data/database.dart';
+import '../data/models/note.dart';
 
 class Page_AddNote extends StatefulWidget
 {
@@ -16,6 +15,10 @@ class Page_AddNote extends StatefulWidget
 
 class Page_AddNote_State extends State<Page_AddNote>
 {
+  // Misc variables
+  bool isInitialized = false;
+  int dataId = -1; // note id -1 if new
+
   // Time and date variables
   DateTime data_datetime = DateTime.now();
 
@@ -79,6 +82,17 @@ class Page_AddNote_State extends State<Page_AddNote>
     }
   }
 
+  Future<void> load_note(int id) async
+  {
+    List<NoteData> note_data_result = await database_get_note_from_id(id);
+    NoteData note_data = note_data_result.first;
+
+    setState(() {
+      title_controller.text = note_data.title;
+      content_controller.text = note_data.content;
+    });
+  }
+
   Future<DateTime?> data_date_select(BuildContext context) async
   {
     final DateTime? picked_date = await showDatePicker
@@ -123,11 +137,80 @@ class Page_AddNote_State extends State<Page_AddNote>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
+    // Update existing note
+    final arguments = ModalRoute.of(context)?.settings.arguments;
+    if(!isInitialized && arguments!=null)
+    {
+      isInitialized = true;
+      try
+      {
+        dataId = arguments as int;
+        if(dataId!=-1)
+        {
+          load_note(dataId);
+        }
+      }
+      catch(e)
+      {
+        int a = 1+2;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Add note"),
+        actions: [
+          if(dataId!=-1)
+            IconButton(
+              icon: Icon(Icons.delete),
+              tooltip: "Delete note",
+              onPressed: () async {
+                //print("Delete note pressed");
+                final result = await database_delete_row_from_id("note", dataId);
+                if(result>0)
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Deleted note"));
+                  Navigator.pop(context, true);
+                }
+                else
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Error deleting note"));
+                }
+              },
+            ),
+          IconButton(
+            icon: Icon(Icons.save),
+            tooltip: "Save note",
+            onPressed: (){
+              print("Save note data pressed");
+              if(title_controller.text.isEmpty || content_controller.text.isEmpty)
+              {
+                ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
+              }
+              else
+              {
+                database_insert_note(
+                  title_controller.text,
+                  content_controller.text,
+                  "Manual",
+                  data_datetime.toIso8601String(),
+                  dataId
+                ).then((int row_index)
+                {
+                  if(row_index==0)
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
+                  }
+                  else
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
+                    Navigator.pop(context, true);
+                  }
+                });
+              }
+            },
+          )
+        ]
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -198,42 +281,6 @@ class Page_AddNote_State extends State<Page_AddNote>
             */
           ]
         )
-      ),
-      floatingActionButton: IconButton(
-        icon: Icon(Icons.save),
-        tooltip: "Save note",
-        onPressed: (){
-          print("Save note data pressed");
-          if(title_controller.text.isEmpty || content_controller.text.isEmpty)
-          {
-            ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Empty field not allowed!"));
-          }
-          else
-          {
-            database_insert_note(
-              title_controller.text,
-              content_controller.text,
-              "Manual",
-              data_datetime.toIso8601String(),
-            ).then((int row_index)
-            {
-              if(row_index==0)
-              {
-                ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry failed"));
-              }
-              else
-              {
-                ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data entry success"));
-                /*Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
-                {
-                  return const Page_Notes();
-                }
-                ));*/
-                Navigator.pop(context, true);
-              }
-            });
-          }
-        },
       ),
     );
   }
