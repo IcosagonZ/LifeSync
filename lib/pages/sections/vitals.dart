@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -8,7 +9,7 @@ import '../../data/models/vitals.dart';
 
 import '../../data/iconmapper.dart';
 
-import '../../components/recents_listtile.dart';
+import '../../components/listtile_single_icon.dart';
 import '../../components/graph_linechart.dart';
 
 class Page_Vitals extends StatefulWidget
@@ -173,11 +174,13 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                           spacing: 2,
                           children: List.generate(vitals_data.length, (index){
                             final data = vitals_data[index];
-                            final tile = RecentsListTile(
+                            final tile = ListTileSingleIcon(
                               list_icon: Icon(iconmapper_geticon("Vitals", data.type)),
                               list_title: data.type,
                               list_subtitle: "${data.value} ${data.unit}",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "vitals",
                             );
 
                             if(index>0)

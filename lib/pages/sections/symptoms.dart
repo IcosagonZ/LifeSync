@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -22,8 +23,10 @@ class Page_Symptoms extends StatefulWidget
 class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
 {
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<SymptomData> symptom_data = [];
-  bool symptom_unresolved_present = false;
+  List<SymptomData> symptom_unresolved_data = [];
 
   // Route aware initializers
   @override
@@ -43,13 +46,13 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
 
   Future<void> initData() async
   {
-    List<SymptomData> symptom_data_result = await database_get_symptom();
-    bool symptom_unresolved_present_result = await database_symptom_unresolved_present();
+    List<SymptomData> symptom_data_result = await database_get_symptom_for_date(data_timenow);
+    List<SymptomData> symptom_unresolved_data_result = await database_get_symptom_unresolved();
 
     setState(()
     {
       symptom_data = symptom_data_result;
-      symptom_unresolved_present = symptom_unresolved_present_result;
+      symptom_unresolved_data = symptom_unresolved_data_result;
     });
   }
 
@@ -134,7 +137,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("95"),
+                          Text("N/A"),
                           Text("Score", style: TextStyle(fontSize: 10)),
                         ]
                       ),
@@ -152,7 +155,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: !symptom_unresolved_present || symptom_data.isEmpty,
+                      visible: symptom_unresolved_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -161,42 +164,33 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                       )
                     ),
                     Visibility(
-                      visible: symptom_unresolved_present && symptom_data.isNotEmpty,
+                      visible: symptom_unresolved_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(symptom_data.length, (index){
-                            final data = symptom_data[index];
-                            int count = 0;
+                          children: List.generate(symptom_unresolved_data.length, (index){
+                            final data = symptom_unresolved_data[index];
+                            final tile = RecentsListTileMultiline(
+                              list_icon: Icon(iconmapper_geticon("Symptom")),
+                              list_title: data.name,
+                              list_subtitle: "Intensity ${data.intensity}",
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "symptom",
+                            );
 
-                            if(data.resolved==0)
+                            if(index>0)
                             {
-                              final tile = RecentsListTileSymptoms(
-                                list_icon: Icon(iconmapper_geticon("Symptom")),
-                                list_title: data.name,
-                                list_subtitle: "Intensity ${data.intensity}",
-                                list_date: data.entry_date,
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
                               );
-
-                              if(count>0)
-                              {
-                                count++;
-                                return Column(
-                                  children: [
-                                    Divider(height: 1),
-                                    tile,
-                                  ]
-                                );
-                              }
-                              else
-                              {
-                                count++;
-                                return tile;
-                              }
                             }
                             else
                             {
-                              return SizedBox(height: 0,);
+                              return tile;
                             }
                           }),
                         )
@@ -234,7 +228,9 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                               list_icon: Icon(iconmapper_geticon("Symptom")),
                               list_title: data.name,
                               list_subtitle: "Intensity ${data.intensity}",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "symptom",
                             );
 
                             if(index>0)

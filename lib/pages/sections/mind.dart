@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -21,6 +22,8 @@ class Page_Mind extends StatefulWidget
 class Page_Mind_State extends State<Page_Mind> with RouteAware
 {
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<MindMoodData> mind_mood_data = [];
 
   // Route aware initializers
@@ -40,7 +43,7 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   }
 
   Future<void> initData() async{
-    List<MindMoodData> mind_mood_data_result = await database_get_mind_mood();
+    List<MindMoodData> mind_mood_data_result = await database_get_mind_mood_for_date(data_timenow);
 
     setState(()
     {
@@ -227,7 +230,9 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
                               list_icon: Icon(Symbols.cognition_2),
                               list_title: data.name,
                               list_subtitle: data.intensity,
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "mind_mood",
                             );
 
                             if(index>0)

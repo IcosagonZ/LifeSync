@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -117,7 +118,9 @@ class Page_Notes_State extends State<Page_Notes> with RouteAware
                               list_icon: Icon(Symbols.notes),
                               list_title: data.title,
                               list_subtitle: "${data.content.length} chars",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('dd/M/yy h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "note",
                             );
 
                             if(index>0)

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -198,7 +199,9 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                               list_icon: Icon(iconmapper_geticon("Activity", data.name)),
                               list_title: data.name,
                               list_subtitle: "${helper_get_duration(data.duration)}, ${helper_get_distance_single(data.distance)}, ${data.calories} cal",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "activity",
                             );
 
                             if(index>0)

@@ -1239,6 +1239,70 @@ Future<List<SymptomData>> database_get_symptom() async
   return data_symptom_list;
 }
 
+Future<List<SymptomData>> database_get_symptom_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final List<Map<String, dynamic>> data_symptom_map = await database_db.query(
+    'symptom',
+    columns: ['id', 'name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note'],
+    where: 'date(entry_date) = ?',
+    whereArgs: [_target_date],
+  );
+
+  List<SymptomData> data_symptom_list = [];
+
+  for(var data in data_symptom_map)
+  {
+    data_symptom_list.add(
+      SymptomData(
+        data["id"],
+        data["name"],
+        data["intensity"],
+        data["resolved"],
+        data["end_date"],
+        DateTime.parse(data["entry_date"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_symptom_list;
+}
+
+Future<List<SymptomData>> database_get_symptom_unresolved() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_symptom_map = await database_db.query(
+    'symptom',
+    columns: ['id', 'name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note']
+  );
+
+  List<SymptomData> data_symptom_list = [];
+
+  for(var data in data_symptom_map)
+  {
+    if(data["resolved"]!=1)
+    {
+      data_symptom_list.add(
+        SymptomData(
+          data["id"],
+          data["name"],
+          data["intensity"],
+          data["resolved"],
+          data["end_date"],
+          DateTime.parse(data["entry_date"]),
+          data["entry_note"],
+        )
+      );
+    }
+  }
+
+  return data_symptom_list;
+}
+
 Future<List<SymptomData>> database_get_symptom_from_id(int id)
 async
 {

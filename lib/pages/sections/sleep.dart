@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -7,7 +8,7 @@ import '../../data/models/time.dart';
 
 import '../../helpers/helper_string.dart';
 
-import '../../components/recents_listtile.dart';
+import '../../components/listtile_single_icon.dart';
 
 class Page_Sleep extends StatefulWidget
 {
@@ -163,11 +164,13 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
                         child: Column(
                           children: recents_data.map((data)
                           {
-                            return RecentsListTile(
+                            return ListTileSingleIcon(
                               list_icon: Icon(data.icon),
                               list_title: data.title,
                               list_subtitle: data.subtitle,
-                              list_date: data.date_time,
+                              list_trail: DateFormat('h:mm a').format(data.date_time),
+                              id: -1,
+                              datatype: "sleep",
                             );
                           }).toList(),
                         )

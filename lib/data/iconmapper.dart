@@ -48,8 +48,9 @@ final Map<String, IconData> activity_mapping = {
   "Custom":Symbols.sports
 };
 
-IconData iconmapper_geticon(String section, [String item = "None"])
+IconData iconmapper_geticon(String _section, [String item = "None"])
 {
+  final section = _section.toLowerCase();
   if(section=="academics_exam")
   {
     return Symbols.quiz;

@@ -2,19 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-class RecentsListTile extends StatelessWidget
+import '../pages/add_data.dart';
+
+class ListTileSingleIcon extends StatelessWidget
 {
   final Icon list_icon;
   final String list_title;
   final String list_subtitle;
-  final DateTime list_date;
+  final String list_trail;
 
-  const RecentsListTile({
+  final String datatype;
+  final int id;
+
+  const ListTileSingleIcon({
     Key? key,
     required this.list_icon,
     required this.list_title,
     required this.list_subtitle,
-    required this.list_date,
+    required this.list_trail,
+
+    required this.id,
+    required this.datatype,
   }) : super (key: key);
 
   @override
@@ -44,53 +52,42 @@ class RecentsListTile extends StatelessWidget
     final style_titlesmall = text_theme.titleSmall;
 
 
-    return Padding(
-      padding: EdgeInsets.all(2),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 8,
-          ),
-          list_icon,
-          SizedBox(
-            width: 16,
-          ),
-          Expanded(
-            child: Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
-          ),
-          Text(list_subtitle),
-          SizedBox(
-            width: 16,
-          ),
-          Text(DateFormat('dd/M/yy').format(list_date)),
-          SizedBox(
-            width: 8,
-          ),
-          Text(DateFormat('h:mm a').format(list_date)),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              PopupMenuItem(
-                child: Text("View"),
-                onTap: (){
-                  print("View tapped");
-                },
-              ),
-              PopupMenuItem(
-                child: Text("Edit"),
-                onTap: (){
-                  print("Edit tapped");
-                },
-              ),
-              PopupMenuItem(
-                child: Text("Remove"),
-                onTap: (){
-                  print("Remove tapped");
-                },
-              ),
-            ],
-          )
-        ]
-      )
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.all(2),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 8,
+            ),
+            list_icon,
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Text(list_title, textAlign: TextAlign.left, style: style_titlemedium),
+            ),
+            Text(list_subtitle),
+            SizedBox(
+              width: 16,
+            ),
+            Text(list_trail),
+          ]
+        )
+      ),
+      onTap: (){
+        if(id!=-1)
+        {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context){
+              return const Page_AddData();
+            },
+            settings: RouteSettings(
+              arguments: [id, datatype],
+            ),
+          ));
+        }
+      },
     );
   }
 }

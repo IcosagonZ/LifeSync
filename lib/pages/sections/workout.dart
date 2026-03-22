@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -183,7 +184,9 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
                               list_icon: Icon(iconmapper_geticon("Workout")),
                               list_title: data.name,
                               list_subtitle: "${data.reps} reps",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "workout",
                             );
 
                             if(index>0)

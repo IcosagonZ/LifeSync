@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -8,7 +9,7 @@ import '../../data/models/body_measurement.dart';
 import '../../data/iconmapper.dart';
 import '../../helpers/helper_calculate.dart';
 
-import '../../components/recents_listtile.dart';
+import '../../components/listtile_single_icon.dart';
 import '../../components/graph_linechart.dart';
 
 
@@ -174,11 +175,13 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
                           spacing: 2,
                           children: List.generate(bodymeasurements_data.length, (index){
                             final data = bodymeasurements_data[index];
-                            final tile = RecentsListTile(
+                            final tile = ListTileSingleIcon(
                               list_icon: Icon(iconmapper_geticon("Body Measurements", data.measurement_type)),
                               list_title: data.measurement_type,
                               list_subtitle: "${data.value.toInt()} ${data.unit}",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "note",
                             );
 
                             if(index>0)

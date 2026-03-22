@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
@@ -172,7 +173,9 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
                               list_icon: Icon(iconmapper_geticon("Nutrition")),
                               list_title: data.name,
                               list_subtitle: "${data.calories} cal",
-                              list_date: data.entry_date,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "nutrition",
                             );
 
                             if(index>0)

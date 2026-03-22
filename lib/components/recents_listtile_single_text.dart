@@ -73,15 +73,17 @@ class RecentsListTileSingleText extends StatelessWidget
         )
       ),
       onTap: (){
-        print("Tapped id:$id data_type:$datatype");
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context){
-            return const Page_AddData();
-          },
-          settings: RouteSettings(
-            arguments: [id, datatype],
-          ),
-        ));
+        if(id!=-1)
+        {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context){
+              return const Page_AddData();
+            },
+            settings: RouteSettings(
+              arguments: [id, datatype],
+            ),
+          ));
+        }
       },
     );
   }
