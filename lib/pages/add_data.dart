@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/database.dart';
 
 import 'misc/nutrition_image_recognition.dart';
+import '../components/snackbar_notify.dart';
 
 // Model files (data class) for use by modify_data part
 import '../data/models/academics_absent.dart';
@@ -98,23 +99,6 @@ class Page_AddData_State extends State<Page_AddData>
 
     data_time_chosen = TimeOfDay.now();
     data_date_chosen = DateTime.now();
-  }
-
-  // Move to seperate file
-  SnackBar notify_snackbar(String message)
-  {
-    return SnackBar(
-      content: Text(
-        message,
-        style: TextStyle(
-          color:Color.fromRGBO(250, 250, 250, 1)
-        ),
-      ),
-      behavior: SnackBarBehavior.floating,
-      showCloseIcon: true,
-      backgroundColor: Color.fromRGBO(33, 33, 33, 1),
-      closeIconColor: Color.fromRGBO(250, 250, 250, 1),
-    );
   }
 
   // Also move this to seperate file

@@ -20,6 +20,8 @@ import '../data/models/workout.dart';
 
 import '../../components/recents_listtile_single_text.dart';
 import '../../components/listtile_3_line_expandable.dart';
+import '../components/snackbar_notify.dart';
+import '../components/dialog_information.dart';
 
 class Page_Recommendations extends StatefulWidget
 {
@@ -36,6 +38,8 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
   DateTime data_date = DateTime.now();
 
+  String backend_response = "N/A"; // to store error messages
+
   var section_scores = {
     "academics_absent":-1,
     "academics_assignment":-1,
@@ -51,7 +55,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
     "workout":-1,
   };
 
-  Future<void> updateData() async
+  Future<int> updateData() async
   {
 
     List<AcademicsAbsentData> academics_absent_data = await database_get_academics_absent();
@@ -83,14 +87,26 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
     BackendMLData backend_data = await backend_send_map(section_data, "recommendations/all");
 
-    setState(()
+    if(backend_data.response_code!=200)
     {
-      recommendation_list.clear();
-      insight_list.clear();
+      setState(()
+      {
+        backend_response = backend_data.response_body;
+      });
+    }
+    else
+    {
+      setState(()
+      {
+        recommendation_list.clear();
+        insight_list.clear();
 
-      recommendation_list.addAll(backend_data.recommendations);
-      insight_list.addAll(backend_data.insights);
-    });
+        recommendation_list.addAll(backend_data.recommendations);
+        insight_list.addAll(backend_data.insights);
+      });
+    }
+
+    return backend_data.response_code;
   }
 
   @override
@@ -128,9 +144,18 @@ class Page_Recommendations_State extends State<Page_Recommendations>
           IconButton(
             icon: Icon(Icons.refresh),
             tooltip: "Refresh",
-            onPressed: (){
+            onPressed: () async
+            {
               print("Refresh pressed");
-              updateData();
+              final response = await updateData();
+              if(response==200)
+              {
+                ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Retrieval success"));
+              }
+              else
+              {
+                dialog_information_show(context, "Error: ${response}", backend_response);
+              }
             },
           ),
         ],
