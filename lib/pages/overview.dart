@@ -8,6 +8,7 @@ import '../helpers/helper_string.dart';
 import '../helpers/helper_calculate.dart';
 
 // Pages
+import '../main.dart';
 import 'timeline.dart';
 import 'settings.dart';
 import 'add_data.dart';
@@ -34,7 +35,7 @@ class Page_Overview extends StatefulWidget
   State<Page_Overview> createState() => Page_Overview_State();
 }
 
-class Page_Overview_State extends State<Page_Overview>
+class Page_Overview_State extends State<Page_Overview> with RouteAware
 {
   // Widget variables
   DateTime data_timenow = DateTime.now();
@@ -56,6 +57,14 @@ class Page_Overview_State extends State<Page_Overview>
 
   int data_latest_height = 0;
   int data_latest_weight = 0;
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -104,6 +113,13 @@ class Page_Overview_State extends State<Page_Overview>
       data_latest_height = data_latest_height_result;
       data_latest_weight = data_latest_weight_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

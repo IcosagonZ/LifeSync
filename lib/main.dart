@@ -18,7 +18,7 @@ void printDatabasePath() async
 void main()
 {
   // Database setup only for desktop
-  if(Platform.isWindows || Platform.isWindows)
+  if(Platform.isWindows || Platform.isLinux)
   {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
