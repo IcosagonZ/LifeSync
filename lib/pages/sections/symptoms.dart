@@ -9,7 +9,7 @@ import '../../data/models/symptom.dart';
 import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile_multiline.dart';
-import '../../components/recents_listtile_symptoms.dart';
+import '../../components/listtile_2_line_icon_check.dart';
 
 
 class Page_Symptoms extends StatefulWidget
@@ -170,13 +170,16 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                           spacing: 2,
                           children: List.generate(symptom_unresolved_data.length, (index){
                             final data = symptom_unresolved_data[index];
-                            final tile = RecentsListTileMultiline(
+                            final tile = ListTile2LineIconCheck(
                               list_icon: Icon(iconmapper_geticon("Symptom")),
                               list_title: data.name,
                               list_subtitle: "${data.intensity}",
                               list_trail: DateFormat('h:mm a').format(data.entry_date),
                               id: data.id,
                               datatype: "symptom",
+                              onUpdate: (){
+                                initData();
+                              }
                             );
 
                             if(index>0)

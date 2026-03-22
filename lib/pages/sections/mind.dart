@@ -8,7 +8,7 @@ import '../../data/database.dart';
 import '../../data/models/mind_mood.dart';
 
 import '../../components/recents_listtile_multiline.dart';
-import '../../components/recents_listtile_symptoms.dart';
+import '../../components/listtile_2_line_icon_check.dart';
 
 
 class Page_Mind extends StatefulWidget
@@ -25,6 +25,7 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   DateTime data_timenow = DateTime.now();
 
   List<MindMoodData> mind_mood_data = [];
+  List<MindMoodData> mind_mood_unresolved_data = [];
 
   // Route aware initializers
   @override
@@ -44,10 +45,12 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
 
   Future<void> initData() async{
     List<MindMoodData> mind_mood_data_result = await database_get_mind_mood_for_date(data_timenow);
+    List<MindMoodData> mind_mood_unresolved_data_result = await database_get_mind_mood_unresolved();
 
     setState(()
     {
       mind_mood_data = mind_mood_data_result;
+      mind_mood_unresolved_data = mind_mood_unresolved_data_result;
     });
   }
 
@@ -147,7 +150,7 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: mind_mood_data.isEmpty,
+                      visible: mind_mood_unresolved_data.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -156,43 +159,36 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
                       )
                     ),
                     Visibility(
-                      visible: mind_mood_data.isNotEmpty,
+                      visible: mind_mood_unresolved_data.isNotEmpty,
                       child: Center(
                         child: Column(
                           spacing: 2,
-                          children: List.generate(mind_mood_data.length, (index){
-                            final data = mind_mood_data[index];
-                            int count = 0;
+                          children: List.generate(mind_mood_unresolved_data.length, (index){
+                            final data = mind_mood_unresolved_data[index];
+                            final tile = ListTile2LineIconCheck(
+                              list_icon: Icon(Symbols.cognition_2),
+                              list_title: data.name,
+                              list_subtitle: data.intensity,
+                              list_trail: DateFormat('h:mm a').format(data.entry_date),
+                              id: data.id,
+                              datatype: "mind_mood",
+                              onUpdate: (){
+                                initData();
+                              }
+                            );
 
-                            if(data.resolved==false)
+                            if(index>0)
                             {
-                              print(data.resolved);
-                              final tile = RecentsListTileSymptoms(
-                                list_icon: Icon(Symbols.cognition_2),
-                                list_title: data.name,
-                                list_subtitle: data.intensity,
-                                list_date: data.entry_date,
+                              return Column(
+                                children: [
+                                  Divider(height: 1),
+                                  tile,
+                                ]
                               );
-
-                              if(count>0)
-                              {
-                                count++;
-                                return Column(
-                                  children: [
-                                    Divider(height: 1),
-                                    tile,
-                                  ]
-                                );
-                              }
-                              else
-                              {
-                                count++;
-                                return tile;
-                              }
                             }
                             else
                             {
-                              return SizedBox(height: 0,);
+                              return tile;
                             }
                           }),
                         )

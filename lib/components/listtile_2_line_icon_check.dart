@@ -2,19 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-class RecentsListTileSymptoms extends StatelessWidget
+import '../data/database.dart';
+
+class ListTile2LineIconCheck extends StatelessWidget
 {
   final Icon list_icon;
   final String list_title;
   final String list_subtitle;
-  final DateTime list_date;
+  final String list_trail;
 
-  const RecentsListTileSymptoms({
+  final int id;
+  final String datatype;
+  final VoidCallback onUpdate;
+
+  const ListTile2LineIconCheck({
     Key? key,
     required this.list_icon,
     required this.list_title,
     required this.list_subtitle,
-    required this.list_date,
+    required this.list_trail,
+
+    required this.id,
+    required this.datatype,
+    required this.onUpdate,
   }) : super (key: key);
 
   @override
@@ -67,18 +77,26 @@ class RecentsListTileSymptoms extends StatelessWidget
           SizedBox(
             width: 16,
           ),
-          /*
-          Text(DateFormat('dd/M/yy').format(list_date)),
+          Text(list_trail),
           SizedBox(
-            width: 8,
+            width: 16,
           ),
-          Text(DateFormat('h:mm a').format(list_date)),
-          */
           IconButton(
             icon: Icon(Symbols.bookmark_check),
             tooltip: "Resolved",
-            onPressed: (){
-              print("Check pressed");
+            onPressed: ()
+            {
+              // Call resolve method
+              if(id!=-1 && datatype=="mind_mood")
+              {
+                database_mind_mood_resolve(id);
+                onUpdate();
+              }
+              else if(id!=-1 && datatype=="symptom")
+              {
+                database_symptom_resolve(id);
+                onUpdate();
+              }
             },
           ),
         ]

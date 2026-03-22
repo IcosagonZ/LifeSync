@@ -848,6 +848,38 @@ Future<List<MindMoodData>> database_get_mind_mood() async
   return data_mind_mood_list;
 }
 
+Future<List<MindMoodData>> database_get_mind_mood_unresolved() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_mind_mood_map = await database_db.query(
+    'mind_mood',
+    columns: ['id', 'name', 'intensity', 'resolved', 'end_date', 'entry_date', 'entry_note'],
+  );
+
+  List<MindMoodData> data_mind_mood_list = [];
+
+  for(var data in data_mind_mood_map)
+  {
+    if(data["resolved"]!=1)
+    {
+      data_mind_mood_list.add(
+        MindMoodData(
+          data["id"],
+          data["name"],
+          data["intensity"],
+          false,
+          DateTime.tryParse(data["end_date"]),
+          DateTime.parse(data["entry_date"]),
+          data["entry_note"],
+        )
+      );
+    }
+  }
+
+  return data_mind_mood_list;
+}
+
 Future<List<MindMoodData>> database_get_mind_mood_from_id(int id)
 async
 {
@@ -973,6 +1005,21 @@ Future<int> database_insert_mind_mood(
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
+  return row_index;
+}
+
+Future<int> database_mind_mood_resolve(int id) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.update(
+    "mind_mood",
+    {
+      'resolved':1,
+    },
+    where: 'id = ?',
+    whereArgs: [id],
+  );
   return row_index;
 }
 
@@ -1361,6 +1408,21 @@ Future<int> database_insert_symptom(
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
 
+  return row_index;
+}
+
+Future<int> database_symptom_resolve(int id) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.update(
+    "symptom",
+    {
+      'resolved':1,
+    },
+    where: 'id = ?',
+    whereArgs: [id],
+  );
   return row_index;
 }
 
