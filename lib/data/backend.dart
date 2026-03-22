@@ -2,7 +2,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 
-String backend_url = "http://127.0.0.1:8000/";
+import 'database.dart';
+
+//String backend_url = "http://127.0.0.1:8000/";
 
 dynamic server_getresponse(String url) async
 {
@@ -22,6 +24,7 @@ void backend_test() async
 {
   print("Backend: Testing");
   //var response_decoded = await server_getresponse("${backend_url}client/version/0.1.1");
+  String backend_url = await database_get_settings_backendurl();
   final url = Uri.parse("${backend_url}client/version");
 
   final response = await http.post(
@@ -62,6 +65,7 @@ Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
 {
   print("Backend: Image upload");
 
+  String backend_url = await database_get_settings_backendurl();
   final url = Uri.parse("${backend_url}upload/nutrition");
 
   var request = http.MultipartRequest("POST", url);
@@ -143,6 +147,7 @@ Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) as
 {
   print("Backend: Sending data (length ${data.length})");
 
+  String backend_url = await database_get_settings_backendurl();
   final url = Uri.parse("${backend_url}${url_trail}");
 
   print("Backend: URL is ${url}");
@@ -251,6 +256,7 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
 {
   print("Backend: Sending data (length ${data.length})");
 
+  String backend_url = await database_get_settings_backendurl();
   final url = Uri.parse("${backend_url}${url_trail}");
 
   print("Backend: URL is ${url}");

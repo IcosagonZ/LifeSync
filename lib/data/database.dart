@@ -28,7 +28,7 @@ import 'models/workout.dart';
 //part 'academics_absent.g.dart';
 
 // SQL code
-List<String> database_sql_commands = ['create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
+List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);','create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
 
 // title, subtitle, datatype, datetime
 String database_sql_timeline = '''
@@ -179,6 +179,107 @@ Future<List<TimelineData>> database_timeline_retrive() async
   }
 
   return data_timeline;
+}
+
+// Settings
+class SettingsData
+{
+  int id;
+  String name;
+  String value;
+
+  SettingsData(this.id, this.name, this.value);
+}
+
+Future<List<SettingsData>> database_get_settings() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_settings_map = await database_db.query(
+    'settings',
+    columns: ['id', 'name', 'value']
+  );
+
+  List<SettingsData> data_settings_list = [];
+
+  for(var data in data_settings_map)
+  {
+    data_settings_list.add(
+      SettingsData(
+        data["id"],
+        data["name"],
+        data["value"]
+      )
+    );
+  }
+
+  return data_settings_list;
+}
+
+
+Future<int> database_insert_settings(
+  String name,
+  String value,
+  [int id=-1]
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "settings",
+    {
+      'name':name,
+      'value':value,
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
+  print("Row index: ${row_index}");
+  return row_index;
+}
+
+Future<String> database_get_settings_backendurl() async
+{
+  Database database_db = await database_open();
+  String default_url = 'http://127.0.0.1:8000/';
+
+  final List<Map<String, dynamic>> data_settings_map = await database_db.query(
+    'settings',
+    columns: ['id', 'name', 'value']
+  );
+
+  for(var data in data_settings_map)
+  {
+    if(data["name"]=="backend_url")
+    {
+      return data["value"];
+    }
+  }
+
+  // if not returned it doesnt exist, add backendurl
+  print("Added backend url as it didnt exist");
+  database_insert_settings("backend_url", default_url);
+
+  return default_url;
+}
+
+Future<int> database_update_settings(
+  String name,
+  String value,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.update(
+    "settings",
+    {
+      'value':value,
+    },
+    where: 'name = ?',
+    whereArgs: [name],
+  );
+  print("Updated rows: ${row_index}");
+  return row_index;
 }
 
 // Academics

@@ -15,6 +15,26 @@ class Page_Settings extends StatefulWidget
 
 class Page_Settings_State extends State<Page_Settings>
 {
+  TextEditingController settings_backendurl_controller = TextEditingController();
+
+  @override
+  void initState()
+  {
+    super.initState();
+
+    updateData();
+  }
+
+  void updateData() async
+  {
+    String backend_url = await database_get_settings_backendurl();
+
+    setState(()
+    {
+      settings_backendurl_controller.text = backend_url;
+    });
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -54,6 +74,39 @@ class Page_Settings_State extends State<Page_Settings>
             Row(
               children: [
                 Expanded(
+                  child: Text("Backend URL"),
+                ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 100,
+                  ),
+                  child: IntrinsicWidth(
+                    child: TextField(
+                      controller: settings_backendurl_controller,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(),
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Symbols.save),
+                  onPressed: () async
+                  {
+                    if(settings_backendurl_controller.text.isNotEmpty)
+                    {
+                      final result = await database_update_settings("backend_url", settings_backendurl_controller.text);
+                    }
+                  },
+                )
+              ],
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
                   child: Text("Delete database"),
                 ),
                 IconButton(
@@ -67,7 +120,7 @@ class Page_Settings_State extends State<Page_Settings>
                   },
                 )
               ],
-            )
+            ),
           ]
         )
       ),
