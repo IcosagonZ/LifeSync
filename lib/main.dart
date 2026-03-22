@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 import 'pages/overview.dart';
 import 'data/database.dart';
 import 'pages/login.dart';
 
-import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
@@ -17,9 +17,12 @@ void printDatabasePath() async
 
 void main()
 {
-  // Database setup
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
+  // Database setup only for desktop
+  if(Platform.isWindows || Platform.isWindows)
+  {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
 
   printDatabasePath();
 
