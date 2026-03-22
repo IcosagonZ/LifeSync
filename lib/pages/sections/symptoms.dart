@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/symptom.dart';
 
@@ -17,11 +19,19 @@ class Page_Symptoms extends StatefulWidget
   State<Page_Symptoms> createState() => Page_Symptoms_State();
 }
 
-class Page_Symptoms_State extends State<Page_Symptoms>
+class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
 {
   // Widget variables
   List<SymptomData> symptom_data = [];
   bool symptom_unresolved_present = false;
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -41,6 +51,13 @@ class Page_Symptoms_State extends State<Page_Symptoms>
       symptom_data = symptom_data_result;
       symptom_unresolved_present = symptom_unresolved_present_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

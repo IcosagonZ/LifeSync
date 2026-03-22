@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/note.dart';
 
@@ -16,10 +18,18 @@ class Page_Notes extends StatefulWidget
   State<Page_Notes> createState() => Page_Notes_State();
 }
 
-class Page_Notes_State extends State<Page_Notes>
+class Page_Notes_State extends State<Page_Notes> with RouteAware
 {
   // Widget variables
   List<NoteData> note_data = [];
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -36,6 +46,13 @@ class Page_Notes_State extends State<Page_Notes>
     {
       note_data = note_data_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:material_symbols_icons/material_symbols_icons.dart';
+import '../../main.dart';
 
 import '../../data/database.dart';
 import '../../data/models/academics_absent.dart';
@@ -19,13 +19,21 @@ class Page_Academics extends StatefulWidget
   State<Page_Academics> createState() => Page_Academics_State();
 }
 
-class Page_Academics_State extends State<Page_Academics>
+class Page_Academics_State extends State<Page_Academics> with RouteAware
 {
-    // Widget variables
+  // Widget variables
   List<AcademicsAbsentData> academics_absent_data = [];
   List<AcademicsAssignmentData> academics_assignment_data = [];
   List<AcademicsExamData> academics_exam_data = [];
   List<AcademicsMarkData> academics_mark_data = [];
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -48,6 +56,13 @@ class Page_Academics_State extends State<Page_Academics>
       academics_exam_data = academics_exam_data_result;
       academics_mark_data = academics_mark_data_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

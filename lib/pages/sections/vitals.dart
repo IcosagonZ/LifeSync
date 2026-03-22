@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/backend.dart';
 import '../../data/database.dart';
 import '../../data/models/vitals.dart';
@@ -17,7 +19,7 @@ class Page_Vitals extends StatefulWidget
   State<Page_Vitals> createState() => Page_Vitals_State();
 }
 
-class Page_Vitals_State extends State<Page_Vitals>
+class Page_Vitals_State extends State<Page_Vitals> with RouteAware
 {
   DateTime date_start = DateTime.now().subtract(Duration(days: 7));
   DateTime date_end = DateTime.now();
@@ -26,6 +28,14 @@ class Page_Vitals_State extends State<Page_Vitals>
   DateTime data_timenow = DateTime.now();
 
   List<VitalsData> vitals_data = [];
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -50,6 +60,13 @@ class Page_Vitals_State extends State<Page_Vitals>
 
       //data_heartrates = data_heartrates_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

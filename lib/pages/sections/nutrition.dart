@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/nutrition.dart';
 
@@ -15,7 +17,7 @@ class Page_Nutrition extends StatefulWidget
   State<Page_Nutrition> createState() => Page_Nutrition_State();
 }
 
-class Page_Nutrition_State extends State<Page_Nutrition>
+class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
 {
   // Widget variables
   DateTime data_timenow = DateTime.now();
@@ -24,12 +26,27 @@ class Page_Nutrition_State extends State<Page_Nutrition>
 
   int nutrition_data_total_calories = 0;
 
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
   @override
   void initState()
   {
     initData();
 
     super.initState();
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   Future<void> initData() async

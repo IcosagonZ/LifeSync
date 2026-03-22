@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/mind_mood.dart';
 
@@ -16,10 +18,18 @@ class Page_Mind extends StatefulWidget
   State<Page_Mind> createState() => Page_Mind_State();
 }
 
-class Page_Mind_State extends State<Page_Mind>
+class Page_Mind_State extends State<Page_Mind> with RouteAware
 {
   // Widget variables
   List<MindMoodData> mind_mood_data = [];
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -36,6 +46,13 @@ class Page_Mind_State extends State<Page_Mind>
     {
       mind_mood_data = mind_mood_data_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

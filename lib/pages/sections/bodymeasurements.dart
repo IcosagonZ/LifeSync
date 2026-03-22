@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/body_measurement.dart';
 
@@ -18,7 +20,7 @@ class Page_BodyMeasurements extends StatefulWidget
   State<Page_BodyMeasurements> createState() => Page_BodyMeasurements_State();
 }
 
-class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
+class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with RouteAware
 {
   // Widget variables
   DateTime data_timenow = DateTime.now();
@@ -30,6 +32,14 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
 
   int data_latest_height = 0;
   int data_latest_weight = 0;
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -51,6 +61,13 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements>
       data_latest_height = data_latest_height_result;
       data_latest_weight = data_latest_weight_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

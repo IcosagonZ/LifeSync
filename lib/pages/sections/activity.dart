@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/activity.dart';
 
@@ -16,7 +18,7 @@ class Page_Activity extends StatefulWidget
   State<Page_Activity> createState() => Page_Activity_State();
 }
 
-class Page_Activity_State extends State<Page_Activity>
+class Page_Activity_State extends State<Page_Activity> with RouteAware
 {
   // Widget variables
   DateTime data_timenow = DateTime.now();
@@ -27,6 +29,14 @@ class Page_Activity_State extends State<Page_Activity>
   int activity_data_total_distance = 0;
   int activity_data_total_duration = 0;
   int activity_data_total_steps = 0;
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -52,6 +62,13 @@ class Page_Activity_State extends State<Page_Activity>
       activity_data_total_duration = activity_data_total_duration_result;
       activity_data_total_steps = activity_data_total_steps_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

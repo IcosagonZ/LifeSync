@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/workout.dart';
 
@@ -15,13 +17,21 @@ class Page_Workout extends StatefulWidget
   State<Page_Workout> createState() => Page_Workout_State();
 }
 
-class Page_Workout_State extends State<Page_Workout>
+class Page_Workout_State extends State<Page_Workout> with RouteAware
 {
   // Widget variables
   DateTime data_timenow = DateTime.now();
 
   List<WorkoutData> workout_data = [];
   int workout_data_total_calories = 0;
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -41,6 +51,13 @@ class Page_Workout_State extends State<Page_Workout>
       workout_data = workout_data_result;
       workout_data_total_calories_result = workout_data_total_calories;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override

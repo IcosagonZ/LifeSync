@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
+
 import '../../data/database.dart';
 import '../../data/models/time.dart';
 
@@ -15,10 +17,18 @@ class Page_Sleep extends StatefulWidget
   State<Page_Sleep> createState() => Page_Sleep_State();
 }
 
-class Page_Sleep_State extends State<Page_Sleep>
+class Page_Sleep_State extends State<Page_Sleep> with RouteAware
 {
   DateTime data_timenow = DateTime.now();
   int data_time_sleep = 0;
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -37,6 +47,13 @@ class Page_Sleep_State extends State<Page_Sleep>
     {
       data_time_sleep = data_time_sleep_result;
     });
+  }
+
+  // Route aware functions
+  @override
+  void didPopNext()
+  {
+    initData();
   }
 
   @override
