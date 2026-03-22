@@ -232,7 +232,7 @@ extension AddDataButton on Page_AddData_State{
               double.parse(activity_calories_controller.text),
               entry_date,
               general_notes_controller.text,
-              dataId
+              dataId,
             ).then((int row_index)
             {
               if(row_index==0)
@@ -265,7 +265,8 @@ extension AddDataButton on Page_AddData_State{
                 bodymeasurement_height_controller.text,
                 "cm",
                 entry_date,
-                general_notes_controller.text
+                general_notes_controller.text,
+                dataId
               ).then((int row_index)
               {
                 if(row_index==0)
@@ -296,7 +297,8 @@ extension AddDataButton on Page_AddData_State{
                 bodymeasurement_weight_controller.text,
                 "kg",
                 entry_date,
-                general_notes_controller.text
+                general_notes_controller.text,
+                dataId
               ).then((int row_index)
               {
                 if(row_index==0)
@@ -345,7 +347,8 @@ extension AddDataButton on Page_AddData_State{
               double.parse(nutrition_proteins_controller.text),
               double.parse(nutrition_fats_controller.text),
               entry_date,
-              general_notes_controller.text
+              general_notes_controller.text,
+              dataId
             ).then((int row_index)
             {
               if(row_index==0)
@@ -397,7 +400,8 @@ extension AddDataButton on Page_AddData_State{
               _symptoms_resolved,
               _symptoms_end_date,
               entry_date,
-              general_notes_controller.text
+              general_notes_controller.text,
+              dataId
             ).then((int row_index)
             {
               if(row_index==0)
@@ -432,7 +436,8 @@ extension AddDataButton on Page_AddData_State{
               time_type_dropdown_chosen ?? "",
               duration,
               entry_date,
-              general_notes_controller.text
+              general_notes_controller.text,
+              dataId
             ).then((int row_index)
             {
               if(row_index==0)
@@ -472,6 +477,7 @@ extension AddDataButton on Page_AddData_State{
                   "C",
                   entry_date,
                   general_notes_controller.text,
+                  dataId
                 ).then((int row_index)
                 {
                   if(row_index==0)
@@ -503,6 +509,7 @@ extension AddDataButton on Page_AddData_State{
                   "%",
                   entry_date,
                   general_notes_controller.text,
+                  dataId
                 ).then((int row_index)
                 {
                   if(row_index==0)
@@ -536,6 +543,7 @@ extension AddDataButton on Page_AddData_State{
                   "",
                   entry_date,
                   general_notes_controller.text,
+                  dataId
                 ).then((int row_index)
                 {
                   if(row_index==0)
@@ -567,6 +575,7 @@ extension AddDataButton on Page_AddData_State{
                   "mmol/L",
                   entry_date,
                   general_notes_controller.text,
+                  dataId
                 ).then((int row_index)
                 {
                   if(row_index==0)
@@ -598,6 +607,7 @@ extension AddDataButton on Page_AddData_State{
                   "bpm",
                   entry_date,
                   general_notes_controller.text,
+                  dataId
                 ).then((int row_index)
                 {
                   if(row_index==0)
@@ -650,6 +660,7 @@ extension AddDataButton on Page_AddData_State{
               double.parse(workout_weight_controller.text),
               entry_date,
               general_notes_controller.text,
+              dataId
             ).then((int row_index)
             {
               if(row_index==0)

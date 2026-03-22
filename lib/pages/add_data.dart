@@ -367,6 +367,7 @@ class Page_AddData_State extends State<Page_AddData>
             SizedBox(height: 16),
             IntrinsicHeight(
               child: TextField(
+                controller: general_notes_controller,
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: "Note",

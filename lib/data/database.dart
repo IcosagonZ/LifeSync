@@ -1689,6 +1689,7 @@ Future<int> database_insert_workout(
       'weight':weight,
       'entry_date':entry_date,
       'entry_note':entry_note,
+      if(id!=-1) "id": id,
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
