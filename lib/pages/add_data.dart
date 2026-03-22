@@ -51,6 +51,7 @@ class Page_AddData_State extends State<Page_AddData>
 
   int dataId = -1;
   String dataType = "N/A";
+  var add_data_text = "Add data"; // It will be add data / update data
 
   // Datatype variables
   final List<String> datatype_dropdown_options = [
@@ -195,14 +196,27 @@ class Page_AddData_State extends State<Page_AddData>
     if(!isInitialized && _arguments!=null){
       final arguments = _arguments as List;
       isInitialized = true;
+
       dataId = arguments[0];
       dataType = arguments[1];
+
+      //print(dataId);
+
+      if(dataId!=-1)
+      {
+        setState(()
+        {
+          add_data_text = "Update data";
+        }
+        );
+      }
+
       modifyData(arguments);
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add data"),
+        title: Text(add_data_text),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -222,7 +236,15 @@ class Page_AddData_State extends State<Page_AddData>
                     setState(()
                     {
                       datatype_dropdown_chosen = newValue;
-                      print(datatype_dropdown_chosen);
+
+                      // Reset id variable
+                      setState(()
+                      {
+                        dataId = -1;
+                        add_data_text = "Add data";
+                      });
+
+                      //print(datatype_dropdown_chosen);
                     });
                   },
                   items: datatype_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
@@ -426,10 +448,18 @@ class Page_AddData_State extends State<Page_AddData>
                     ElevatedButton(
                       child: Text("Delete data"),
                       onPressed: () async{
-                        print("Delete data pressed");
+                        //print("Delete data pressed");
                         final result = await database_delete_row_from_id(dataType, dataId);
-                        print("Deleted $result rows");
-                        Navigator.pop(context, "refresh");
+                        if(result>0)
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data deleted"));
+                          Navigator.pop(context, "refresh");
+                        }
+                        else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Data deletion error"));
+                        }
+                        //print("Deleted $result rows");
                       },
                     ),
                     SizedBox(height: 16),

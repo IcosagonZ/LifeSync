@@ -81,28 +81,6 @@ class RecentsListTileSymptoms extends StatelessWidget
               print("Check pressed");
             },
           ),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              PopupMenuItem(
-                child: Text("View"),
-                onTap: (){
-                  print("View tapped");
-                },
-              ),
-              PopupMenuItem(
-                child: Text("Edit"),
-                onTap: (){
-                  print("Edit tapped");
-                },
-              ),
-              PopupMenuItem(
-                child: Text("Remove"),
-                onTap: (){
-                  print("Remove tapped");
-                },
-              ),
-            ],
-          )
         ]
       )
     );

@@ -3,7 +3,7 @@ part of '../add_data.dart';
 extension AddDataButton on Page_AddData_State{
   Widget getAddDataButton(){
     return ElevatedButton(
-      child: Text("Add data"),
+      child: Text(add_data_text),
       onPressed: ()
       {
         print("Add data pressed");
@@ -396,7 +396,7 @@ extension AddDataButton on Page_AddData_State{
 
             database_insert_symptom(
               symptoms_name_controller.text,
-              1,
+              symptoms_intensity_dropdown_chosen ?? "",
               _symptoms_resolved,
               _symptoms_end_date,
               entry_date,

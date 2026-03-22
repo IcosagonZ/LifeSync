@@ -9,7 +9,7 @@ part of 'symptom.dart';
 SymptomData _$SymptomDataFromJson(Map<String, dynamic> json) => SymptomData(
   (json['id'] as num).toInt(),
   json['name'] as String,
-  (json['intensity'] as num).toInt(),
+  json['intensity'] as String,
   (json['resolved'] as num).toInt(),
   json['end_date'] as String,
   DateTime.parse(json['entry_date'] as String),

@@ -173,7 +173,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                             final tile = RecentsListTileMultiline(
                               list_icon: Icon(iconmapper_geticon("Symptom")),
                               list_title: data.name,
-                              list_subtitle: "Intensity ${data.intensity}",
+                              list_subtitle: "${data.intensity}",
                               list_trail: DateFormat('h:mm a').format(data.entry_date),
                               id: data.id,
                               datatype: "symptom",
@@ -201,7 +201,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
               )
             ),
             SizedBox(height: 16),
-            Text("Recents", style: style_titlelarge),
+            Text("Today", style: style_titlelarge),
             SizedBox(height: 16),
             Card.outlined(
               child: Padding(
@@ -227,7 +227,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                             final tile = RecentsListTileMultiline(
                               list_icon: Icon(iconmapper_geticon("Symptom")),
                               list_title: data.name,
-                              list_subtitle: "Intensity ${data.intensity}",
+                              list_subtitle: "${data.intensity}",
                               list_trail: DateFormat('h:mm a').format(data.entry_date),
                               id: data.id,
                               datatype: "symptom",

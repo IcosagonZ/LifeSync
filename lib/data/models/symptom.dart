@@ -7,7 +7,7 @@ class SymptomData
 {
   int id;
   String name;
-  int intensity;
+  String intensity;
   int resolved;
   String end_date;
   DateTime entry_date;
