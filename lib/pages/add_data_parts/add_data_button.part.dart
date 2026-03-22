@@ -231,7 +231,8 @@ extension AddDataButton on Page_AddData_State{
               (double.parse(activity_distance_controller.text)*1000).toInt(),
               double.parse(activity_calories_controller.text),
               entry_date,
-              general_notes_controller.text
+              general_notes_controller.text,
+              dataId
             ).then((int row_index)
             {
               if(row_index==0)

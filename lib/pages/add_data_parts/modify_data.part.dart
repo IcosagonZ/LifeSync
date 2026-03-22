@@ -49,7 +49,8 @@ extension ModifyData on Page_AddData_State{
         AcademicsAssignmentData assignment_data = academics_assignment_data_list.first;
 
         // Set widgets
-        setState((){
+        setState(()
+        {
           datatype_dropdown_chosen="Academics";
           academics_dropdown_chosen="Assignment";
 
@@ -79,7 +80,8 @@ extension ModifyData on Page_AddData_State{
         AcademicsExamData exam_data = academics_assignment_data_list.first;
 
         // Set widgets
-        setState((){
+        setState(()
+        {
           datatype_dropdown_chosen="Academics";
           academics_dropdown_chosen="Exam";
 
@@ -105,7 +107,8 @@ extension ModifyData on Page_AddData_State{
         AcademicsMarkData mark_data = academics_mark_data_list.first;
 
         // Set widgets
-        setState((){
+        setState(()
+        {
           datatype_dropdown_chosen="Academics";
           academics_dropdown_chosen="Marks";
 
@@ -126,7 +129,8 @@ extension ModifyData on Page_AddData_State{
         MindMoodData mind_mood_data = mind_mood_data_list.first;
 
         // Set widgets
-        setState((){
+        setState(()
+        {
           datatype_dropdown_chosen="Mind";
           mind_mood_name_controller.text = mind_mood_data.name;
           mind_mood_intensity_dropdown_chosen = mind_mood_data.intensity;
@@ -136,6 +140,33 @@ extension ModifyData on Page_AddData_State{
           data_date_chosen = mind_mood_data.entry_date;
           data_time_chosen = TimeOfDay.fromDateTime(mind_mood_data.entry_date);
           general_notes_controller.text = mind_mood_data.entry_note;
+        });
+      }
+
+      if(datatype=="activity")
+      {
+        List<ActivityData> activity_data_list = await database_get_activity_from_id(id);
+        ActivityData activity_data = activity_data_list.first;
+
+        // Set widgets
+        setState(()
+        {
+          datatype_dropdown_chosen="Activity";
+
+          activity_dropdown_chosen = activity_data.name;
+
+          final int _hours = activity_data.duration~/60;
+          final int _minutes = activity_data.duration-(_hours*60);
+
+          activity_duration_hours_controller.text = _hours.toString();
+          activity_duration_minutes_controller.text = _minutes.toString();
+
+          activity_distance_controller.text = (activity_data.distance/1000).toString();
+          activity_calories_controller.text = activity_data.calories.toString();
+
+          data_date_chosen = activity_data.entry_date;
+          data_time_chosen = TimeOfDay.fromDateTime(activity_data.entry_date);
+          general_notes_controller.text = activity_data.entry_note;
         });
       }
     }
