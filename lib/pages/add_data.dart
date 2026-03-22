@@ -48,7 +48,9 @@ class Page_AddData_State extends State<Page_AddData>
 {
   // Misc variables
   bool isInitialized = false;
+
   int dataId = -1;
+  String dataType = "N/A";
 
   // Datatype variables
   final List<String> datatype_dropdown_options = [
@@ -194,6 +196,7 @@ class Page_AddData_State extends State<Page_AddData>
       final arguments = _arguments as List;
       isInitialized = true;
       dataId = arguments[0];
+      dataType = arguments[1];
       modifyData(arguments);
     }
 
@@ -408,6 +411,24 @@ class Page_AddData_State extends State<Page_AddData>
                           nutrition_name_controller.text = result["name"];
                           nutrition_calories_controller.text = result["calories"];
                         }
+                      },
+                    ),
+                    SizedBox(height: 16),
+                  ]
+                )
+              ),
+              Visibility(
+                visible: dataId!=-1 && dataType!="N/A",
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      child: Text("Delete data"),
+                      onPressed: () async{
+                        print("Delete data pressed");
+                        final result = await database_delete_row_from_id(dataType, dataId);
+                        print("Deleted $result rows");
                       },
                     ),
                     SizedBox(height: 16),

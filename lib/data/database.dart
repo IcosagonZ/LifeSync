@@ -125,6 +125,19 @@ Future<void> database_delete() async
   print("Deleted database");
 }
 
+Future<int> database_delete_row_from_id(String table, int id) async
+{
+  Database database_db = await database_open();
+
+  int deleted_rows = await database_db.delete(
+    table,
+    where: 'id = ?',
+    whereArgs: [id],
+  );
+
+  return deleted_rows;
+}
+
 class TimelineData
 {
   int id;
