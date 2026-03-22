@@ -637,6 +637,7 @@ Future<int> database_insert_activity(
   double calories,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -650,7 +651,9 @@ Future<int> database_insert_activity(
       'calories':calories,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;
@@ -767,7 +770,8 @@ Future<int> database_insert_bodymeasurements(
   String value,
   String unit,
   String entry_date,
-  String entry_note
+  String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -780,7 +784,9 @@ Future<int> database_insert_bodymeasurements(
       'unit':unit,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   print("Row index: ${row_index}");
   return row_index;
@@ -1021,6 +1027,7 @@ Future<int> database_insert_note(
   String content,
   String tags,
   String entry_date,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -1032,7 +1039,9 @@ Future<int> database_insert_note(
       'content':content,
       'tags':tags,
       'entry_date':entry_date,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   return row_index;
 }
@@ -1160,6 +1169,7 @@ Future<int> database_insert_nutrition(
   double fats,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -1178,7 +1188,9 @@ Future<int> database_insert_nutrition(
       'fats':fats,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   return row_index;
 }
@@ -1253,6 +1265,7 @@ Future<int> database_insert_symptom(
   String end_date,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -1266,7 +1279,9 @@ Future<int> database_insert_symptom(
       'end_date':end_date,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
 
   return row_index;
@@ -1415,6 +1430,7 @@ Future<int> database_insert_time(
   int duration,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -1426,7 +1442,9 @@ Future<int> database_insert_time(
       'duration':duration,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   return row_index;
 }
@@ -1528,6 +1546,7 @@ Future<int> database_insert_vitals(
   String unit,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
@@ -1540,7 +1559,9 @@ Future<int> database_insert_vitals(
       'unit':unit,
       'entry_date':entry_date,
       'entry_note':entry_note,
-    }
+      if(id!=-1) "id": id,
+    },
+    conflictAlgorithm: ConflictAlgorithm.replace,
   );
   return row_index;
 }
@@ -1652,6 +1673,7 @@ Future<int> database_insert_workout(
   double weight,
   String entry_date,
   String entry_note,
+  [int id=-1]
 ) async
 {
   Database database_db = await database_open();
