@@ -45,7 +45,7 @@ class ThemeProvider extends ChangeNotifier
       isDark = true;
       notifyListeners();
     }
-    print(theme_mode);
+    //print(theme_mode);
   }
 
   void toggleTheme()

@@ -76,6 +76,11 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
 
   Future<void> initData() async
   {
+    if(!mounted)
+    {
+      return;
+    }
+
     int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
     int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);

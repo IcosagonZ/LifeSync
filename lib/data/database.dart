@@ -263,6 +263,28 @@ Future<String> database_get_settings_backendurl() async
   return default_url;
 }
 
+Future<String> database_get_settings_token() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_settings_map = await database_db.query(
+    'settings',
+    columns: ['id', 'name', 'value']
+  );
+
+  for(var data in data_settings_map)
+  {
+    if(data["name"]=="token")
+    {
+      return data["value"];
+    }
+  }
+
+  // if not returned it doesnt exist, add backendurl
+  print("Database: Token doesnt exist");
+  return "N/A";
+}
+
 Future<int> database_update_settings(
   String name,
   String value,
@@ -279,6 +301,21 @@ Future<int> database_update_settings(
     whereArgs: [name],
   );
   print("Updated rows: ${row_index}");
+  return row_index;
+}
+
+Future<int> database_delete_settings(
+  String value,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.delete(
+    "settings",
+    where: 'name = ?',
+    whereArgs: [value],
+  );
+  print("Deleted rows: ${row_index}");
   return row_index;
 }
 
@@ -778,8 +815,6 @@ Future<int> database_insert_activity(
 // Data display for body measurements page
 Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
 {
-  print("Body measurements data requested");
-
   Database database_db = await database_open();
 
   final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query(
@@ -802,17 +837,12 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement() async
       )
     );
   }
-
-  print("Found ${data_bodymeasurements_list.length} entries");
-
   return data_bodymeasurements_list;
 }
 
 
 Future<List<BodyMeasurementData>> database_get_bodymeasurement_from_id(int id) async
 {
-  print("Body measurements data requested");
-
   Database database_db = await database_open();
 
   final List<Map<String, dynamic>> data_bodymeasurements_map = await database_db.query(
@@ -837,17 +867,12 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement_from_id(int id) a
       )
     );
   }
-
-  print("Found ${data_bodymeasurements_list.length} entries");
-
   return data_bodymeasurements_list;
 }
 
 // Data display for body measurements page
 Future<List<BodyMeasurementData>> database_get_bodymeasurement_for_date(DateTime target_date) async
 {
-  print("Body measurements data requested");
-
   Database database_db = await database_open();
   String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
 
@@ -873,9 +898,6 @@ Future<List<BodyMeasurementData>> database_get_bodymeasurement_for_date(DateTime
       )
     );
   }
-
-  print("Found ${data_bodymeasurements_list.length} entries");
-
   return data_bodymeasurements_list;
 }
 

@@ -51,7 +51,7 @@ class MainApp extends StatelessWidget
       darkTheme: ThemeData.dark(),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
-      home: Page_Overview(),
+      home: Page_Login(),
       navigatorObservers: [
         routeObserver
       ],

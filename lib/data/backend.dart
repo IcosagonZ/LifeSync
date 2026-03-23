@@ -51,6 +51,160 @@ void backend_test() async
   }
 }
 
+class UserLogin
+{
+  String status;
+  String message;
+
+  String token;
+  String type;
+
+  UserLogin(this.status, this.message, this.token, this.type);
+}
+
+Future<UserLogin> backend_login(String username, String password) async
+{
+  print("Backend: Logging in");
+  String backend_url = await database_get_settings_backendurl();
+  final url = Uri.parse("${backend_url}login");
+
+  final response = await http.post(
+    url,
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode(
+      {
+        "username":username,
+        "password":password,
+      }
+    ),
+  );
+
+  if(response.statusCode==200)
+  {
+    print("Backend: Sending success");
+    try
+    {
+      final response_json = jsonDecode(response.body);
+      final status = response_json["status"];
+      if(status=="OK")
+      {
+        print("Backend: Login success");
+        return UserLogin(
+          "OK",
+          response_json["message"],
+          response_json["access_token"],
+          response_json["token_type"]
+        );
+      }
+      else
+      {
+        print("Backend: Login fail");
+        return UserLogin(
+          "ERROR",
+          response_json["message"],
+          "N/A",
+          "N/A"
+        );
+      }
+    }
+    catch(e)
+    {
+      return UserLogin(
+        "ERROR",
+        "${e}",
+        "N/A",
+        "N/A"
+      );
+    }
+  }
+  else
+  {
+    print("Backend: Error");
+    print("Backend>Status code: ${response.statusCode}");
+    print("Backend>Response: ${response.body}");
+    return UserLogin(
+      "ERROR",
+      "${response.body}",
+      "N/A",
+      "N/A"
+    );
+  }
+}
+
+class UserSignup
+{
+  String status;
+  String version;
+  String message;
+
+  UserSignup(this.status, this.version, this.message);
+}
+
+Future<UserSignup> backend_signup(String username, String password) async
+{
+  print("Backend: Signing up");
+  String backend_url = await database_get_settings_backendurl();
+  final url = Uri.parse("${backend_url}signup");
+
+  final response = await http.post(
+    url,
+    headers: {"Content-Type": "application/json"},
+    body: jsonEncode(
+      {
+        "username":username,
+        "password":password,
+      }
+    ),
+  );
+
+  if(response.statusCode==200)
+  {
+    print("Backend: Sending success");
+    try
+    {
+      final response_json = jsonDecode(response.body);
+      final status = response_json["status"];
+      if(status=="OK")
+      {
+        print("Backend: Sign up success");
+        return UserSignup(
+          response_json["status"],
+          response_json["version"],
+          response_json["message"]
+        );
+      }
+      else
+      {
+        print("Backend: Login fail");
+        return UserSignup(
+          response_json["status"],
+          response_json["version"],
+          response_json["message"]
+        );
+      }
+    }
+    catch(e)
+    {
+      return UserSignup(
+        "ERROR",
+        "N/A",
+        "${e}",
+      );
+    }
+  }
+  else
+  {
+    print("Backend: Error");
+    print("Backend>Status code: ${response.statusCode}");
+    print("Backend>Response: ${response.body}");
+    return UserSignup(
+      "ERROR",
+      "N/A",
+      "${response.body}",
+    );
+  }
+}
+
 // Image upload
 class NutritionImageResponse{
   String status;
@@ -257,6 +411,8 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
   print("Backend: Sending data (length ${data.length})");
 
   String backend_url = await database_get_settings_backendurl();
+  String token = await database_get_settings_token();
+
   final url = Uri.parse("${backend_url}${url_trail}");
 
   print("Backend: URL is ${url}");
@@ -265,7 +421,10 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
   {
     final response = await http.post(
       url,
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json"
+      },
       body: jsonEncode(data),
     );
 
