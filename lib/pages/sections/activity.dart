@@ -11,6 +11,9 @@ import '../../helpers/helper_string.dart';
 
 import '../../components/recents_listtile_multiline.dart';
 
+// Misc
+import '../../colors/colors_overview_buttons.dart';
+
 class Page_Activity extends StatefulWidget
 {
   const Page_Activity({super.key});
@@ -79,12 +82,12 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    Color color_primary = color_scheme.primary;
-    Color color_secondary = color_scheme.secondary;
-    Color color_onprimary = color_scheme.onPrimary;
-    Color color_onsecondary = color_scheme.onSecondary;
-    Color color_background = color_scheme.onBackground;
-    Color color_surface = color_scheme.onSurface;
+    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.activity;
+    final color_secondary = color_scheme.secondary;
+    final color_onprimary = color_scheme.onPrimary;
+    final color_onsecondary = color_scheme.onSecondary;
+    final color_background = color_scheme.onBackground;
+    final color_surface = color_scheme.onSurface;
 
     final style_displaylarge = text_theme.displayLarge;
     final style_displaymedium = text_theme.displayMedium;
@@ -97,6 +100,8 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
+
+    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBar(
@@ -119,7 +124,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Calories burned", style: TextStyle(color: color_primary))
+                                child: Text("Calories burned", style: style_cardlabel)
                               ),
                               Text("$activity_data_total_calories cal"),
                             ],
@@ -128,7 +133,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Active time", style: TextStyle(color: color_primary)),
+                                child: Text("Active time", style: style_cardlabel)
                               ),
                               Text(helper_get_duration(activity_data_total_duration)),
                             ],
@@ -137,7 +142,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Steps", style: TextStyle(color: color_primary)),
+                                child: Text("Steps", style: style_cardlabel)
                               ),
                               Text("$activity_data_total_steps steps"),
                             ],
@@ -146,7 +151,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Distance", style: TextStyle(color: color_primary))
+                                child: Text("Distance", style: style_cardlabel)
                               ),
                               Text(helper_get_distance(activity_data_total_distance))
                             ],
@@ -157,6 +162,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                     SizedBox(width: 32),
                     CircleAvatar(
                       radius: 32,
+                      backgroundColor: color_primary,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../../main.dart';
 
+// Database and models
 import '../../data/database.dart';
 import '../../data/models/academics_absent.dart';
 import '../../data/models/academics_assignment.dart';
@@ -10,6 +11,9 @@ import '../../data/models/academics_exam.dart';
 import '../../data/models/academics_mark.dart';
 
 import '../../components/recents_listtile_single_text.dart';
+
+// Misc
+import '../../colors/colors_overview_buttons.dart';
 
 class Page_Academics extends StatefulWidget
 {
@@ -72,12 +76,12 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    Color color_primary = color_scheme.primary;
-    Color color_secondary = color_scheme.secondary;
-    Color color_onprimary = color_scheme.onPrimary;
-    Color color_onsecondary = color_scheme.onSecondary;
-    Color color_background = color_scheme.onBackground;
-    Color color_surface = color_scheme.onSurface;
+    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.academics;
+    final color_secondary = color_scheme.secondary;
+    final color_onprimary = color_scheme.onPrimary;
+    final color_onsecondary = color_scheme.onSecondary;
+    final color_background = color_scheme.onBackground;
+    final color_surface = color_scheme.onSurface;
 
     final style_displaylarge = text_theme.displayLarge;
     final style_displaymedium = text_theme.displayMedium;
@@ -90,6 +94,8 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
+
+    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
 
     // Widget size variables
 
@@ -114,7 +120,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Performance", style: TextStyle(color: color_primary))
+                                child: Text("Performance", style: style_cardlabel)
                               ),
                               Text("N/A")
                             ],
@@ -123,7 +129,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Assignments", style: TextStyle(color: color_primary)),
+                                child: Text("Assignments", style: style_cardlabel)
                               ),
                               Text("N/A"),
                             ],
@@ -132,7 +138,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Absent", style: TextStyle(color: color_primary)),
+                                child: Text("Absent", style: style_cardlabel)
                               ),
                               Text("N/A"),
                             ],
@@ -143,6 +149,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                     SizedBox(width: 32),
                     CircleAvatar(
                       radius: 32,
+                      backgroundColor: color_primary,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

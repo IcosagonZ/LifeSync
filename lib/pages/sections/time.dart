@@ -54,9 +54,6 @@ class Page_Time_State extends State<Page_Time>
   {
     List<TimeDataGrouped> time_data_grouped_result = await database_get_time_for_date_grouped(DateTime.now());
     List<TimeData> time_data_result = await database_get_time();
-
-    print(time_data_grouped_result.length);
-
     setState(()
     {
       time_data_grouped = time_data_grouped_result;

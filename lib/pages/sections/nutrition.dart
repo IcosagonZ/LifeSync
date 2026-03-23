@@ -10,6 +10,9 @@ import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile_multiline.dart';
 
+// Misc
+import '../../colors/colors_overview_buttons.dart';
+
 class Page_Nutrition extends StatefulWidget
 {
   const Page_Nutrition({super.key});
@@ -69,12 +72,12 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    Color color_primary = color_scheme.primary;
-    Color color_secondary = color_scheme.secondary;
-    Color color_onprimary = color_scheme.onPrimary;
-    Color color_onsecondary = color_scheme.onSecondary;
-    Color color_background = color_scheme.onBackground;
-    Color color_surface = color_scheme.onSurface;
+    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.nutrition;
+    final color_secondary = color_scheme.secondary;
+    final color_onprimary = color_scheme.onPrimary;
+    final color_onsecondary = color_scheme.onSecondary;
+    final color_background = color_scheme.onBackground;
+    final color_surface = color_scheme.onSurface;
 
     final style_displaylarge = text_theme.displayLarge;
     final style_displaymedium = text_theme.displayMedium;
@@ -88,8 +91,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget variables
-    //List<TimelineData> recents_data = get_nutrition_data();
+    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBar(
@@ -112,7 +114,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Calories consumed", style: TextStyle(color: color_primary))
+                                child: Text("Calories consumed", style: style_cardlabel)
                               ),
                               Text("$nutrition_data_total_calories cal")
                             ],
@@ -121,7 +123,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Calorie target", style: TextStyle(color: color_primary)),
+                                child: Text("Calorie target", style: style_cardlabel),
                               ),
                               Text("2000 cal"),
                             ],
@@ -132,6 +134,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
                     SizedBox(width: 32),
                     CircleAvatar(
                       radius: 32,
+                      backgroundColor: color_primary,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

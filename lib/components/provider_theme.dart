@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../data/database.dart';
+import '../themes/theme_red.dart';
 
 class ThemeProvider extends ChangeNotifier
 {
+  final ThemeData themeDark = ThemeRed.dark;
+  final ThemeData themeLight = ThemeRed.light;
+
   ThemeMode themeModeCurrent = ThemeMode.dark;
   ThemeMode get themeMode => themeModeCurrent;
   bool isDark = true;
@@ -51,7 +55,7 @@ class ThemeProvider extends ChangeNotifier
   void toggleTheme()
   {
     //print("Toggled theme");
-    if(themeModeCurrent==ThemeMode.light)
+    if(!isDark)
     {
       database_update_settings("theme_mode","dark");
       themeModeCurrent = ThemeMode.dark;

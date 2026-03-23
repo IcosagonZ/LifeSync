@@ -82,8 +82,6 @@ class Page_Notes_State extends State<Page_Notes> with RouteAware
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Notes"),

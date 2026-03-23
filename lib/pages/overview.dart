@@ -27,6 +27,9 @@ import 'sections/time.dart';
 import 'sections/vitals.dart';
 import 'sections/workout.dart';
 
+// Misc
+import '../colors/colors_overview_buttons.dart';
+
 class Page_Overview extends StatefulWidget
 {
   const Page_Overview({super.key});
@@ -146,12 +149,17 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
     final style_displaysmall = text_theme.displaySmall;
 
     final style_headlinelarge = text_theme.headlineLarge;
-    final style_headlinemedium = text_theme.headlineMedium;
+    final style_headlinemedium = text_theme.headlineMedium?.copyWith(
+      color: color_primary
+    );
     final style_headlinesmall = text_theme.headlineSmall;
 
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
-    final style_titlesmall = text_theme.titleSmall;
+    final style_titlesmall = text_theme.titleSmall?.copyWith(
+      color: color_primary,
+      fontWeight: FontWeight.w500
+    );;
 
     // Widget size variables
     const double spacing_quickaction = 8;
@@ -238,7 +246,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.schedule, size: iconsize_quickaction),
+                        child: Icon(Symbols.schedule, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.time),
                       ),
                       tooltip: "Time",
                       onPressed: (){
@@ -254,7 +262,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.grading, size: iconsize_quickaction),
+                        child: Icon(Symbols.grading, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.academics),
                       ),
                       tooltip: "Academics",
                       onPressed: (){
@@ -270,7 +278,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.directions_run, size: iconsize_quickaction),
+                        child: Icon(Symbols.directions_run, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.activity),
                       ),
                       tooltip: "Activity",
                       onPressed: (){
@@ -286,7 +294,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.cognition_2, size: iconsize_quickaction),
+                        child: Icon(Symbols.cognition_2, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.mind),
                       ),
                       tooltip: "Mind",
                       onPressed: (){
@@ -302,7 +310,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.ecg_heart, size: iconsize_quickaction),
+                        child: Icon(Symbols.ecg_heart, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.vitals),
                       ),
                       tooltip: "Vitals",
                       onPressed: (){
@@ -320,6 +328,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                 Expanded(
                   child: SvgPicture.asset(
                     "assets/avatar.svg",
+                    colorFilter: ColorFilter.mode(color_surface, BlendMode.srcIn),
                     fit: BoxFit.contain,
                     height: MediaQuery.of(context).size.height * 0.45,
                   ),
@@ -332,7 +341,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.bedtime, size: iconsize_quickaction),
+                        child: Icon(Symbols.bedtime, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.sleep),
                       ),
                       tooltip: "Sleep",
                       onPressed: (){
@@ -348,7 +357,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.exercise, size: iconsize_quickaction),
+                        child: Icon(Symbols.exercise, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.workout),
                       ),
                       tooltip: "Workout",
                       onPressed: (){
@@ -364,7 +373,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.fastfood, size: iconsize_quickaction),
+                        child: Icon(Symbols.fastfood, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.nutrition),
                       ),
                       tooltip: "Nutrition",
                       onPressed: (){
@@ -380,7 +389,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.sick, size: iconsize_quickaction),
+                        child: Icon(Symbols.sick, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.symptoms),
                       ),
                       tooltip: "Symptoms",
                       onPressed: (){
@@ -396,7 +405,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.weight, size: iconsize_quickaction),
+                        child: Icon(Symbols.weight, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.body),
                       ),
                       tooltip: "Body",
                       onPressed: (){

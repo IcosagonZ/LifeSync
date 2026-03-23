@@ -6,6 +6,7 @@ import 'pages/overview.dart';
 import 'data/database.dart';
 import 'pages/login.dart';
 
+import 'themes/theme_red.dart';
 import 'components/provider_theme.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -48,7 +49,8 @@ class MainApp extends StatelessWidget
 
     return MaterialApp(
       title: "LifeSync",
-      darkTheme: ThemeData.dark(),
+      theme: ThemeRed.light,
+      darkTheme: ThemeRed.dark,//ThemeData.dark(),
       themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
       home: Page_Login(),

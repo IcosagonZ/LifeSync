@@ -8,9 +8,11 @@ environment:
 
 dependencies:
   fl_chart: ^1.1.1
+  flex_color_scheme: ^8.4.0
   flutter:
     sdk: flutter
   flutter_svg: ^2.2.3
+  google_fonts: ^8.0.2
   http: ^1.6.0
   image_picker: ^1.2.1
   intl: ^0.20.2

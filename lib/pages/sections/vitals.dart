@@ -12,6 +12,9 @@ import '../../data/iconmapper.dart';
 import '../../components/listtile_single_icon.dart';
 import '../../components/graph_linechart.dart';
 
+// Misc
+import '../../colors/colors_overview_buttons.dart';
+
 class Page_Vitals extends StatefulWidget
 {
   const Page_Vitals({super.key});
@@ -77,12 +80,12 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    Color color_primary = color_scheme.primary;
-    Color color_secondary = color_scheme.secondary;
-    Color color_onprimary = color_scheme.onPrimary;
-    Color color_onsecondary = color_scheme.onSecondary;
-    Color color_background = color_scheme.onBackground;
-    Color color_surface = color_scheme.onSurface;
+    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.vitals;
+    final color_secondary = color_scheme.secondary;
+    final color_onprimary = color_scheme.onPrimary;
+    final color_onsecondary = color_scheme.onSecondary;
+    final color_background = color_scheme.onBackground;
+    final color_surface = color_scheme.onSurface;
 
     final style_displaylarge = text_theme.displayLarge;
     final style_displaymedium = text_theme.displayMedium;
@@ -95,6 +98,8 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
+
+    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBar(
@@ -117,7 +122,7 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Status", style: TextStyle(color: color_primary))
+                                child: Text("Status", style: style_cardlabel)
                               ),
                               Text("N/A")
                             ],
@@ -126,7 +131,7 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Stress", style: TextStyle(color: color_primary))
+                                child: Text("Stress", style: style_cardlabel)
                               ),
                               Text("N/A")
                             ],
@@ -137,6 +142,7 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                     SizedBox(width: 32),
                     CircleAvatar(
                       radius: 32,
+                      backgroundColor: color_primary,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
