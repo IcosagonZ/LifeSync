@@ -170,7 +170,7 @@ Future<List<TimelineData>> database_timeline_retrive() async
     data_timeline.add(TimelineData
     (
       id,
-      iconmapper_geticon(type),
+      iconmapper_geticon(type, heading),
       heading,
       subtitle,
       type,

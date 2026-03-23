@@ -40,7 +40,18 @@ abstract final class ThemeRed {
       ),
     ],
     // Using FlexColorScheme built-in FlexScheme enum based colors
-    scheme: FlexScheme.shadRose,
+    //scheme: FlexScheme.shadRose,
+    colors: const FlexSchemeColor(
+      primary: Color(0xFF8E57E2),
+      primaryContainer: Color(0xFF7C3AED),
+      secondary: Color(0xFFF3F4F6),
+      secondaryContainer: Color(0xFFF3F4F6),
+      tertiary: Color(0xFFF3F4F6),
+      tertiaryContainer: Color(0xFFF3F4F6),
+      appBarColor: Color(0xFFF3F4F6),
+      error: Color(0xFFEF4444),
+      errorContainer: Color(0xFFFFDAD6),
+    ),
     // Convenience direct styling properties.
     tooltipsMatchBackground: true,
     // Component theme configurations for light mode.
@@ -72,17 +83,31 @@ abstract final class ThemeRed {
         time: Color(0xFF607D8B),
         sleep: Color(0xFF3F51B5),
         academics: Color(0xFF2196F3),
-        workout: Color(0xFFFF9800),
+        workout: Color(0xff495057),
         activity: Color(0xFF00BCD4),
         nutrition: Color(0xFF4CAF50),
         mind: Color(0xFF9C27B0),
-        symptoms: Color(0xFFFFC107),
+        symptoms: Color(0xffa61e4d),
         vitals: Color(0xFFF44336),
         body: Color(0xFFFF5252),
       ),
     ],
+    colors: const FlexSchemeColor(
+      primary: Color(0xFF8E57E2),
+      primaryContainer: Color(0xFF6D28D9),
+      primaryLightRef: Color(0xFF7C3AED), // The color of light mode primary
+      secondary: Color(0xFF1F2937),
+      secondaryContainer: Color(0xFF1F2937),
+      secondaryLightRef: Color(0xFFF3F4F6), // The color of light mode secondary
+      tertiary: Color(0xFF1F2937),
+      tertiaryContainer: Color(0xFF1F2937),
+      tertiaryLightRef: Color(0xFFF3F4F6), // The color of light mode tertiary
+      appBarColor: Color(0xFFF3F4F6),
+      error: Color(0xFF7F1D1D),
+      errorContainer: Color(0xFF93000A),
+    ),
     // Using FlexColorScheme built-in FlexScheme enum based colors.
-    scheme: FlexScheme.shadRose,
+    //scheme: FlexScheme.shadRose,
     // Convenience direct styling properties.
     tooltipsMatchBackground: true,
     // Component theme configurations for dark mode.

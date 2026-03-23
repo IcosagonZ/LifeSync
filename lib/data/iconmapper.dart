@@ -50,6 +50,8 @@ final Map<String, IconData> activity_mapping = {
 
 IconData iconmapper_geticon(String _section, [String item = "None"])
 {
+  print("${_section} ${item}");
+
   final section = _section.toLowerCase();
   if(section=="academics_exam")
   {
@@ -82,7 +84,7 @@ IconData iconmapper_geticon(String _section, [String item = "None"])
     }
   }
 
-  if(section=="body_measurements")
+  if(section=="body_measurement")
   {
     if(bodymeasurements_mapping.containsKey(item)){
       return bodymeasurements_mapping[item] ?? Symbols.user_attributes;

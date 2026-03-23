@@ -149,9 +149,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
     final style_displaysmall = text_theme.displaySmall;
 
     final style_headlinelarge = text_theme.headlineLarge;
-    final style_headlinemedium = text_theme.headlineMedium?.copyWith(
-      color: color_primary
-    );
+    final style_headlinemedium = text_theme.headlineMedium;
     final style_headlinesmall = text_theme.headlineSmall;
 
     final style_titlelarge = text_theme.titleLarge;
@@ -166,7 +164,10 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
     const double iconsize_quickaction = 24;
 
     return Scaffold(
+      //backgroundColor: Colors.transparent,
+      //extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text("Overview"),
         actions: [
           IconButton(
@@ -231,8 +232,22 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
           ),
         ]
       ),
-      body: Padding(
+      body: Container(
+        //width: double.infinity,
+        //height:double.infinity,
         padding: EdgeInsets.all(16),
+        /*decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: AlignmentGeometry.topLeft,
+            end: AlignmentGeometry.bottomRight,
+            colors: [
+              //Colors.white,
+              //Color(0xffadb5bd),
+              Color(0xff212529),
+              Colors.black,
+            ]
+          )
+        ),*/
         child: ListView(
           children:[
             Row(
@@ -373,7 +388,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.fastfood, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.nutrition),
+                        child: Icon(Symbols.nutrition, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.nutrition),
                       ),
                       tooltip: "Nutrition",
                       onPressed: (){
@@ -389,7 +404,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.sick, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.symptoms),
+                        child: Icon(Symbols.symptoms, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.symptoms),
                       ),
                       tooltip: "Symptoms",
                       onPressed: (){
@@ -405,7 +420,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     IconButton(
                       icon: Padding(
                         padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.weight, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.body),
+                        child: Icon(Symbols.height, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.body),
                       ),
                       tooltip: "Body",
                       onPressed: (){
@@ -471,7 +486,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       SizedBox(height: 8),
                       Text("Slept", style:style_titlesmall),
                     ]
-                  ),
+                  )
                 ),
                 Expanded(
                   child: Column(
