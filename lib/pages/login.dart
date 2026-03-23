@@ -157,16 +157,25 @@ class Page_Login_State extends State<Page_Login>
                   ),
                 ]
               ),
-              /*
+
               SizedBox(height: 32),
               TextButton(
                 child: Text("Continue without account"),
                 onPressed: ()
                 {
-                  print("UI > Button press > Continue without account");
+                  //print("UI > Button press > Continue without account");
+                  // Delete existing token and store new token
+                  database_delete_settings("token");
+
+                  // Go to home page
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
+                  {
+                    return const Page_Overview();
+                  },
+                  ));
                 }
               ),
-              */
+
             ],
           )
         )

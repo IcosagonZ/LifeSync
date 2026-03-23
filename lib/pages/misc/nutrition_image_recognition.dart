@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import '../../data/backend.dart';
+import '../../components/snackbar_notify.dart';
+import '../../components/dialog_information.dart';
 
 class Page_NutritionImageRecognition extends StatefulWidget
 {
@@ -38,7 +40,7 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
     print("Image picked");
   }
 
-  Future nutrition_upload() async
+  Future<NutritionImageResponse> nutrition_upload() async
   {
     NutritionImageResponse nutrition_response =
     await backend_send_nutrition_image(File(image_path!.path));;
@@ -50,7 +52,13 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
       {
         nutrition_data_received = true;
       }
+      else
+      {
+        nutrition_data_received = false;
+      }
     });
+
+    return nutrition_response;
   }
 
   @override
@@ -92,7 +100,6 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
               child: Card(
                 child: InkWell(
                   onTap: (){
-                    print("Tapped");
                     nutrition_pickimage();
                   },
                   child: image_path==null
@@ -140,11 +147,25 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
           children: [
             ElevatedButton(
               child: Text("Upload image"),
-              onPressed: (){
-                print("Upload pressed");
+              onPressed: () async
+              {
                 if(image_path!=null)
                 {
-                  nutrition_upload();
+                  final result = await nutrition_upload();
+                  if(result.status=="OK")
+                  {
+                    if(mounted)
+                    {
+                      ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Received data from server"));
+                    }
+                  }
+                  else
+                  {
+                    if(mounted)
+                    {
+                      dialog_information_show(context, "Error ${result.status}", result.name);
+                    }
+                  }
                 }
               },
             ),

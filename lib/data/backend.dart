@@ -219,53 +219,67 @@ Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
 {
   print("Backend: Image upload");
 
-  String backend_url = await database_get_settings_backendurl();
-  final url = Uri.parse("${backend_url}upload/nutrition");
-
-  var request = http.MultipartRequest("POST", url);
-  var stream = http.ByteStream(image.openRead());
-  var length = await image.length();
-  var filename = image.path.split("/").last;
-
-  var multipart_file = http.MultipartFile(
-    "file_upload",
-    stream,
-    length,
-    filename: filename,
-  );
-
-  request.files.add(multipart_file);
-
-  var response_streamed = await request.send();
-  var response = await http.Response.fromStream(response_streamed);
-
-  final response_json = jsonDecode(response.body);
-
-  if(response.statusCode==200)
+  try
   {
-    print("Backend: Success");
-    return NutritionImageResponse(
-      response_json["status"],
-      response_json["nutrition_name"],
-      response_json["nutrition_calories"].toString()
+    String backend_url = await database_get_settings_backendurl();
+    String token = await database_get_settings_token();
+
+    final url = Uri.parse("${backend_url}upload/nutrition");
+
+    var request = http.MultipartRequest("POST", url);
+    request.headers.addAll({
+      "Authorization": "Bearer $token",
+      "Content-Type": "application/json"
+    });
+
+    var stream = http.ByteStream(image.openRead());
+    var length = await image.length();
+    var filename = image.path.split("/").last;
+
+    var multipart_file = http.MultipartFile(
+      "file_upload",
+      stream,
+      length,
+      filename: filename,
     );
-    //print("Backend>Response: ${response.statusCode}");
-    //print("Backend>Response: ${response.body}");
-  }
-  else
-  {
+
+    request.files.add(multipart_file);
+
+    var response_streamed = await request.send();
+    var response = await http.Response.fromStream(response_streamed);
+
+    final response_json = jsonDecode(response.body);
+
+    if(response.statusCode==200)
+    {
+      print("Backend: Success");
+      return NutritionImageResponse(
+        response_json["status"],
+        response_json["nutrition_name"],
+        response_json["nutrition_calories"].toString()
+      );
+    }
+    else
     {
       print("Backend: Error");
       print("Backend>Status code: ${response.statusCode}");
       print("Backend>Response: ${response.body}");
+
+      return NutritionImageResponse(
+        "${response.statusCode}",
+        "${response.body}",
+        "N/A"
+      );
     }
   }
-
-  return NutritionImageResponse(
-    response.statusCode.toString(),
-    "N/A",
-    "N/A"
-  );
+  catch(e)
+  {
+    return NutritionImageResponse(
+      "ERROR",
+      "N/A",
+      "N/A"
+    );
+  }
 }
 
 class RecommendationData{
@@ -301,16 +315,22 @@ Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) as
 {
   print("Backend: Sending data (length ${data.length})");
 
-  String backend_url = await database_get_settings_backendurl();
-  final url = Uri.parse("${backend_url}${url_trail}");
-
-  print("Backend: URL is ${url}");
-
   try
   {
+    String backend_url = await database_get_settings_backendurl();
+    String token = await database_get_settings_token();
+
+    final url = Uri.parse("${backend_url}${url_trail}");
+
+    print("Backend: URL is ${url}");
+
+
     final response = await http.post(
       url,
-      headers: {"Content-Type": "application/json"},
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json"
+      },
       body: jsonEncode(
         {
           "version":"0.1.1",
@@ -374,6 +394,17 @@ Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) as
         );
       }
     }
+    else if(response.statusCode==401)
+    {
+      return BackendMLData(
+        401,
+        "Authentication error",
+        "ERROR",
+        -1,
+        [],
+        [],
+      );
+    }
     else
     {
       {
@@ -410,15 +441,16 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
 {
   print("Backend: Sending data (length ${data.length})");
 
-  String backend_url = await database_get_settings_backendurl();
-  String token = await database_get_settings_token();
-
-  final url = Uri.parse("${backend_url}${url_trail}");
-
-  print("Backend: URL is ${url}");
-
   try
   {
+    String backend_url = await database_get_settings_backendurl();
+    String token = await database_get_settings_token();
+
+    final url = Uri.parse("${backend_url}${url_trail}");
+
+    print("Backend: URL is ${url}");
+
+
     final response = await http.post(
       url,
       headers: {
@@ -481,6 +513,17 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
           response_insights
         );
       }
+    }
+    else if(response.statusCode==401)
+    {
+      return BackendMLData(
+        401,
+        "Authentication error",
+        "ERROR",
+        -1,
+        [],
+        [],
+      );
     }
     else
     {
