@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
 
 import 'pages/overview.dart';
 import 'data/database.dart';
 import 'pages/login.dart';
+
+import 'components/provider_theme.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -26,7 +29,12 @@ void main()
 
   printDatabasePath();
 
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MainApp(),
+    )
+  );
 }
 
 class MainApp extends StatelessWidget
@@ -36,9 +44,12 @@ class MainApp extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       title: "LifeSync",
-      theme: ThemeData.dark(), // make it user changable
+      darkTheme: ThemeData.dark(),
+      themeMode: themeProvider.themeMode,
       debugShowCheckedModeBanner: false,
       home: Page_Overview(),
       navigatorObservers: [

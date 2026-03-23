@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:provider/provider.dart';
 
 import '../data/database.dart';
+import '../components/provider_theme.dart';
 
 import '../components/dialog_confirmation.dart';
 
@@ -16,6 +18,7 @@ class Page_Settings extends StatefulWidget
 class Page_Settings_State extends State<Page_Settings>
 {
   TextEditingController settings_backendurl_controller = TextEditingController();
+  bool settings_theme_toggle = false;
 
   @override
   void initState()
@@ -31,6 +34,7 @@ class Page_Settings_State extends State<Page_Settings>
 
     setState(()
     {
+      settings_theme_toggle = context.read<ThemeProvider>().isDark;
       settings_backendurl_controller.text = backend_url;
     });
   }
@@ -117,6 +121,27 @@ class Page_Settings_State extends State<Page_Settings>
                     {
                       database_delete();
                     }
+                  },
+                )
+              ],
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text("Toggle dark mode"),
+                ),
+                Checkbox(
+                  tristate: false,
+                  value: settings_theme_toggle,
+                  onChanged: (newBool){
+                    setState(() {
+                      if(newBool!=null)
+                      {
+                        settings_theme_toggle = newBool;
+                      }
+                      context.read<ThemeProvider>().toggleTheme();
+                    });
                   },
                 )
               ],
