@@ -15,6 +15,7 @@ import 'add_data.dart';
 import 'recommendations.dart';
 import 'login.dart';
 import 'chat.dart';
+import 'goals.dart';
 
 // Page sections
 import 'sections/academics.dart';
@@ -227,6 +228,17 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                 ));
               },
             ),
+            ListTile(
+              leading: Icon(Icons.lightbulb),
+              title: Text("Recommendations"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Recommendations();
+                }
+                ));
+              },
+            ),
             Divider(),
             ListTile(
               leading: Icon(Icons.add),
@@ -261,18 +273,18 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                 ));
               },
             ),
+            Divider(),
             ListTile(
-              leading: Icon(Icons.lightbulb),
-              title: Text("Recommendations"),
+              leading: Icon(Icons.sports_football),
+              title: Text("Goals"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
                 {
-                  return const Page_Recommendations();
+                  return const Page_Goals();
                 }
                 ));
               },
             ),
-            Divider(),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("Settings"),

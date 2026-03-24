@@ -434,6 +434,46 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
 
     print("Backend: URL is ${url}");
 
+    // Get user details and goals
+    int height_result = await database_get_goal("height");
+    int weight_result = await database_get_goal("weight");
+    int age_result = await database_get_goal("age");
+    int gender_result = await database_get_goal("gender");
+
+    int steps_result = await database_get_goal("steps");
+    int distance_result = await database_get_goal("distance");
+    int calories_result = await database_get_goal("calories");
+
+    int study_result = await database_get_goal("study");
+    int sleep_result = await database_get_goal("sleep");
+    int exercise_result = await database_get_goal("exercise");
+
+    String gender;
+    if(gender_result==0)
+    {
+      gender = "F";
+    }
+    else
+    {
+      gender = "M";
+    }
+
+    Map<String,dynamic> goals = {
+      "height":height_result,
+      "weight":weight_result,
+      "age":age_result,
+      "gender":gender,
+
+      "steps":steps_result,
+      "distance":distance_result,
+      "calories":calories_result,
+
+      "study":study_result,
+      "sleep":sleep_result,
+      "exercise":exercise_result,
+    };
+
+    data["goals"]= goals;
 
     final response = await http.post(
       url,
@@ -474,6 +514,8 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
           academic_scores += response_score_json[1] as int;
           academic_scores += response_score_json[2] as int;
 
+          database_delete_score();
+
           database_insert_score("academics", academic_scores);
 
           database_insert_score("activity", response_score_json[3]);
@@ -484,6 +526,17 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
           database_insert_score("time", response_score_json[8]);
           database_insert_score("vitals", response_score_json[9]);
           database_insert_score("workout", response_score_json[10]);
+
+          int total_score=0;
+          for(var score_s in response_score_json)
+          {
+            final score = score_s as int;
+            print(score);
+            total_score+=score;
+          }
+          final total_score_d = 100*(academic_scores/1100);
+          print("Total score is $total_score_d");
+          database_insert_score("total", total_score_d.toInt());
         }
         /*
          academics_absent

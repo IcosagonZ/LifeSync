@@ -38,6 +38,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 {
   DateTime data_date = DateTime.now();
   String last_update = "Never";
+  String score = "N/A";
 
   String recommendation_text = "No recommendations available";
 
@@ -80,10 +81,20 @@ class Page_Recommendations_State extends State<Page_Recommendations>
     final insights_list_result = await database_get_insights();
     final last_update_result = await database_get_settings_last_update_string();
 
+    final score_result = await database_get_score("total");
+
     setState(()
     {
       // Misc
       last_update = last_update_result;
+      if(score_result==-1)
+      {
+        score = "N/A";
+      }
+      else
+      {
+        score = score_result.toString();
+      }
 
       // Recommendations list
       recommendations_list = recommendations_list_result;
@@ -147,10 +158,23 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
     if(backend_data.status==200)
     {
+      final score_result = await database_get_score("total");
+
       setState(()
       {
         insight_list.clear();
         insight_list.addAll(backend_data.insights);
+
+        // Misc
+        print(score_result);
+        if(score_result==-1)
+        {
+          score = "N/A";
+        }
+        else
+        {
+          score = score_result.toString();
+        }
       });
 
       List<String> insight_headings = [];
@@ -295,7 +319,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      score,
                       "Score",
                       [
                         color_primary,
