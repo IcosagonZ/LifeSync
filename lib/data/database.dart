@@ -216,6 +216,37 @@ Future<List<SettingsData>> database_get_settings() async
   return data_settings_list;
 }
 
+Future<String> database_get_settings_from_name(String name) async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_settings_map = await database_db.query(
+    'settings',
+    columns: ['id', 'name', 'value'],
+    where: 'name = ?',
+    whereArgs: [name],
+  );
+
+  List<SettingsData> data_settings_list = [];
+
+  for(var data in data_settings_map)
+  {
+    data_settings_list.add(
+      SettingsData(
+        data["id"],
+        data["name"],
+        data["value"]
+      )
+    );
+  }
+
+  if(data_settings_list.isEmpty)
+  {
+    return "No data";
+  }
+
+  return data_settings_list.first.value;
+}
 
 Future<int> database_insert_settings(
   String name,
@@ -230,6 +261,7 @@ Future<int> database_insert_settings(
     {
       'name':name,
       'value':value,
+
       if(id!=-1) "id": id,
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
@@ -361,6 +393,8 @@ Future<String> database_get_settings_last_update_string() async
 
 Future<int> database_set_settings_last_update(DateTime update_time) async
 {
+  database_delete_settings("last_update");
+
   Database database_db = await database_open();
 
   int row_index = await database_db.insert(

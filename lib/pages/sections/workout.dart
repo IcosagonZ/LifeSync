@@ -49,7 +49,7 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
   {
     List<WorkoutData> workout_data_result = await database_get_workout_for_date(data_timenow);
     int workout_data_total_calories_result = await database_aggregate_workout_calories(data_timenow);
-    final score_result = await database_get_score("academics");
+    final score_result = await database_get_score("workout");
 
     setState(()
     {

@@ -47,6 +47,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
 {
   // Widget variables
   DateTime data_timenow = DateTime.now();
+  String summary_text = "No data";
 
   int activity_data_total_calories = 0;
   int activity_data_total_distance = 0;
@@ -89,6 +90,9 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
       return;
     }
 
+    String summary_result = await database_get_settings_from_name("summary");
+    print(summary_result);
+
     int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
     int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
@@ -108,6 +112,8 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
 
     setState(()
     {
+      summary_text = summary_result;
+
       activity_data_total_calories = activity_data_total_calories_result;
       activity_data_total_distance = activity_data_total_distance_result;
       activity_data_total_duration = activity_data_total_duration_result;
@@ -131,6 +137,12 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
   // Route aware functions
   @override
   void didPopNext()
+  {
+    initData();
+  }
+
+  @override
+  void didPushNext()
   {
     initData();
   }
@@ -564,7 +576,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               height: 8
             ),
             Center(
-              child: Text("All good", style:style_titlelarge),
+              child: Text(summary_text, style:style_titlelarge),
             ),
             SizedBox(
               height: 16

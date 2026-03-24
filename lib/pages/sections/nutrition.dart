@@ -57,7 +57,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
   {
     List<NutritionData> nutrition_data_result = await database_get_nutrition_for_date(data_timenow);
     int nutrition_data_total_calories_result = await database_aggregate_nutrition_calories(data_timenow);
-    final score_result = await database_get_score("academics");
+    final score_result = await database_get_score("nutrition");
 
     setState(()
     {

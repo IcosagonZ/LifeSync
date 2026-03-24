@@ -50,7 +50,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
   {
     List<SymptomData> symptom_data_result = await database_get_symptom_for_date(data_timenow);
     List<SymptomData> symptom_unresolved_data_result = await database_get_symptom_unresolved();
-    final score_result = await database_get_score("academics");
+    final score_result = await database_get_score("symptoms");
 
     setState(()
     {

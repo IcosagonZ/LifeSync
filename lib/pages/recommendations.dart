@@ -182,13 +182,14 @@ class Page_Recommendations_State extends State<Page_Recommendations>
       database_delete_insights();
       for(var data in insight_list)
       {
-        insight_headings.add(data.subtitle);
+        insight_headings.add(data.description);
         database_insert_insights(
           data.title,
           data.subtitle,
           data.description,
           data.score
         );
+        //print(insight_headings);
       }
 
       if(insight_headings.isNotEmpty)
@@ -199,7 +200,23 @@ class Page_Recommendations_State extends State<Page_Recommendations>
         });
 
         // Get recommendation from LLM
+        LLMResponse llmresponse_summary = await backend_send_llm("Give me summary in less than 5 words: ${insight_headings}");
+
+        if(llmresponse_summary.status=="OK")
+        {
+          database_delete_settings("summary");
+          database_insert_settings("summary", llmresponse_summary.message);
+          print(llmresponse_summary.message);
+        }
+        else
+        {
+          database_delete_settings("summary");
+          database_insert_settings("summary", "No data available");
+        }
+
         LLMResponse llmresponse = await backend_send_llm("Give me health recommendations: ${insight_headings}");
+
+
         if(llmresponse.status=="OK")
         {
           final index = await database_insert_recommendation(llmresponse.message);

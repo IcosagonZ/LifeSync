@@ -514,6 +514,8 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
           academic_scores += response_score_json[1] as int;
           academic_scores += response_score_json[2] as int;
 
+          academic_scores = (academic_scores/3).toInt();
+
           database_delete_score();
 
           database_insert_score("academics", academic_scores);

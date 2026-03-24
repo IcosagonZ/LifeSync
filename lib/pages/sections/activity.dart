@@ -60,7 +60,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
     int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
     int activity_data_total_steps_result = await database_aggregate_activity_steps(data_timenow);
-    final score_result = await database_get_score("academics");
+    final score_result = await database_get_score("activity");
 
     setState(()
     {

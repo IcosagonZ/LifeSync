@@ -48,7 +48,7 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   Future<void> initData() async{
     List<MindMoodData> mind_mood_data_result = await database_get_mind_mood_for_date(data_timenow);
     List<MindMoodData> mind_mood_unresolved_data_result = await database_get_mind_mood_unresolved();
-    final score_result = await database_get_score("academics");
+    final score_result = await database_get_score("mind");
 
     setState(()
     {
