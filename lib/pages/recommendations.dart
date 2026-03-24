@@ -76,9 +76,11 @@ class Page_Recommendations_State extends State<Page_Recommendations>
   void loadData() async
   {
     final recommendations_list_result = await database_get_recommendations();
+    final insights_list_result = await database_get_insights();
 
     setState(()
     {
+      // Recommendations list
       recommendations_list = recommendations_list_result;
       recommendation_max = recommendations_list.length;
       recommendation_index = recommendation_max;
@@ -89,6 +91,19 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
         recommendation_text = data.content;
         recommendation_date = data.datetime;
+      }
+
+      // Insights list
+      for(var data in insights_list_result)
+      {
+        insight_list.add(
+          InsightData(
+            data.title,
+            data.subtitle,
+            data.description,
+            data.score
+          )
+        );
       }
     });
   }
@@ -134,9 +149,16 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
       List<String> insight_headings = [];
 
+      database_delete_insights();
       for(var data in insight_list)
       {
         insight_headings.add(data.subtitle);
+        database_insert_insights(
+          data.title,
+          data.subtitle,
+          data.description,
+          data.score
+        );
       }
 
       if(insight_headings.isNotEmpty)

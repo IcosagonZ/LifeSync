@@ -513,6 +513,17 @@ Future<int> database_insert_insights(
   return row_index;
 }
 
+Future<int> database_delete_insights() async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.delete(
+    "insights",
+  );
+  print("Deleted $row_index");
+  return row_index;
+}
+
 Future<int> database_delete_insights_from_id(int id) async
 {
   Database database_db = await database_open();
