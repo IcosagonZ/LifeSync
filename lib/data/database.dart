@@ -28,7 +28,7 @@ import 'models/workout.dart';
 //part 'academics_absent.g.dart';
 
 // SQL code
-List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);','create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
+List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
 
 // title, subtitle, datatype, datetime
 String database_sql_timeline = '''
@@ -316,6 +316,68 @@ Future<int> database_delete_settings(
     whereArgs: [value],
   );
   print("Deleted rows: ${row_index}");
+  return row_index;
+}
+
+// Chat
+class ChatData
+{
+  String user;
+  String server;
+
+  ChatData(this.user, this.server);
+}
+
+Future<List<ChatData>> database_get_chat() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_chat_map = await database_db.query(
+    'chat',
+    columns: ['user', 'server']
+  );
+
+  List<ChatData> data_chat_list = [];
+
+  for(var data in data_chat_map)
+  {
+    data_chat_list.add(
+      ChatData(
+        data["user"],
+        data["server"],
+      )
+    );
+  }
+
+  return data_chat_list;
+}
+
+Future<int> database_insert_chat(
+  String user,
+  String server,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "chat",
+    {
+      'user':user,
+      'server':server,
+    },
+  );
+  print("Row index: ${row_index}");
+  return row_index;
+}
+
+Future<int> database_delete_chat() async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.delete(
+    "chat"
+  );
+  print("Deleted $row_index");
   return row_index;
 }
 

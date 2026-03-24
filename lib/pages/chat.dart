@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../data/database.dart';
 import '../data/backend.dart';
 
 import '../components/snackbar_notify.dart';
@@ -16,12 +17,31 @@ class Page_Chat extends StatefulWidget
 
 class Page_Chat_State extends State<Page_Chat>
 {
-  List<List<String>> messages = [];
+  List<ChatData> messages = [];
 
   TextEditingController message_controller = TextEditingController();
 
+  @override
+  void initState()
+  {
+    super.initState();
+
+    loadChat();
+  }
+
+  void loadChat() async
+  {
+    List<ChatData> messages_stored = await database_get_chat();
+
+    setState(()
+    {
+      messages = messages_stored;
+    });
+  }
+
   void clearChat()
   {
+    database_delete_chat();
     setState(()
     {
       messages.clear();
@@ -35,7 +55,7 @@ class Page_Chat_State extends State<Page_Chat>
     setState(()
     {
       message_controller.text = "";
-      messages.add([user_message, "Loading..."]);
+      messages.add(ChatData(user_message, "Loading..."));
     });
 
     final message_index = messages.length - 1;
@@ -46,7 +66,8 @@ class Page_Chat_State extends State<Page_Chat>
       setState(()
       {
         message_controller.text = "";
-        messages[message_index] = [user_message, server_response.message];
+        messages[message_index] = ChatData(user_message, server_response.message);
+        database_insert_chat(user_message, server_response.message);
       });
 
       return server_response;
@@ -55,7 +76,7 @@ class Page_Chat_State extends State<Page_Chat>
     {
       setState(()
       {
-        messages[message_index] = [user_message, "Server error"];
+        messages[message_index] = ChatData(user_message, "Server error");
       });
       return server_response;
     }
@@ -117,7 +138,7 @@ class Page_Chat_State extends State<Page_Chat>
                   child: Card(
                     child: Padding(
                       padding: EdgeInsetsGeometry.all(16),
-                      child: Text(messages[index][0])
+                      child: Text(messages[index].user)
                     )
                   )
                 ),
@@ -127,7 +148,7 @@ class Page_Chat_State extends State<Page_Chat>
                   child: Card(
                     child: Padding(
                       padding: EdgeInsetsGeometry.all(16),
-                      child: Text(messages[index][1])
+                      child: Text(messages[index].server)
                     )
                   )
                 ),
