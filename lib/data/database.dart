@@ -28,7 +28,7 @@ import 'models/workout.dart';
 //part 'academics_absent.g.dart';
 
 // SQL code
-List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
+List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists insights(id integer primary key, title text, subtitle text, description text, score integer, datetime text);', 'create table if not exists recommendations(id integer primary key, content text, datetime text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
 
 // title, subtitle, datatype, datetime
 String database_sql_timeline = '''
@@ -376,6 +376,151 @@ Future<int> database_delete_chat() async
 
   int row_index = await database_db.delete(
     "chat"
+  );
+  print("Deleted $row_index");
+  return row_index;
+}
+
+// Recommendations
+class RecommendationsData
+{
+  int id;
+
+  String content;
+  DateTime datetime;
+
+  RecommendationsData(this.id, this.content, this.datetime);
+}
+
+Future<List<RecommendationsData>> database_get_recommendations() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_recommendations_map = await database_db.query(
+    'recommendations',
+    columns: ['id','content', 'datetime']
+  );
+
+  List<RecommendationsData> data_recommendations_list = [];
+
+  for(var data in data_recommendations_map)
+  {
+    data_recommendations_list.add(
+      RecommendationsData(
+        data["id"],
+        data["content"],
+        DateTime.parse(data["datetime"]),
+      )
+    );
+  }
+
+  return data_recommendations_list;
+}
+
+Future<int> database_insert_recommendation(
+  String content,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "recommendations",
+    {
+      'content': content,
+      'datetime': DateTime.now().toIso8601String(),
+    },
+  );
+  print("Row index: ${row_index}");
+  return row_index;
+}
+
+Future<int> database_delete_recommendation_from_id(int id) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.delete(
+    "recommendations",
+    where: 'id = ?',
+    whereArgs: [id],
+  );
+  print("Deleted $row_index");
+  return row_index;
+}
+
+// Insights
+
+class InsightsData{
+  int id;
+
+  String title;
+  String subtitle;
+  String description;
+  DateTime datetime;
+
+  int score;
+
+  InsightsData(this.id, this.title, this.subtitle, this.description, this.score, this.datetime);
+}
+
+Future<List<InsightsData>> database_get_insights() async
+{
+  Database database_db = await database_open();
+
+  final List<Map<String, dynamic>> data_insights_map = await database_db.query(
+    'insights',
+    columns: ['id','title', 'subtitle', 'description', 'datetime', 'score']
+  );
+
+  List<InsightsData> data_insights_list = [];
+
+  for(var data in data_insights_map)
+  {
+    data_insights_list.add(
+      InsightsData(
+        data["id"],
+        data["title"],
+        data["subtitle"],
+        data["description"],
+        data["score"],
+        DateTime.parse(data["datetime"]),
+      )
+    );
+  }
+
+  return data_insights_list;
+}
+
+Future<int> database_insert_insights(
+  String title,
+  String subtitle,
+  String description,
+  int score,
+) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.insert(
+    "insights",
+    {
+      "title":title,
+      "subtitle":subtitle,
+      "description":description,
+      "score":score,
+      "datetime": DateTime.now().toIso8601String(),
+    },
+  );
+  print("Row index: ${row_index}");
+  return row_index;
+}
+
+Future<int> database_delete_insights_from_id(int id) async
+{
+  Database database_db = await database_open();
+
+  int row_index = await database_db.delete(
+    "insights",
+    where: 'id = ?',
+    whereArgs: [id],
   );
   print("Deleted $row_index");
   return row_index;

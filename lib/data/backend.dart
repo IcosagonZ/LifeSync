@@ -390,11 +390,13 @@ Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
 }
 
 class RecommendationData{
-  String title;
-  String subtitle;
-  String description;
+  String status;
+  String version;
+  String message;
 
-  RecommendationData(this.title, this.subtitle, this.description);
+  String datetime;
+
+  RecommendationData(this.status, this.version, this.message, this.datetime);
 }
 
 class InsightData{
@@ -402,149 +404,24 @@ class InsightData{
   String subtitle;
   String description;
 
-  InsightData(this.title, this.subtitle, this.description);
+  int score;
+
+  InsightData(this.title, this.subtitle, this.description, this.score);
 }
 
-class BackendMLData{
-  int response_code;
-  String response_body;
+class BackendInsightData{
+  int status;
+  String body;
 
   String type;
   int score;
 
-  List<RecommendationData> recommendations;
   List<InsightData> insights;
 
-  BackendMLData(this.response_code, this.response_body, this.type, this.score, this.recommendations, this.insights);
+  BackendInsightData(this.status, this.body, this.type, this.score, this.insights);
 }
 
-Future<BackendMLData> backend_send_data(List<dynamic> data, String url_trail) async
-{
-  print("Backend: Sending data (length ${data.length})");
-
-  try
-  {
-    String backend_url = await database_get_settings_backendurl();
-    String token = await database_get_settings_token();
-
-    final url = Uri.parse("${backend_url}${url_trail}");
-
-    print("Backend: URL is ${url}");
-
-
-    final response = await http.post(
-      url,
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode(
-        {
-          "version":"0.1.1",
-          "data": data,
-        }
-      ),
-    );
-
-
-    if(response.statusCode==200)
-    {
-      print("Backend: Success");
-
-      int response_score = -1;
-      String response_type = "N/A";
-
-      List<RecommendationData> response_recommendations = [];
-      List<InsightData> response_insights = [];
-
-      bool isDecoded = false;
-
-      try
-      {
-        final response_decoded = jsonDecode(response.body);
-        //print(response_decoded);
-
-        response_type = response_decoded["type"];
-        response_score = response_decoded["score"];
-
-        for(var recommendation in response_decoded["recommendation"])
-        {
-          response_recommendations.add(
-            RecommendationData(recommendation[0], recommendation[1], recommendation[2])
-          );
-        }
-
-        for(var insight in response_decoded["insight"])
-        {
-          response_insights.add(
-            InsightData(insight[0], insight[1], insight[2])
-          );
-        }
-
-        isDecoded = true;
-      }
-      catch(e)
-      {
-        print("Backend: Error decoding JSON");
-        print("Backend>Error: ${e}");
-      }
-
-      if(isDecoded)
-      {
-        return BackendMLData(
-          response.statusCode,
-          response.body,
-          response_type,
-          response_score,
-          response_recommendations,
-          response_insights
-        );
-      }
-    }
-    else if(response.statusCode==401)
-    {
-      return BackendMLData(
-        401,
-        "Authentication error",
-        "ERROR",
-        -1,
-        [],
-        [],
-      );
-    }
-    else
-    {
-      {
-        print("Backend: Error");
-        print("Backend>Status code: ${response.statusCode}");
-        print("Backend>Response: ${response.body}");
-      }
-    }
-  }
-  catch(e)
-  {
-    return BackendMLData(
-      -1,
-      "$e",
-      "ERROR",
-      -1,
-      [],
-      [],
-    );
-  }
-
-  return BackendMLData(
-    -1,
-    "Unknown error",
-    "ERROR",
-    -1,
-    [],
-    [],
-  );
-}
-
-
-Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_trail) async
+Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String url_trail) async
 {
   print("Backend: Sending data (length ${data.length})");
 
@@ -574,7 +451,6 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
       int response_score = -1;
       String response_type = "N/A";
 
-      List<RecommendationData> response_recommendations = [];
       List<InsightData> response_insights = [];
 
       bool isDecoded = false;
@@ -587,17 +463,10 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
         response_type = response_decoded["type"];
         response_score = response_decoded["score"];
 
-        for(var recommendation in response_decoded["recommendation"])
-        {
-          response_recommendations.add(
-            RecommendationData(recommendation[0], recommendation[1], recommendation[2])
-          );
-        }
-
         for(var insight in response_decoded["insight"])
         {
           response_insights.add(
-            InsightData(insight[0], insight[1], insight[2])
+            InsightData(insight[0], insight[1], insight[2], -1)
           );
         }
 
@@ -611,24 +480,22 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
 
       if(isDecoded)
       {
-        return BackendMLData(
+        return BackendInsightData(
           response.statusCode,
           response.body,
           response_type,
           response_score,
-          response_recommendations,
           response_insights
         );
       }
     }
     else if(response.statusCode==401)
     {
-      return BackendMLData(
+      return BackendInsightData(
         401,
         "Authentication error",
         "ERROR",
         -1,
-        [],
         [],
       );
     }
@@ -643,22 +510,20 @@ Future<BackendMLData> backend_send_map(Map<String, dynamic> data, String url_tra
   }
   catch(e)
   {
-    return BackendMLData(
+    return BackendInsightData(
       -1,
       "$e",
       "ERROR",
       -1,
       [],
-      [],
     );
   }
 
-  return BackendMLData(
+  return BackendInsightData(
     -1,
     "Unknown error",
     "ERROR",
     -1,
-    [],
     [],
   );
 }
