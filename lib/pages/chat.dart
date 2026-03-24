@@ -20,9 +20,25 @@ class Page_Chat_State extends State<Page_Chat>
 
   TextEditingController message_controller = TextEditingController();
 
+  void clearChat()
+  {
+    setState(()
+    {
+      messages.clear();
+    });
+  }
+
   Future<LLMResponse> sendData() async
   {
     final user_message = message_controller.text;
+
+    setState(()
+    {
+      message_controller.text = "";
+      messages.add([user_message, "Loading..."]);
+    });
+
+    final message_index = messages.length - 1;
     final server_response = await backend_send_llm(user_message);
 
     if(server_response.status=="OK")
@@ -30,7 +46,7 @@ class Page_Chat_State extends State<Page_Chat>
       setState(()
       {
         message_controller.text = "";
-        messages.add([user_message, server_response.message]);
+        messages[message_index] = [user_message, server_response.message];
       });
 
       return server_response;
@@ -39,7 +55,7 @@ class Page_Chat_State extends State<Page_Chat>
     {
       setState(()
       {
-        messages.add([user_message, "Server error"]);
+        messages[message_index] = [user_message, "Server error"];
       });
       return server_response;
     }
@@ -76,6 +92,16 @@ class Page_Chat_State extends State<Page_Chat>
     return Scaffold(
       appBar: AppBar(
         title: Text("Chat with AI"),
+        actions: [
+          IconButton(
+            icon: Icon(Symbols.delete),
+            tooltip: "Clear chat",
+            onPressed: ()
+            {
+              clearChat();
+            },
+          )
+        ]
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
