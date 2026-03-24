@@ -205,6 +205,113 @@ Future<UserSignup> backend_signup(String username, String password) async
   }
 }
 
+// LLM chat
+// Image upload
+class LLMResponse{
+  String status;
+
+  String version;
+  String message;
+
+  LLMResponse(this.status, this.version, this.message);
+}
+
+Future<LLMResponse> backend_send_llm(String message) async
+{
+  print("Backend: Sent LLM message to server");
+
+  try
+  {
+    String backend_url = await database_get_settings_backendurl();
+    String token = await database_get_settings_token();
+
+    final url = Uri.parse("${backend_url}chat");
+
+    print("Backend: URL is ${url}");
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(
+        {
+          "version":"0.1.1",
+          "message": message,
+        }
+      ),
+    );
+
+
+    if(response.statusCode==200)
+    {
+      print("Backend: Success");
+
+      String response_status = "-1";
+      String response_version = "N/A";
+      String response_message = "N/A";
+
+      bool isDecoded = false;
+
+      try
+      {
+        final response_decoded = jsonDecode(response.body);
+
+        response_status = response_decoded["status"];
+        response_version = response_decoded["version"];
+        response_message = response_decoded["message"];
+
+        isDecoded = true;
+      }
+      catch(e)
+      {
+        print("Backend: Error decoding JSON");
+        print("Backend>Error: ${e}");
+      }
+
+      if(isDecoded)
+      {
+        return LLMResponse(
+          response_status,
+          response_version,
+          response_message
+        );
+      }
+    }
+    else if(response.statusCode==401)
+    {
+      return LLMResponse(
+        "401",
+        "N/A",
+        "Authentication error"
+      );
+    }
+    else
+    {
+      {
+        print("Backend: Error");
+        print("Backend>Status code: ${response.statusCode}");
+        print("Backend>Response: ${response.body}");
+      }
+    }
+  }
+  catch(e)
+  {
+    return LLMResponse(
+      "ERROR",
+      "N/A",
+      "$e"
+    );
+  }
+
+  return LLMResponse(
+    "ERROR",
+    "N/A",
+    "Unknown error"
+  );
+}
+
 // Image upload
 class NutritionImageResponse{
   String status;

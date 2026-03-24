@@ -13,6 +13,8 @@ import 'timeline.dart';
 import 'settings.dart';
 import 'add_data.dart';
 import 'recommendations.dart';
+import 'login.dart';
+import 'chat.dart';
 
 // Page sections
 import 'sections/academics.dart';
@@ -202,6 +204,30 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               ),
             ),
             ListTile(
+              leading: Icon(Icons.login),
+              title: Text("Login"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Login();
+                },
+                ));
+              },
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.chat),
+              title: Text("Chat with AI"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Chat();
+                },
+                ));
+              },
+            ),
+            Divider(),
+            ListTile(
               leading: Icon(Icons.add),
               title: Text("Add data"),
               onTap: (){
@@ -245,6 +271,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                 ));
               },
             ),
+            Divider(),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("Settings"),
