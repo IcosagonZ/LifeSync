@@ -28,6 +28,8 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
   List<SymptomData> symptom_data = [];
   List<SymptomData> symptom_unresolved_data = [];
 
+  int score = -1;
+
   // Route aware initializers
   @override
   void didChangeDependencies()
@@ -48,9 +50,11 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
   {
     List<SymptomData> symptom_data_result = await database_get_symptom_for_date(data_timenow);
     List<SymptomData> symptom_unresolved_data_result = await database_get_symptom_unresolved();
+    final score_result = await database_get_score("academics");
 
     setState(()
     {
+      score = score_result;
       symptom_data = symptom_data_result;
       symptom_unresolved_data = symptom_unresolved_data_result;
     });
@@ -134,7 +138,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

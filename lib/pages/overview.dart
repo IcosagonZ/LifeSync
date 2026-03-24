@@ -173,6 +173,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
         child: ListView(
           children: [
             DrawerHeader(
+              /*
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: AlignmentGeometry.topLeft,
@@ -182,7 +183,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     color_scheme.surface,
                   ]
                 )
-              ),
+              ),*/
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

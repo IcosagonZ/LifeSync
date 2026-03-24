@@ -32,6 +32,8 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
   List<AcademicsExamData> academics_exam_data = [];
   List<AcademicsMarkData> academics_mark_data = [];
 
+  int score = -1;
+
   // Route aware initializers
   @override
   void didChangeDependencies()
@@ -54,8 +56,12 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     List<AcademicsExamData> academics_exam_data_result = await database_get_academics_exam();
     List<AcademicsMarkData> academics_mark_data_result = await database_get_academics_mark();
 
+    final score_result = await database_get_score("academics");
+
     setState(()
     {
+      score = score_result;
+
       academics_absent_data = academics_absent_data_result;
       academics_assignment_data = academics_assignment_data_result;
       academics_exam_data = academics_exam_data_result;
@@ -147,7 +153,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

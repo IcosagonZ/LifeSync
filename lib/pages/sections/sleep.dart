@@ -24,6 +24,8 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
   DateTime data_timenow = DateTime.now();
   int data_time_sleep = 0;
 
+  int score = -1;
+
   // Route aware initializers
   @override
   void didChangeDependencies()
@@ -44,9 +46,11 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
   {
     // Get previous datas sleep data since entry_datetime = time person went to bed
     int data_time_sleep_result = await database_aggregate_time_sleep(data_timenow.subtract(Duration(days: 1)));
+    final score_result = await database_get_score("academics");
 
     setState(()
     {
+      score = score_result;
       data_time_sleep = data_time_sleep_result;
     });
   }
@@ -130,7 +134,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

@@ -27,6 +27,8 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   List<MindMoodData> mind_mood_data = [];
   List<MindMoodData> mind_mood_unresolved_data = [];
 
+  int score = -1;
+
   // Route aware initializers
   @override
   void didChangeDependencies()
@@ -46,9 +48,11 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   Future<void> initData() async{
     List<MindMoodData> mind_mood_data_result = await database_get_mind_mood_for_date(data_timenow);
     List<MindMoodData> mind_mood_unresolved_data_result = await database_get_mind_mood_unresolved();
+    final score_result = await database_get_score("academics");
 
     setState(()
     {
+      score = score_result;
       mind_mood_data = mind_mood_data_result;
       mind_mood_unresolved_data = mind_mood_unresolved_data_result;
     });
@@ -129,7 +133,7 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

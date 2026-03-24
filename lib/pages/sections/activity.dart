@@ -35,6 +35,8 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
   int activity_data_total_duration = 0;
   int activity_data_total_steps = 0;
 
+  int score = -1;
+
   // Route aware initializers
   @override
   void didChangeDependencies()
@@ -58,9 +60,11 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
     int activity_data_total_duration_result = await database_aggregate_activity_duration(data_timenow);
     int activity_data_total_steps_result = await database_aggregate_activity_steps(data_timenow);
+    final score_result = await database_get_score("academics");
 
     setState(()
     {
+      score = score_result;
       activity_data = activity_data_result;
       activity_data_total_calories = activity_data_total_calories_result;
       activity_data_total_distance = activity_data_total_distance_result;
@@ -162,7 +166,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

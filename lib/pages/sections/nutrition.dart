@@ -28,6 +28,8 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
 
   int nutrition_data_total_calories = 0;
 
+  int score = -1;
+
   // Route aware initializers
   @override
   void didChangeDependencies()
@@ -55,9 +57,11 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
   {
     List<NutritionData> nutrition_data_result = await database_get_nutrition_for_date(data_timenow);
     int nutrition_data_total_calories_result = await database_aggregate_nutrition_calories(data_timenow);
+    final score_result = await database_get_score("academics");
 
     setState(()
     {
+      score = score_result;
       nutrition_data = nutrition_data_result;
       nutrition_data_total_calories = nutrition_data_total_calories_result;
     });
@@ -131,7 +135,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

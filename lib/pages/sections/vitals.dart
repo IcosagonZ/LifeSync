@@ -26,6 +26,8 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
   DateTime date_start = DateTime.now().subtract(Duration(days: 7));
   DateTime date_end = DateTime.now();
 
+  int score = -1;
+
   // Widget variables
   DateTime data_timenow = DateTime.now();
 
@@ -55,9 +57,11 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
    // backend_send(vitals_data_all_result);
 
     //List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", data_heartrate_date_start, data_heartrate_date_end);
+    final score_result = await database_get_score("academics");
 
     setState(()
     {
+      score = score_result;
       vitals_data = vitals_data_result;
 
       //data_heartrates = data_heartrates_result;
@@ -139,7 +143,7 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                     ),
                     SizedBox(width: 32),
                     AvatarGradient(
-                      "N/A",
+                      "${score}",
                       "Score",
                       [
                         color_primary,

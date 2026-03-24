@@ -37,6 +37,7 @@ class Page_Recommendations extends StatefulWidget
 class Page_Recommendations_State extends State<Page_Recommendations>
 {
   DateTime data_date = DateTime.now();
+  String last_update = "Never";
 
   String recommendation_text = "No recommendations available";
 
@@ -77,9 +78,13 @@ class Page_Recommendations_State extends State<Page_Recommendations>
   {
     final recommendations_list_result = await database_get_recommendations();
     final insights_list_result = await database_get_insights();
+    final last_update_result = await database_get_settings_last_update_string();
 
     setState(()
     {
+      // Misc
+      last_update = last_update_result;
+
       // Recommendations list
       recommendations_list = recommendations_list_result;
       recommendation_max = recommendations_list.length;
@@ -94,6 +99,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
       }
 
       // Insights list
+      insight_list.clear();
       for(var data in insights_list_result)
       {
         insight_list.add(
@@ -179,6 +185,9 @@ class Page_Recommendations_State extends State<Page_Recommendations>
             recommendations_list.add(RecommendationsData(index, llmresponse.message, DateTime.now()));
             loadData();
           });
+
+          // Update last_update time
+          database_set_settings_last_update(DateTime.now());
         }
         else
         {
@@ -420,6 +429,8 @@ class Page_Recommendations_State extends State<Page_Recommendations>
                 ]
               )
             ),
+            SizedBox(height: 16),
+            Text("Last updated: $last_update")
           ]
         )
       ),

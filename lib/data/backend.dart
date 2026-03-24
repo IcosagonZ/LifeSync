@@ -414,11 +414,11 @@ class BackendInsightData{
   String body;
 
   String type;
-  int score;
 
+  List<int> scores;
   List<InsightData> insights;
 
-  BackendInsightData(this.status, this.body, this.type, this.score, this.insights);
+  BackendInsightData(this.status, this.body, this.type, this.scores, this.insights);
 }
 
 Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String url_trail) async
@@ -448,7 +448,7 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
     {
       print("Backend: Success");
 
-      int response_score = -1;
+      List<int> response_score = [];
       String response_type = "N/A";
 
       List<InsightData> response_insights = [];
@@ -461,10 +461,47 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
         //print(response_decoded);
 
         response_type = response_decoded["type"];
-        response_score = response_decoded["score"];
+
+        final response_score_json = response_decoded["scores"];
+
+
+        // Hacky way to enter scores
+        if(response_score_json.length==11)
+        {
+          int academic_scores = 0;
+
+          academic_scores += response_score_json[0] as int;
+          academic_scores += response_score_json[1] as int;
+          academic_scores += response_score_json[2] as int;
+
+          database_insert_score("academics", academic_scores);
+
+          database_insert_score("activity", response_score_json[3]);
+          database_insert_score("bodymeasurement", response_score_json[4]);
+          database_insert_score("mind_mood", response_score_json[5]);
+          database_insert_score("nutrition", response_score_json[6]);
+          database_insert_score("symptom", response_score_json[7]);
+          database_insert_score("time", response_score_json[8]);
+          database_insert_score("vitals", response_score_json[9]);
+          database_insert_score("workout", response_score_json[10]);
+        }
+        /*
+         academics_absent
+         academics_assignment
+         academics_mark
+         activity
+         bodymeasurement
+         mind_mood
+         nutrition
+         symptom
+         time
+         vitals
+         workout
+         */
 
         for(var insight in response_decoded["insight"])
         {
+          //print(insight[0]);
           response_insights.add(
             InsightData(insight[0], insight[1], insight[2], -1)
           );
@@ -495,7 +532,7 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
         401,
         "Authentication error",
         "ERROR",
-        -1,
+        [],
         [],
       );
     }
@@ -514,7 +551,7 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
       -1,
       "$e",
       "ERROR",
-      -1,
+      [],
       [],
     );
   }
@@ -523,7 +560,7 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
     -1,
     "Unknown error",
     "ERROR",
-    -1,
+    [],
     [],
   );
 }
