@@ -29,6 +29,7 @@ import 'sections/workout.dart';
 
 // Misc
 import '../components/icon_gradient.dart';
+import '../components/mask_gradient.dart';
 import '../colors/colors_overview_buttons.dart';
 
 class Page_Overview extends StatefulWidget
@@ -361,11 +362,17 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                 ),
                 // Avatar
                 Expanded(
-                  child: SvgPicture.asset(
-                    "assets/avatar.svg",
-                    colorFilter: ColorFilter.mode(color_surface, BlendMode.srcIn),
-                    fit: BoxFit.contain,
-                    height: MediaQuery.of(context).size.height * 0.45,
+                  child: MaskGradient(
+                    SvgPicture.asset(
+                      "assets/avatar.svg",
+                      colorFilter: ColorFilter.mode(color_surface, BlendMode.srcIn),
+                      fit: BoxFit.contain,
+                      height: MediaQuery.of(context).size.height * 0.45,
+                    ),
+                    [
+                      Colors.green,
+                      Colors.red,
+                    ]
                   ),
                 ),
                 // Right quick action buttons
