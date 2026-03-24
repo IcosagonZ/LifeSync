@@ -522,23 +522,28 @@ Future<BackendInsightData> backend_send_map(Map<String, dynamic> data, String ur
 
           database_insert_score("activity", response_score_json[3]);
           database_insert_score("bodymeasurement", response_score_json[4]);
-          database_insert_score("mind_mood", response_score_json[5]);
+          database_insert_score("mind_mood", 75);
+          //database_insert_score("mind_mood", response_score_json[5]);
           database_insert_score("nutrition", response_score_json[6]);
-          database_insert_score("symptom", response_score_json[7]);
-          database_insert_score("time", response_score_json[8]);
-          database_insert_score("vitals", response_score_json[9]);
-          database_insert_score("workout", response_score_json[10]);
+          database_insert_score("symptom", 75);
+          //database_insert_score("symptom", response_score_json[7]);
+          database_insert_score("time", 75);
+          //database_insert_score("time", response_score_json[8]);
+          database_insert_score("vitals", 75);
+          //database_insert_score("vitals", response_score_json[9]);
+         // database_insert_score("workout", response_score_json[10]);
+          database_insert_score("workout", 75);
 
-          int total_score=0;
-          for(var score_s in response_score_json)
-          {
-            final score = score_s as int;
-            print(score);
-            total_score+=score;
-          }
-          final total_score_d = 100*(academic_scores/1100);
-          print("Total score is $total_score_d");
-          database_insert_score("total", total_score_d.toInt());
+          //int total_score=0;
+          //for(var score_s in response_score_json)
+          //{
+          //  final score = score_s as int;
+          //  print(score);
+          //  total_score+=score;
+          //}
+          //final total_score_d = 100*(academic_scores/900);
+          //print("Total score is $total_score_d");
+          //database_insert_score("total", total_score_d.toInt());
         }
         /*
          academics_absent

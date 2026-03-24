@@ -48,6 +48,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
   // Widget variables
   DateTime data_timenow = DateTime.now();
   String summary_text = "No data";
+  int score = -1;
 
   int activity_data_total_calories = 0;
   int activity_data_total_distance = 0;
@@ -91,7 +92,8 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
     }
 
     String summary_result = await database_get_settings_from_name("summary");
-    print(summary_result);
+    final score_result = await database_get_score_total();
+    //print(summary_result);
 
     int activity_data_total_calories_result = await database_aggregate_activity_calories(data_timenow);
     int activity_data_total_distance_result = await database_aggregate_activity_distance(data_timenow);
@@ -112,6 +114,8 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
 
     setState(()
     {
+      score = score_result;
+
       summary_text = summary_result;
 
       activity_data_total_calories = activity_data_total_calories_result;
@@ -145,6 +149,29 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
   void didPushNext()
   {
     initData();
+  }
+
+  // Gradients
+  List<Color> AvatarGradientColor()
+  {
+    //print(score);
+    if(score<0)
+    {
+      return [Colors.grey, Colors.white];
+    }
+    if(score<30)
+    {
+      return [Colors.red, Colors.redAccent];
+    }
+    if(score<50)
+    {
+      return [Colors.orange, Colors.orangeAccent];
+    }
+    if(score<70)
+    {
+      return [Colors.green, Colors.teal];
+    }
+    return [Colors.purple, Colors.blue];
   }
 
   @override
@@ -451,10 +478,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       fit: BoxFit.contain,
                       height: MediaQuery.of(context).size.height * 0.45,
                     ),
-                    [
-                      Colors.green,
-                      Colors.red,
-                    ]
+                    AvatarGradientColor()
                   ),
                 ),
                 // Right quick action buttons
@@ -576,7 +600,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               height: 8
             ),
             Center(
-              child: Text(summary_text, style:style_titlelarge),
+              child: Text(summary_text, style:style_titlelarge, textAlign: TextAlign.center,),
             ),
             SizedBox(
               height: 16

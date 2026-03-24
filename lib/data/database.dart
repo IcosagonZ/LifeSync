@@ -649,6 +649,25 @@ Future<int> database_get_score(String name) async
   return -1;
 }
 
+Future<int> database_get_score_total() async
+{
+  Database database_db = await database_open();
+
+  final score_total = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select sum(value)/count(*) from scores where name!=?',
+    ['total']
+  ));
+
+  if(score_total==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return score_total;
+  }
+}
+
 Future<int> database_insert_score(
   String name,
   int value

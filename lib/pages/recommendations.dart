@@ -81,7 +81,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
     final insights_list_result = await database_get_insights();
     final last_update_result = await database_get_settings_last_update_string();
 
-    final score_result = await database_get_score("total");
+    final score_result = await database_get_score_total();
 
     setState(()
     {
@@ -158,7 +158,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
 
     if(backend_data.status==200)
     {
-      final score_result = await database_get_score("total");
+      final score_result = await database_get_score_total();
 
       setState(()
       {
@@ -199,6 +199,7 @@ class Page_Recommendations_State extends State<Page_Recommendations>
           recommendation_text = "Loading...";
         });
 
+
         // Get recommendation from LLM
         LLMResponse llmresponse_summary = await backend_send_llm("Give me summary in less than 5 words: ${insight_headings}");
 
@@ -215,7 +216,6 @@ class Page_Recommendations_State extends State<Page_Recommendations>
         }
 
         LLMResponse llmresponse = await backend_send_llm("Give me health recommendations: ${insight_headings}");
-
 
         if(llmresponse.status=="OK")
         {
