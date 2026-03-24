@@ -82,12 +82,13 @@ class Page_Login_State extends State<Page_Login>
               SizedBox(height: 16),
               TextField(
                 controller: password_controller,
+                obscureText: true,
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: "Password",
                   hintText: "Enter password",
                 ),
-                maxLines: null,
+                maxLines: 1,
               ),
               SizedBox(height: 32),
               Row(
