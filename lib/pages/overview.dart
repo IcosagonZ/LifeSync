@@ -30,7 +30,7 @@ import 'sections/workout.dart';
 // Misc
 import '../components/icon_gradient.dart';
 import '../components/mask_gradient.dart';
-import '../colors/colors_overview_buttons.dart';
+import '../components/text_logo.dart';
 
 class Page_Overview extends StatefulWidget
 {
@@ -167,71 +167,101 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
     return Scaffold(
       //backgroundColor: Colors.transparent,
       //extendBodyBehindAppBar: true,
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: AlignmentGeometry.topLeft,
+                  end:AlignmentGeometry.bottomRight,
+                  colors: [
+                    color_primary.withValues(alpha: 0.01),
+                    color_scheme.surface,
+                  ]
+                )
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextLogo(
+                    "LifeSyncAI",
+                    [
+                      color_primary,
+                      color_primary.withValues(alpha: 0.5)
+                    ],
+                    48
+                  ),
+                  Text(
+                    "Version 0.1.1",
+                    style: TextStyle(
+                      color: color_primary
+                    ),
+                  )
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.add),
+              title: Text("Add data"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_AddData();
+                },
+                ));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.notes),
+              title: Text("Notes"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Notes();
+                }
+                ));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.timeline),
+              title: Text("Timeline"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Timeline();
+                }
+                ));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.lightbulb),
+              title: Text("Recommendations"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Recommendations();
+                }
+                ));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Settings"),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)
+                {
+                  return const Page_Settings();
+                }
+                ));
+              },
+            ),
+          ]
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text("Overview"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            tooltip: "Add data",
-            onPressed: (){
-              print("Add data pressed");
-              Navigator.push(context, MaterialPageRoute(builder: (context)
-              {
-                return const Page_AddData();
-              },
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.notes),
-            tooltip: "View notes",
-            onPressed: (){
-              print("View notes pressed");
-              Navigator.push(context, MaterialPageRoute(builder: (context)
-              {
-                return const Page_Notes();
-              }
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.timeline),
-            tooltip: "Timeline",
-            onPressed: (){
-              print("Timeline pressed");
-              Navigator.push(context, MaterialPageRoute(builder: (context)
-              {
-                return const Page_Timeline();
-              }
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.lightbulb),
-            tooltip: "Recommendations",
-            onPressed: (){
-              print("Recommendations pressed");
-              Navigator.push(context, MaterialPageRoute(builder: (context)
-              {
-                return const Page_Recommendations();
-              }
-              ));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            tooltip: "Settings",
-            onPressed: (){
-              print("Settings pressed");
-              Navigator.push(context, MaterialPageRoute(builder: (context)
-              {
-                return const Page_Settings();
-              }
-              ));
-            },
-          ),
-        ]
       ),
       body: Container(
         //width: double.infinity,

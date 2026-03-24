@@ -5,6 +5,7 @@ import '../data/backend.dart';
 
 import '../components/snackbar_notify.dart';
 import '../components/dialog_information.dart';
+import '../components/text_logo.dart';
 
 import 'overview.dart';
 
@@ -60,7 +61,14 @@ class Page_Login_State extends State<Page_Login>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("LifeSyncAI", style:style_headlinelarge),
+              TextLogo(
+                "LifeSyncAI",
+                [
+                  color_primary,
+                  color_secondary
+                ],
+                48
+              ),
               SizedBox(height: 32),
               TextField(
                 controller: username_controller,
