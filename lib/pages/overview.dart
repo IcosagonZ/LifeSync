@@ -28,6 +28,7 @@ import 'sections/vitals.dart';
 import 'sections/workout.dart';
 
 // Misc
+import '../components/icon_gradient.dart';
 import '../colors/colors_overview_buttons.dart';
 
 class Page_Overview extends StatefulWidget
@@ -155,7 +156,6 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
     final style_titlelarge = text_theme.titleLarge;
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall?.copyWith(
-      color: color_primary,
       fontWeight: FontWeight.w500
     );;
 
@@ -259,9 +259,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                   children:
                   [
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.schedule, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.time),
+                      icon: IconGradient(
+                        Symbols.schedule,
+                        [
+                          Colors.grey,
+                          Colors.white,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Time",
                       onPressed: (){
@@ -275,9 +279,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.grading, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.academics),
+                      icon: IconGradient(
+                        Symbols.grading,
+                        [
+                          Colors.lightBlue,
+                          Colors.purple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Academics",
                       onPressed: (){
@@ -291,9 +299,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.directions_run, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.activity),
+                      icon: IconGradient(
+                        Symbols.sports_basketball,
+                        [
+                          Colors.cyan,
+                          Colors.deepPurple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Activity",
                       onPressed: (){
@@ -307,9 +319,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.cognition_2, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.mind),
+                      icon: IconGradient(
+                        Symbols.cognition_2,
+                        [
+                          Colors.purple,
+                          Colors.blue,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Mind",
                       onPressed: (){
@@ -323,9 +339,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.ecg_heart, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.vitals),
+                      icon: IconGradient(
+                        Symbols.ecg_heart,
+                        [
+                          Colors.red,
+                          Colors.purple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Vitals",
                       onPressed: (){
@@ -354,9 +374,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                   children:
                   [
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.bedtime, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.sleep),
+                      icon: IconGradient(
+                        Symbols.bedtime,
+                        [
+                          Colors.blue,
+                          Colors.purple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Sleep",
                       onPressed: (){
@@ -370,9 +394,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.exercise, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.workout),
+                      icon: IconGradient(
+                        Symbols.exercise,
+                        [
+                          Colors.grey,
+                          Colors.purple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Workout",
                       onPressed: (){
@@ -386,9 +414,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.nutrition, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.nutrition),
+                      icon: IconGradient(
+                        Symbols.cookie,
+                        [
+                          Colors.deepOrange,
+                          Colors.brown,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Nutrition",
                       onPressed: (){
@@ -402,9 +434,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.symptoms, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.symptoms),
+                      icon: IconGradient(
+                        Symbols.symptoms,
+                        [
+                          Colors.pink,
+                          Colors.purple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Symptoms",
                       onPressed: (){
@@ -418,9 +454,13 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                     ),
                     SizedBox(height: spacing_quickaction),
                     IconButton(
-                      icon: Padding(
-                        padding: EdgeInsets.all(2),
-                        child: Icon(Symbols.height, fill: 1, size: iconsize_quickaction, color: Theme.of(context).extension<ColorsOverviewButtons>()?.body),
+                      icon: IconGradient(
+                        Symbols.height,
+                        [
+                          Colors.yellow,
+                          Colors.purple,
+                        ],
+                        iconsize_quickaction
                       ),
                       tooltip: "Body",
                       onPressed: (){

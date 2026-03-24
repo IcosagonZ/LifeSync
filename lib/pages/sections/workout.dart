@@ -9,9 +9,7 @@ import '../../data/models/workout.dart';
 import '../../data/iconmapper.dart';
 
 import '../../components/recents_listtile_multiline.dart';
-
-// Misc
-import '../../colors/colors_overview_buttons.dart';
+import '../../components/avatar_gradient.dart';
 
 class Page_Workout extends StatefulWidget
 {
@@ -71,7 +69,7 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.workout;
+    final color_primary = color_scheme.primary;//Theme.of(context).extension<ColorsOverviewButtons>()?.workout;
     final color_secondary = color_scheme.secondary;
     final color_onprimary = color_scheme.onPrimary;
     final color_onsecondary = color_scheme.onSecondary;
@@ -90,10 +88,7 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
-
-    // Widget variables
-    //List<TimelineData> recents_data = get_workout_data();
+    final style_cardlabel = TextStyle(fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBar(
@@ -122,41 +117,17 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
                               Text("$workout_data_total_calories cal")
                             ],
                           ),
-                          /*
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("Muscle groups targeted", style: TextStyle(color: color_primary)),
-                              ),
-                              Text("3"),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text("Intensity rating", style: TextStyle(color: color_primary))
-                              ),
-                              Text("4/10")
-                            ],
-                          )
-                          */
                         ]
                       )
                     ),
                     SizedBox(width: 32),
-                    CircleAvatar(
-                      radius: 32,
-                      backgroundColor: color_primary,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("N/A"),
-                          Text("Score", style: TextStyle(fontSize: 10)),
-                        ]
-                      ),
+                    AvatarGradient(
+                      "N/A",
+                      "Score",
+                      [
+                        color_primary,
+                        color_secondary
+                      ]
                     ),
                   ],
                 )

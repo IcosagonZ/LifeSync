@@ -11,10 +11,7 @@ import '../../helpers/helper_calculate.dart';
 
 import '../../components/listtile_single_icon.dart';
 import '../../components/graph_linechart.dart';
-
-// Misc
-import '../../colors/colors_overview_buttons.dart';
-
+import '../../components/avatar_gradient.dart';
 
 class Page_BodyMeasurements extends StatefulWidget
 {
@@ -81,7 +78,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.body;
+    final color_primary = color_scheme.primary;//Theme.of(context).extension<ColorsOverviewButtons>()?.body;
     final color_secondary = color_scheme.secondary;
     final color_onprimary = color_scheme.onPrimary;
     final color_onsecondary = color_scheme.onSecondary;
@@ -100,7 +97,7 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
+    final style_cardlabel = TextStyle(fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBar(
@@ -141,17 +138,13 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
                       )
                     ),
                     SizedBox(width: 32),
-                    CircleAvatar(
-                      radius: 32,
-                      backgroundColor: color_primary,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("${helper_get_bmi(data_latest_height, data_latest_weight).toStringAsFixed(1)}"),
-                          Text("BMI", style: TextStyle(fontSize: 10)),
-                        ]
-                      ),
+                    AvatarGradient(
+                      "${helper_get_bmi(data_latest_height, data_latest_weight).toStringAsFixed(1)}",
+                      "BMI",
+                      [
+                        color_primary,
+                        color_secondary
+                      ]
                     ),
                   ],
                 )

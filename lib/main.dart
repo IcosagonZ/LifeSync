@@ -6,7 +6,7 @@ import 'pages/overview.dart';
 import 'data/database.dart';
 import 'pages/login.dart';
 
-import 'themes/theme_red.dart';
+import 'themes/theme_violet.dart';
 import 'components/provider_theme.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';

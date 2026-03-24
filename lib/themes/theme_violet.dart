@@ -24,25 +24,10 @@ abstract final class ThemeRed {
   static ThemeData light = FlexThemeData.light(
     // Set font family
     textTheme: GoogleFonts.latoTextTheme(),
-    // Set additional colors
-    extensions: [
-      const ColorsOverviewButtons(
-        time: Color(0xFF607D8B),
-        sleep: Color(0xFF3F51B5),
-        academics: Color(0xFF2196F3),
-        workout: Color(0xFFFF9800),
-        activity: Color(0xFF00BCD4),
-        nutrition: Color(0xFF4CAF50),
-        mind: Color(0xFF9C27B0),
-        symptoms: Color(0xFFFFC107),
-        vitals: Color(0xFFF44336),
-        body: Color(0xFFFF5252),
-      ),
-    ],
     // Using FlexColorScheme built-in FlexScheme enum based colors
     //scheme: FlexScheme.shadRose,
     colors: const FlexSchemeColor(
-      primary: Color(0xFF8E57E2),
+      primary: Color(0xFF7C3AED),
       primaryContainer: Color(0xFF7C3AED),
       secondary: Color(0xFFF3F4F6),
       secondaryContainer: Color(0xFFF3F4F6),
@@ -77,23 +62,9 @@ abstract final class ThemeRed {
   static ThemeData dark = FlexThemeData.dark(
     // Set font family
     textTheme: GoogleFonts.latoTextTheme(),
-    // Set additional colors
-    extensions: [
-      const ColorsOverviewButtons(
-        time: Color(0xFF607D8B),
-        sleep: Color(0xFF3F51B5),
-        academics: Color(0xFF2196F3),
-        workout: Color(0xff495057),
-        activity: Color(0xFF00BCD4),
-        nutrition: Color(0xFF4CAF50),
-        mind: Color(0xFF9C27B0),
-        symptoms: Color(0xffa61e4d),
-        vitals: Color(0xFFF44336),
-        body: Color(0xFFFF5252),
-      ),
-    ],
+    // Custom colors
     colors: const FlexSchemeColor(
-      primary: Color(0xFF8E57E2),
+      primary: Color(0xFF6D28D9),
       primaryContainer: Color(0xFF6D28D9),
       primaryLightRef: Color(0xFF7C3AED), // The color of light mode primary
       secondary: Color(0xFF1F2937),

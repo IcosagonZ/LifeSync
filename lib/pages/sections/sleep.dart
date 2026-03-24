@@ -9,9 +9,7 @@ import '../../data/models/time.dart';
 import '../../helpers/helper_string.dart';
 
 import '../../components/listtile_single_icon.dart';
-
-// Misc
-import '../../colors/colors_overview_buttons.dart';
+import '../../components/avatar_gradient.dart';
 
 class Page_Sleep extends StatefulWidget
 {
@@ -67,7 +65,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.sleep;
+    final color_primary = color_scheme.primary;//Theme.of(context).extension<ColorsOverviewButtons>()?.sleep;
     final color_secondary = color_scheme.secondary;
     final color_onprimary = color_scheme.onPrimary;
     final color_onsecondary = color_scheme.onSecondary;
@@ -86,7 +84,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
+    final style_cardlabel = TextStyle(fontWeight: FontWeight.w600);
 
     // Widget variables
     List<TimelineData> recents_data = [];
@@ -131,17 +129,13 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
                       )
                     ),
                     SizedBox(width: 32),
-                    CircleAvatar(
-                      radius: 32,
-                      backgroundColor: color_primary,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("N/A"),
-                          Text("Score", style: TextStyle(fontSize: 10)),
-                        ]
-                      ),
+                    AvatarGradient(
+                      "N/A",
+                      "Score",
+                      [
+                        color_primary,
+                        color_secondary
+                      ]
                     ),
                   ],
                 )

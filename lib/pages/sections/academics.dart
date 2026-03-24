@@ -11,9 +11,10 @@ import '../../data/models/academics_exam.dart';
 import '../../data/models/academics_mark.dart';
 
 import '../../components/recents_listtile_single_text.dart';
+import '../../components/avatar_gradient.dart';
 
 // Misc
-import '../../colors/colors_overview_buttons.dart';
+//import '../../colors/colors_overview_buttons.dart';
 
 class Page_Academics extends StatefulWidget
 {
@@ -76,7 +77,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     final color_scheme = Theme.of(context).colorScheme;
     final text_theme = Theme.of(context).textTheme;
 
-    final color_primary = Theme.of(context).extension<ColorsOverviewButtons>()?.academics;
+    final color_primary = color_scheme.primary;//Theme.of(context).extension<ColorsOverviewButtons>()?.academics;
     final color_secondary = color_scheme.secondary;
     final color_onprimary = color_scheme.onPrimary;
     final color_onsecondary = color_scheme.onSecondary;
@@ -95,9 +96,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    final style_cardlabel = TextStyle(color: color_primary, fontWeight: FontWeight.w600);
-
-    // Widget size variables
+    final style_cardlabel = TextStyle(fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBar(
@@ -147,17 +146,13 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                       )
                     ),
                     SizedBox(width: 32),
-                    CircleAvatar(
-                      radius: 32,
-                      backgroundColor: color_primary,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("N/A"),
-                          Text("Score", style: TextStyle(fontSize: 10)),
-                        ]
-                      ),
+                    AvatarGradient(
+                      "N/A",
+                      "Score",
+                      [
+                        color_primary,
+                        color_secondary
+                      ]
                     ),
                   ],
                 )

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/database.dart';
-import '../themes/theme_red.dart';
+import '../themes/theme_violet.dart';
 
 class ThemeProvider extends ChangeNotifier
 {
