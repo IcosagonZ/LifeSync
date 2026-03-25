@@ -26,7 +26,8 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
   DateTime date_start = DateTime.now().subtract(Duration(days: 7));
   DateTime date_end = DateTime.now();
 
-  int score = -1;
+  String score = "N/A";
+  String tracking_total = "N/A";
 
   // Widget variables
   DateTime data_timenow = DateTime.now();
@@ -51,20 +52,31 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
 
   Future<void> initData() async{
     List<VitalsData> vitals_data_result = await database_get_vitals_for_date(data_timenow);
-    //List<VitalsData> vitals_data_all_result = await database_get_vitals();
 
-    //backend_test();
-   // backend_send(vitals_data_all_result);
-
-    //List<GraphData> data_heartrates_result = await database_graphdata_retrive("vitals", "value", "type", "Heartrate", data_heartrate_date_start, data_heartrate_date_end);
     final score_result = await database_get_score("vitals");
+    final tracking_total_result = await database_get_vitals_total_for_date(data_timenow);
 
     setState(()
     {
-      score = score_result;
-      vitals_data = vitals_data_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
 
-      //data_heartrates = data_heartrates_result;
+
+      if(tracking_total_result!=-1)
+      {
+        tracking_total = tracking_total_result.toString();
+      }
+      else
+      {
+        tracking_total = "0";
+      }
+      vitals_data = vitals_data_result;
     });
   }
 
@@ -124,11 +136,12 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Status", style: style_cardlabel)
+                                child: Text("Tracking", style: style_cardlabel)
                               ),
-                              Text("N/A")
+                              Text(tracking_total)
                             ],
                           ),
+                          /*
                           SizedBox(height: 8),
                           Row(
                             children: [
@@ -137,7 +150,7 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
                               ),
                               Text("N/A")
                             ],
-                          )
+                          )*/
                         ]
                       )
                     ),

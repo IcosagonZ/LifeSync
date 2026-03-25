@@ -27,7 +27,7 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
   List<WorkoutData> workout_data = [];
   int workout_data_total_calories = 0;
 
-  int score = -1;
+  String score = "N/A";
 
   // Route aware initializers
   @override
@@ -53,7 +53,14 @@ class Page_Workout_State extends State<Page_Workout> with RouteAware
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
       workout_data = workout_data_result;
       workout_data_total_calories_result = workout_data_total_calories;
     });

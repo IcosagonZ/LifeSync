@@ -35,7 +35,7 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
   int activity_data_total_duration = 0;
   int activity_data_total_steps = 0;
 
-  int score = -1;
+  String score = "N/A";
 
   // Route aware initializers
   @override
@@ -64,7 +64,15 @@ class Page_Activity_State extends State<Page_Activity> with RouteAware
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
+
       activity_data = activity_data_result;
       activity_data_total_calories = activity_data_total_calories_result;
       activity_data_total_distance = activity_data_total_distance_result;

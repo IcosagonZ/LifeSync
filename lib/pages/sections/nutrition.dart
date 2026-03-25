@@ -11,6 +11,8 @@ import '../../data/iconmapper.dart';
 import '../../components/recents_listtile_multiline.dart';
 import '../../components/avatar_gradient.dart';
 
+import '../../helpers/helper_calculate.dart';
+
 class Page_Nutrition extends StatefulWidget
 {
   const Page_Nutrition({super.key});
@@ -27,8 +29,9 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
   List<NutritionData> nutrition_data = [];
 
   int nutrition_data_total_calories = 0;
+  String nutrition_data_required_calories = "N/A";
 
-  int score = -1;
+  String score = "N/A";
 
   // Route aware initializers
   @override
@@ -57,11 +60,43 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
   {
     List<NutritionData> nutrition_data_result = await database_get_nutrition_for_date(data_timenow);
     int nutrition_data_total_calories_result = await database_aggregate_nutrition_calories(data_timenow);
+
+    // Required calories calculation
+    int height_result = await database_get_goal("height");
+    int weight_result = await database_get_goal("weight");
+    int age_result = await database_get_goal("age");
+    int gender_result = await database_get_goal("gender");
+
+    String gender_string = "F";
+    if(gender_string==1)
+    {
+      gender_string = "M";
+    }
+
+    int nutrition_data_required_calories_result = await helper_get_calories_required(height_result, weight_result, age_result, gender_string);
+
     final score_result = await database_get_score("nutrition");
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
+
+      if(nutrition_data_required_calories_result>1000)
+      {
+        nutrition_data_required_calories = nutrition_data_required_calories_result.toString();
+      }
+      else
+      {
+        nutrition_data_required_calories = "N/A";
+      }
+
       nutrition_data = nutrition_data_result;
       nutrition_data_total_calories = nutrition_data_total_calories_result;
     });
@@ -127,7 +162,7 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
                               Expanded(
                                 child: Text("Calorie target", style: style_cardlabel),
                               ),
-                              Text("2000 cal"),
+                              Text("${nutrition_data_required_calories} cal"),
                             ],
                           ),
                         ]

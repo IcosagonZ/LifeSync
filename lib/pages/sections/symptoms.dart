@@ -28,7 +28,8 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
   List<SymptomData> symptom_data = [];
   List<SymptomData> symptom_unresolved_data = [];
 
-  int score = -1;
+  String score = "N/A";
+  String tracking_total = "N/A";
 
   // Route aware initializers
   @override
@@ -50,11 +51,30 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
   {
     List<SymptomData> symptom_data_result = await database_get_symptom_for_date(data_timenow);
     List<SymptomData> symptom_unresolved_data_result = await database_get_symptom_unresolved();
+
     final score_result = await database_get_score("symptoms");
+    final tracking_total_result = await database_get_symptom_tracking_total();
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
+
+      if(tracking_total_result!=-1)
+      {
+        tracking_total = tracking_total_result.toString();
+      }
+      else
+      {
+        tracking_total = "0";
+      }
+
       symptom_data = symptom_data_result;
       symptom_unresolved_data = symptom_unresolved_data_result;
     });
@@ -121,9 +141,10 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                               Expanded(
                                 child: Text("Currently tracking", style: style_cardlabel)
                               ),
-                              Text("N/A")
+                              Text(tracking_total)
                             ],
                           ),
+                          /*
                           SizedBox(height: 8),
                           Row(
                             children: [
@@ -133,6 +154,7 @@ class Page_Symptoms_State extends State<Page_Symptoms> with RouteAware
                               Text("N/A"),
                             ],
                           ),
+                          */
                         ]
                       )
                     ),

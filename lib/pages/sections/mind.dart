@@ -27,7 +27,8 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   List<MindMoodData> mind_mood_data = [];
   List<MindMoodData> mind_mood_unresolved_data = [];
 
-  int score = -1;
+  String score = "N/A";
+  String tracking_total = "N/A";
 
   // Route aware initializers
   @override
@@ -48,11 +49,30 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
   Future<void> initData() async{
     List<MindMoodData> mind_mood_data_result = await database_get_mind_mood_for_date(data_timenow);
     List<MindMoodData> mind_mood_unresolved_data_result = await database_get_mind_mood_unresolved();
+
     final score_result = await database_get_score("mind");
+    final tracking_total_result = await database_get_mind_mood_tracking_total();
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
+
+      if(tracking_total_result!=-1)
+      {
+        tracking_total = tracking_total_result.toString();
+      }
+      else
+      {
+        tracking_total = "0";
+      }
+
       mind_mood_data = mind_mood_data_result;
       mind_mood_unresolved_data = mind_mood_unresolved_data_result;
     });
@@ -114,11 +134,12 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Status", style: style_cardlabel)
+                                child: Text("Tracking", style: style_cardlabel)
                               ),
-                              Text("N/A")
+                              Text(tracking_total)
                             ],
                           ),
+                          /*
                           SizedBox(height: 8),
                           Row(
                             children: [
@@ -128,6 +149,7 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
                               Text("N/A"),
                             ],
                           ),
+                          */
                         ]
                       )
                     ),

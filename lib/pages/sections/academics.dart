@@ -32,7 +32,9 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
   List<AcademicsExamData> academics_exam_data = [];
   List<AcademicsMarkData> academics_mark_data = [];
 
-  int score = -1;
+  String score = "N/A";
+  String assignments_pending = "N/A";
+  String absent_total = "N/A";
 
   // Route aware initializers
   @override
@@ -56,11 +58,39 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     List<AcademicsExamData> academics_exam_data_result = await database_get_academics_exam();
     List<AcademicsMarkData> academics_mark_data_result = await database_get_academics_mark();
 
+
+    final assignments_pending_result = await database_get_assignments_not_submitted_total();
+    final absent_result = await database_get_absent_total();
     final score_result = await database_get_score("academics");
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
+
+      if(assignments_pending_result!=-1)
+      {
+        assignments_pending = assignments_pending_result.toString();
+      }
+      else
+      {
+        assignments_pending = "0";
+      }
+
+      if(absent_result!=-1)
+      {
+        absent_total = absent_result.toString();
+      }
+      else
+      {
+        absent_total = "0";
+      }
 
       academics_absent_data = academics_absent_data_result;
       academics_assignment_data = academics_assignment_data_result;
@@ -122,6 +152,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                     Expanded(
                       child: Column(
                         children: [
+                          /*
                           Row(
                             children: [
                               Expanded(
@@ -130,13 +161,14 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                               Text("N/A")
                             ],
                           ),
+                          */
                           SizedBox(height: 8),
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Assignments", style: style_cardlabel)
+                                child: Text("Assignments pending", style: style_cardlabel)
                               ),
-                              Text("N/A"),
+                              Text(assignments_pending),
                             ],
                           ),
                           SizedBox(height: 8),
@@ -145,7 +177,7 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
                               Expanded(
                                 child: Text("Absent", style: style_cardlabel)
                               ),
-                              Text("N/A"),
+                              Text(absent_total),
                             ],
                           ),
                         ]

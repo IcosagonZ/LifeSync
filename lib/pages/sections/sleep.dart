@@ -24,7 +24,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
   DateTime data_timenow = DateTime.now();
   int data_time_sleep = 0;
 
-  int score = -1;
+  String score = "N/A";
 
   // Route aware initializers
   @override
@@ -50,7 +50,14 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
 
     setState(()
     {
-      score = score_result;
+      if(score_result!=-1)
+      {
+        score = score_result.toString();
+      }
+      else
+      {
+        score = "N/A";
+      }
       data_time_sleep = data_time_sleep_result;
     });
   }

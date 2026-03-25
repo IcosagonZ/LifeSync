@@ -124,71 +124,77 @@ class Page_Chat_State extends State<Page_Chat>
           )
         ]
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: ListView.builder(
-          reverse: true,
-          itemCount: messages.length,
-          itemBuilder: (context, index_reverse){
-            final index = messages.length - index_reverse - 1;
-            return Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Card(
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.all(16),
-                      child: Text(messages[index].user)
-                    )
-                  )
-                ),
-                SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Card(
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.all(16),
-                      child: Text(messages[index].server)
-                    )
-                  )
-                ),
-                SizedBox(height: 32),
-              ],
-            );
-          },
-        )
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: EdgeInsetsGeometry.all(16),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: message_controller,
-                  decoration: InputDecoration(
-                    labelText: "Message",
-                    hintText: "Enter message",
-                  )
-                )
-              ),
-              SizedBox(width: 16),
-              IconButton(
-                icon: Icon(Symbols.send),
-                tooltip: "Send message",
-                onPressed: () async
-                {
-                  final response = await sendData();
-                  if(response.status!="OK")
-                  {
-                    dialog_information_show(context, "Error: ${response.status}", response.message);
-                  }
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: ListView.builder(
+                reverse: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index_reverse){
+                  final index = messages.length - index_reverse - 1;
+                  return Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsetsGeometry.all(16),
+                            child: Text(messages[index].user)
+                          )
+                        )
+                      ),
+                      SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsetsGeometry.all(16),
+                            child: Text(messages[index].server)
+                          )
+                        )
+                      ),
+                      SizedBox(height: 32),
+                    ],
+                  );
                 },
               )
-            ],
+            )
           ),
-        )
+          SafeArea(
+            child: Padding(
+              padding: EdgeInsetsGeometry.all(16),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: message_controller,
+                      decoration: InputDecoration(
+                        labelText: "Message",
+                        hintText: "Enter message",
+                      )
+                    )
+                  ),
+                  SizedBox(width: 16),
+                  IconButton(
+                    icon: Icon(Symbols.send),
+                    tooltip: "Send message",
+                    onPressed: () async
+                    {
+                      final response = await sendData();
+                      if(response.status!="OK")
+                      {
+                        dialog_information_show(context, "Error: ${response.status}", response.message);
+                      }
+                    },
+                  )
+                ],
+              ),
+            )
+          ),
+        ],
       ),
     );
   }

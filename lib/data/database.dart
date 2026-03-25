@@ -789,6 +789,24 @@ Future<List<AcademicsAbsentData>> database_get_academics_absent() async
   return data_academics_absent_list;
 }
 
+Future<int> database_get_absent_total() async
+{
+  Database database_db = await database_open();
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(*) from academics_absent',
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
+}
+
 Future<List<AcademicsAbsentData>> database_get_academics_absent_from_id(int id) async
 {
   Database database_db = await database_open();
@@ -873,6 +891,62 @@ Future<List<AcademicsAssignmentData>> database_get_academics_assignment() async
   }
 
   return data_academics_assignment_list;
+}
+
+Future<int> database_get_assignments_not_submitted_total() async
+{
+  Database database_db = await database_open();
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(*) from academics_assignment where submitted!=?',
+    [1]
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
+}
+
+Future<int> database_get_assignments_submitted_total() async
+{
+  Database database_db = await database_open();
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(*) from academics_assignment where submitted=?',
+    [1]
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
+}
+
+Future<int> database_get_assignments_total() async
+{
+  Database database_db = await database_open();
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(*) from academics_assignment',
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
 }
 
 
@@ -1444,6 +1518,25 @@ Future<List<MindMoodData>> database_get_mind_mood_unresolved() async
   return data_mind_mood_list;
 }
 
+Future<int> database_get_mind_mood_tracking_total() async
+{
+  Database database_db = await database_open();
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(*) from mind_mood where resolved!=?',
+    [1]
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
+}
+
 Future<List<MindMoodData>> database_get_mind_mood_from_id(int id)
 async
 {
@@ -1914,6 +2007,26 @@ Future<List<SymptomData>> database_get_symptom_unresolved() async
   return data_symptom_list;
 }
 
+
+Future<int> database_get_symptom_tracking_total() async
+{
+  Database database_db = await database_open();
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(*) from symptom where resolved!=?',
+    [1]
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
+}
+
 Future<List<SymptomData>> database_get_symptom_from_id(int id)
 async
 {
@@ -2241,6 +2354,26 @@ Future<List<VitalsData>> database_get_vitals_for_date(DateTime target_date) asyn
   }
 
   return data_vitals_list;
+}
+
+Future<int> database_get_vitals_total_for_date(DateTime target_date) async
+{
+  Database database_db = await database_open();
+  String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
+
+  final result = Sqflite.firstIntValue(await database_db.rawQuery(
+    'select count(distinct type) from symptom where date(entry_date) = ?',
+    [_target_date],
+  ));
+
+  if(result==null)
+  {
+    return -1;
+  }
+  else
+  {
+    return result;
+  }
 }
 
 Future<int> database_insert_vitals(
