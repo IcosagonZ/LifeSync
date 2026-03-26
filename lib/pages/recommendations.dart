@@ -136,7 +136,9 @@ class Page_Recommendations_State extends State<Page_Recommendations>
     List<NutritionData> nutrition_data = await database_get_nutrition_for_date(data_date);
     List<SymptomData> symptom_data = await database_get_symptom();
     List<TimeData> time_data = await database_get_time_for_date(data_date);
-    List<VitalsData> vitals_data = await database_get_vitals_for_date(data_date);
+    print(time_data.length);
+
+    List<VitalsData> vitals_data = await database_get_vitals_for_date(data_date.subtract(Duration(days: 1))); // time slept in previous day sent
     List<WorkoutData> workout_data = await database_get_workout_for_date(data_date);
 
     Map<String,dynamic> section_data = {

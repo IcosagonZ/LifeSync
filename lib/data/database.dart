@@ -60,7 +60,10 @@ bool database_print_enabled = false;
 
 void database_print(String text)
 {
-  print(text);
+  if(database_print_enabled)
+  {
+    print(text);
+  }
 }
 
 Future<String> database_path() async
@@ -2283,7 +2286,7 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
     columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
-    where: 'entry_date = ?',
+    where: 'date(entry_date) = date(?)',
     whereArgs: [_target_date],
   );
 
