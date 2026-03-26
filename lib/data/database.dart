@@ -28,7 +28,7 @@ import 'models/workout.dart';
 //part 'academics_absent.g.dart';
 
 // SQL code
-List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);','create table if not exists scores(name text, value integer);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists goals(name text, value integer);', 'create table if not exists insights(id integer primary key, title text, subtitle text, description text, score integer, datetime text);', 'create table if not exists recommendations(id integer primary key, content text, datetime text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
+List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);','create table if not exists scores(name text, value integer);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists goals(name text, value integer);', 'create table if not exists insights(id integer primary key, title text, subtitle text, description text, score integer, datetime text);', 'create table if not exists recommendations(id integer primary key, content text, datetime text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, start_datetime text, end_datetime text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
 
 // title, subtitle, datatype, datetime
 String database_sql_timeline = '''
@@ -2212,7 +2212,7 @@ Future<List<TimeData>> database_get_time() async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
   );
 
   List<TimeData> data_time_list = [];
@@ -2225,6 +2225,8 @@ Future<List<TimeData>> database_get_time() async
         data["event"],
         data["duration"],
         DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
         data["entry_note"],
       )
     );
@@ -2241,7 +2243,7 @@ async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
     where: 'id = ?',
     whereArgs: [id],
   );
@@ -2256,6 +2258,8 @@ async
         data["event"],
         data["duration"],
         DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
         data["entry_note"],
       )
     );
@@ -2271,7 +2275,7 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
     where: 'entry_date = ?',
     whereArgs: [_target_date],
   );
@@ -2285,7 +2289,9 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
         data["id"],
         data["event"],
         data["duration"],
-        data["entry_date"],
+        DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
         data["entry_note"],
       )
     );
@@ -2326,6 +2332,8 @@ Future<int> database_insert_time(
   String event,
   int duration,
   String entry_date,
+  String start_datetime,
+  String end_datetime,
   String entry_note,
   [int id=-1]
 ) async
@@ -2338,6 +2346,8 @@ Future<int> database_insert_time(
       'event':event,
       'duration':duration,
       'entry_date':entry_date,
+      'start_datetime':start_datetime,
+      'end_datetime':end_datetime,
       'entry_note':entry_note,
       if(id!=-1) "id": id,
     },

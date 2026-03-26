@@ -420,6 +420,10 @@ extension AddDataButton on Page_AddData_State{
         {
           if(
             time_type_dropdown_chosen==null ||
+            data_time_start_chosen==null ||
+            data_time_end_chosen==null||
+            data_time_start_date==null||
+            data_time_end_date==null||
             time_duration_hours_controller.text.isEmpty ||
             time_duration_minutes_controller.text.isEmpty ||
             !isNumeric(time_duration_hours_controller.text) ||
@@ -432,10 +436,27 @@ extension AddDataButton on Page_AddData_State{
           {
             int duration = int.parse(time_duration_hours_controller.text) * 60 + int.parse(time_duration_minutes_controller.text);
 
+            final start_datetime = DateTime(
+              data_time_start_date!.year,
+              data_time_start_date!.month,
+              data_time_start_date!.day,
+              data_time_start_chosen!.hour,
+              data_time_start_chosen!.minute,
+            ).toIso8601String();
+            final end_datetime = DateTime(
+              data_time_end_date!.year,
+              data_time_end_date!.month,
+              data_time_end_date!.day,
+              data_time_end_chosen!.hour,
+              data_time_end_chosen!.minute,
+            ).toIso8601String();
+
             database_insert_time(
               time_type_dropdown_chosen ?? "",
               duration,
               entry_date,
+              start_datetime,
+              end_datetime,
               general_notes_controller.text,
               dataId
             ).then((int row_index)

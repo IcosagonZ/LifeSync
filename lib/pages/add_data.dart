@@ -72,7 +72,7 @@ class Page_AddData_State extends State<Page_AddData>
   DateTime data_datetime = DateTime.now();
 
   TimeOfDay? data_time_chosen;
-  DateTime? _data_time_chosen;
+  //DateTime? _data_time_chosen;
   DateTime? data_date_chosen;
 
   // Controllers
@@ -114,7 +114,7 @@ class Page_AddData_State extends State<Page_AddData>
     }
   }
 
-  Future<void> data_time_select(BuildContext context) async
+  Future<TimeOfDay?> data_time_select(BuildContext context) async
   {
     final TimeOfDay? picked_time = await showTimePicker
     (
@@ -131,13 +131,18 @@ class Page_AddData_State extends State<Page_AddData>
 
     if(picked_time != null && picked_time != data_time_chosen)
     {
+      return picked_time;
+      /*
       setState(()
       {
         data_time_chosen = picked_time;
         _data_time_chosen = DateTime(2025, 5, 15, picked_time.hour, picked_time.minute);
       }
       );
+      */
     }
+
+    return null;
   }
 
   Future<DateTime?> data_date_select(BuildContext context) async
@@ -156,6 +161,46 @@ class Page_AddData_State extends State<Page_AddData>
     }
 
     return null;
+  }
+
+  // Duration calculator for time page
+  void time_calculate_duration()
+  {
+    if(data_time_start_chosen!=null &&
+      data_time_end_chosen!=null &&
+      data_time_start_date!=null &&
+      data_time_end_date!=null
+    )
+    {
+      // Set combined date time
+      final start_datetime = DateTime(
+        data_time_start_date!.year,
+        data_time_start_date!.month,
+        data_time_start_date!.day,
+        data_time_start_chosen!.hour,
+        data_time_start_chosen!.minute,
+      );
+      final end_datetime = DateTime(
+        data_time_end_date!.year,
+        data_time_end_date!.month,
+        data_time_end_date!.day,
+        data_time_end_chosen!.hour,
+        data_time_end_chosen!.minute,
+      );
+      final duration = end_datetime.difference(start_datetime);
+      if(!duration.isNegative)
+      {
+        int mins = duration.inMinutes;
+        int hrs = mins~/60;
+        mins -= hrs*60;
+
+        setState(()
+        {
+          time_duration_hours_controller.text = hrs.toString();
+          time_duration_minutes_controller.text = mins.toString();
+        });
+      }
+    }
   }
 
   @override
@@ -255,8 +300,16 @@ class Page_AddData_State extends State<Page_AddData>
                     ? "Select time"
                     : "${data_time_chosen!.format(context)}"
                   ),
-                  onPressed: (){
-                    data_time_select(context);
+                  onPressed: () async
+                  {
+                    final time_chosen = await data_time_select(context);;
+                    setState(()
+                    {
+                      if(time_chosen!=null)
+                      {
+                        data_time_chosen = time_chosen;
+                      }
+                    });
                   },
                 ),
               ],
