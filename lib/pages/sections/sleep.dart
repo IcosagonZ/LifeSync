@@ -10,6 +10,8 @@ import '../../data/models/time.dart';
 
 import '../../helpers/helper_string.dart';
 
+import '../add_data.dart';
+
 import '../../components/listtile_single_icon.dart';
 import '../../components/avatar_gradient.dart';
 
@@ -202,6 +204,25 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
             )
           ]
         )
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        tooltip: "Add data",
+        onPressed: () async {
+          //print("Add data pressed");
+          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+          {
+            return const Page_AddData();
+          },
+          settings: RouteSettings(
+            arguments: "sleep",
+          ),
+          ));
+          if(result!=null) // when returning
+          {
+            initData();
+          }
+        },
       ),
     );
   }

@@ -9,6 +9,8 @@ import '../../data/models/vitals.dart';
 
 import '../../data/iconmapper.dart';
 
+import '../add_data.dart';
+
 import '../../components/listtile_single_icon.dart';
 import '../../components/graph_linechart.dart';
 import '../../components/avatar_gradient.dart';
@@ -294,6 +296,25 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
             SizedBox(height: 16),
           ]
         )
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        tooltip: "Add data",
+        onPressed: () async {
+          //print("Add data pressed");
+          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+          {
+            return const Page_AddData();
+          },
+          settings: RouteSettings(
+            arguments: "vitals",
+          ),
+          ));
+          if(result!=null) // when returning
+          {
+            initData();
+          }
+        },
       ),
     );
   }

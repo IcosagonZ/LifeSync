@@ -1,6 +1,5 @@
 part of '../add_data.dart';
 
-
 final datatypes_valid = [
   "academics_absent",
   "academics_assignment",

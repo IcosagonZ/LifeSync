@@ -2496,7 +2496,7 @@ Future<int> database_get_vitals_total_for_date(DateTime target_date) async
   String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
 
   final result = Sqflite.firstIntValue(await database_db.rawQuery(
-    'select count(distinct type) from symptom where date(entry_date) = ?',
+    'select count(distinct type) from vitals where date(entry_date) = ?',
     [_target_date],
   ));
 

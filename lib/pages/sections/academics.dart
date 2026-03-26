@@ -10,6 +10,8 @@ import '../../data/models/academics_assignment.dart';
 import '../../data/models/academics_exam.dart';
 import '../../data/models/academics_mark.dart';
 
+import '../add_data.dart';
+
 import '../../components/recents_listtile_single_text.dart';
 import '../../components/avatar_gradient.dart';
 
@@ -409,6 +411,25 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
             ),
           ]
         )
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        tooltip: "Add data",
+        onPressed: () async {
+          //print("Add data pressed");
+          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+          {
+            return const Page_AddData();
+          },
+          settings: RouteSettings(
+            arguments: "academics",
+          ),
+          ));
+          if(result!=null) // when returning
+          {
+            initData();
+          }
+        },
       ),
     );
   }

@@ -36,6 +36,7 @@ part 'add_data_parts/workout.part.dart';
 
 part 'add_data_parts/add_data_button.part.dart';
 part 'add_data_parts/modify_data.part.dart';
+part 'add_data_parts/insert_data.part.dart';
 
 class Page_AddData extends StatefulWidget
 {
@@ -222,7 +223,7 @@ class Page_AddData_State extends State<Page_AddData>
 
     final _arguments = ModalRoute.of(context)?.settings.arguments;
     // If we are modifying existing data
-    if(!isInitialized && _arguments!=null){
+    if(!isInitialized && _arguments is List<String> && _arguments!=null){
       final arguments = _arguments as List;
       isInitialized = true;
 
@@ -242,6 +243,13 @@ class Page_AddData_State extends State<Page_AddData>
 
       modifyData(arguments);
     }
+    else if(!isInitialized && _arguments is String && _arguments!=null){
+      final arguments = _arguments as String;
+      isInitialized = true;
+
+      insertData(arguments);
+    }
+
 
     return Scaffold(
       appBar: AppBar(

@@ -11,6 +11,8 @@ import '../../data/models/time.dart';
 import '../../data/iconmapper.dart';
 import '../../helpers/helper_string.dart';
 
+import '../add_data.dart';
+
 import '../../components/listtile_single_icon.dart';
 
 class Page_Time extends StatefulWidget
@@ -209,6 +211,25 @@ class Page_Time_State extends State<Page_Time> with RouteAware
             )
           ]
         )
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        tooltip: "Add data",
+        onPressed: () async {
+          //print("Add data pressed");
+          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+          {
+            return const Page_AddData();
+          },
+          settings: RouteSettings(
+            arguments: "time",
+          ),
+          ));
+          if(result!=null) // when returning
+          {
+            initData();
+          }
+        },
       ),
     );
   }
