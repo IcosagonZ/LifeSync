@@ -120,6 +120,27 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
     return Scaffold(
       appBar: AppBar(
         title: Text("Vitals"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "vitals",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -296,25 +317,6 @@ class Page_Vitals_State extends State<Page_Vitals> with RouteAware
             SizedBox(height: 16),
           ]
         )
-      ),
-      floatingActionButton: IconButton(
-        icon: Icon(Icons.add),
-        tooltip: "Add data",
-        onPressed: () async {
-          //print("Add data pressed");
-          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
-          {
-            return const Page_AddData();
-          },
-          settings: RouteSettings(
-            arguments: "vitals",
-          ),
-          ));
-          if(result!=null) // when returning
-          {
-            initData();
-          }
-        },
       ),
     );
   }

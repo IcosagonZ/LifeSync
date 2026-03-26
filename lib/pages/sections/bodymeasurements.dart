@@ -104,6 +104,27 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
     return Scaffold(
       appBar: AppBar(
         title: Text("Body measurements"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Body",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "body_measurement",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -238,25 +259,6 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
             SizedBox(height: 16),
           ]
         )
-      ),
-      floatingActionButton: IconButton(
-        icon: Icon(Icons.add),
-        tooltip: "Body",
-        onPressed: () async {
-          //print("Add data pressed");
-          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
-          {
-            return const Page_AddData();
-          },
-          settings: RouteSettings(
-            arguments: "body_measurement",
-          ),
-          ));
-          if(result!=null) // when returning
-          {
-            initData();
-          }
-        },
       ),
     );
   }
