@@ -133,14 +133,6 @@ class Page_AddData_State extends State<Page_AddData>
     if(picked_time != null && picked_time != data_time_chosen)
     {
       return picked_time;
-      /*
-      setState(()
-      {
-        data_time_chosen = picked_time;
-        _data_time_chosen = DateTime(2025, 5, 15, picked_time.hour, picked_time.minute);
-      }
-      );
-      */
     }
 
     return null;
@@ -152,8 +144,8 @@ class Page_AddData_State extends State<Page_AddData>
     (
       context: context,
       initialDate: data_date_chosen ?? DateTime.now(),
-      firstDate: DateTime(2010),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(data_datetime.year-1),
+      lastDate: DateTime(data_datetime.year+1),
     );
 
     if(picked_date != null && picked_date != data_date_chosen)
