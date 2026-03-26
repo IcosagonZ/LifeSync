@@ -2210,10 +2210,11 @@ Future<bool> database_symptom_unresolved_present() async
 }
 
 class TimeDataGrouped{
+  IconData icon;
   String event;
   int duration;
 
-  TimeDataGrouped(this.event, this.duration);
+  TimeDataGrouped(this.icon, this.event, this.duration);
 }
 
 Future<List<TimeData>> database_get_time() async
@@ -2244,7 +2245,6 @@ Future<List<TimeData>> database_get_time() async
 
   return data_time_list;
 }
-
 
 Future<List<TimeData>> database_get_time_from_id(int id)
 async
@@ -2329,6 +2329,7 @@ Future<List<TimeDataGrouped>> database_get_time_for_date_grouped(DateTime target
   {
     data_time_list.add(
       TimeDataGrouped(
+        iconmapper_geticon("time",data["event"]),
         data["event"],
         data["duration"],
       )
@@ -2495,7 +2496,7 @@ Future<int> database_get_vitals_total_for_date(DateTime target_date) async
   String _target_date = DateFormat('yyyy-MM-dd').format(target_date);
 
   final result = Sqflite.firstIntValue(await database_db.rawQuery(
-    'select count(distinct type) from symptom where date(entry_date) = ?',
+    'select count(distinct type) from vitals where date(entry_date) = ?',
     [_target_date],
   ));
 

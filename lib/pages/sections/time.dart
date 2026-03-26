@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
-//import '../../main.dart';
+import 'package:intl/intl.dart';
+
+import '../../main.dart';
 
 import '../../data/database.dart';
 import '../../data/models/time.dart';
 
 import '../../data/iconmapper.dart';
-
 import '../../helpers/helper_string.dart';
+
+import '../add_data.dart';
+
+import '../../components/listtile_single_icon.dart';
 
 class Page_Time extends StatefulWidget
 {
@@ -19,7 +23,7 @@ class Page_Time extends StatefulWidget
   State<Page_Time> createState() => Page_Time_State();
 }
 
-class Page_Time_State extends State<Page_Time>
+class Page_Time_State extends State<Page_Time> with RouteAware
 {
   Container piechart_label(String label_text)
   {
@@ -40,7 +44,18 @@ class Page_Time_State extends State<Page_Time>
   }
 
   // Widget variables
+  DateTime data_timenow = DateTime.now();
+
   List<TimeDataGrouped> time_data_grouped = [];
+  List<TimeData> time_data = [];
+
+  // Route aware initializers
+  @override
+  void didChangeDependencies()
+  {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
 
   @override
   void initState()
@@ -52,11 +67,12 @@ class Page_Time_State extends State<Page_Time>
 
   Future<void> initData() async
   {
-    List<TimeDataGrouped> time_data_grouped_result = await database_get_time_for_date_grouped(DateTime.now());
-    List<TimeData> time_data_result = await database_get_time();
+    List<TimeDataGrouped> time_data_grouped_result = await database_get_time_for_date_grouped(data_timenow);
+    List<TimeData> time_data_result = await database_get_time_for_date(data_timenow);
     setState(()
     {
       time_data_grouped = time_data_grouped_result;
+      time_data = time_data_result;
     });
   }
 
@@ -86,111 +102,55 @@ class Page_Time_State extends State<Page_Time>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    Map<String, double> time_breakdown = {
-      for (var data in time_data_grouped) data.event : data.duration.toDouble()
-    };
-
-    /*Map<String, double> time_breakdown = {
-      "Sleep": 0,
-      "Study": 3,
-      "Eating": 3,
-      "Hobby": 2,
-      "Gaming": 2,
-      "Outing": 1,
-      "Commute": 1,
-      "Entertainment": 3,
-    };*/
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Time"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "time",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: ListView(
           children:[
             Visibility(
-              visible: time_breakdown.isNotEmpty,
+              visible: time_data_grouped.isNotEmpty,
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Padding(
                   padding: EdgeInsets.all(32),
                   child: PieChart(
                     PieChartData(
-                      sections: [
-                        // Sleep
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Sleep"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Sleep"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.bedtime, color:color_onprimary)
-                          : null,
-                        ),
-                        // Study
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Study"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Study"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.book, color:color_onprimary)
-                          : null,
-                        ),
-                        // Food
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Eating"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Eating"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.flatware, color:color_onprimary)
-                          : null,
-                        ),
-                        // Hobby
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Hobby"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Hobby"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.construction, color:color_onprimary)
-                          : null,
-                        ),
-                        // Gaming
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Gaming"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Gaming"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.sports_esports, color:color_onprimary)
-                          : null,
-                        ),
-                        // Outing
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Outing"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Outing"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.tour, color:color_onprimary)
-                          : null,
-                        ),
-                        // Commute
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Commute"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Commute"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.commute, color:color_onprimary)
-                          : null,
-                        ),
-                        // Entertainment
-                        PieChartSectionData(
-                          color: color_primary,
-                          value: time_breakdown["Entertainment"],
-                          title: "",
-                          badgeWidget: (time_breakdown["Entertainment"] ?? 0.0) > 0.01 ?
-                          Icon(Symbols.comedy_mask, color:color_onprimary)
-                          : null,
-                        ),
-                      ]
+                      sections: List.generate(time_data_grouped.length, (index){
+                        if(time_data_grouped[index].duration!=0)
+                        {
+                          return PieChartSectionData(
+                            color: color_primary,
+                            value: time_data_grouped[index].duration.toDouble(),
+                            title: "",
+                            badgeWidget: Icon(time_data_grouped[index].icon, color:color_onprimary),
+                          );
+                        }
+                        return PieChartSectionData();
+                      })
                     )
                   )
                 )
@@ -202,112 +162,70 @@ class Page_Time_State extends State<Page_Time>
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: time_breakdown.isEmpty,
+                      visible: time_data_grouped.isEmpty,
                       child: Text("Data unavailable for current day")
                     ),
                     Visibility(
-                      visible: time_breakdown.isNotEmpty,
+                      visible: time_data_grouped.isNotEmpty,
                       child: Column(
-                        children: [
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.bedtime, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Sleep", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Sleep"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.book, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Study", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Study"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.flatware, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Eating", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Eating"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.construction, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Hobby", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Hobby"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.sports_esports, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Gaming", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Gaming"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.tour, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Outing", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Outing"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.commute, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Commute", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Commute"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(Symbols.comedy_mask, color: color_primary),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text("Entertainment", style: TextStyle(color: color_primary))
-                              ),
-                              SizedBox(width: 8),
-                              Text("${helper_get_duration(time_breakdown["Entertainment"]?.toInt() ?? 0)}")
-                            ]
-                          ),
-                        ]
+                        children: List.generate(time_data_grouped.length, (index){
+                          if(time_data_grouped[index].duration!=0)
+                          {
+                            return Row(
+                              children: [
+                                Icon(time_data_grouped[index].icon, color: color_primary),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(time_data_grouped[index].event, style: TextStyle(color: color_primary))
+                                ),
+                                SizedBox(width: 8),
+                                Text("${helper_get_duration(time_data_grouped[index].duration.toInt() ?? 0)}")
+                              ],
+                            );
+                          }
+                          return SizedBox(height: 0);
+                        })
                       )
                     )
+                  ]
+                )
+              )
+            ),
+            SizedBox(height: 16),
+            Text("Recents", style: style_titlelarge),
+            SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(2),
+                child: Stack(
+                  children: [
+                    Visibility(
+                      visible: time_data.isEmpty,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: Text("No data available")
+                        ),
+                      )
+                    ),
+                    Visibility(
+                      visible: time_data.isNotEmpty,
+                      child: Center(
+                        child: Column(
+                          children: time_data.map((data)
+                          {
+                            return ListTileSingleIcon(
+                              list_icon: Icon(iconmapper_geticon("Time", data.event)),
+                              list_title: data.event,
+                              list_subtitle: "${helper_get_duration(data.duration)}",
+                              list_trail: DateFormat('h:mm a dd/mm').format(data.entry_date),
+                              id: data.id,
+                              datatype: "time",
+                            );
+                          }).toList(),
+                        )
+                      )
+                    ),
                   ]
                 )
               )

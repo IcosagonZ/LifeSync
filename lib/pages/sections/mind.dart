@@ -7,6 +7,8 @@ import '../../main.dart';
 import '../../data/database.dart';
 import '../../data/models/mind_mood.dart';
 
+import '../add_data.dart';
+
 import '../../components/recents_listtile_multiline.dart';
 import '../../components/listtile_2_line_icon_check.dart';
 import '../../components/avatar_gradient.dart';
@@ -116,6 +118,27 @@ class Page_Mind_State extends State<Page_Mind> with RouteAware
     return Scaffold(
       appBar: AppBar(
         title: Text("Mind"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "mind_mood",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

@@ -81,6 +81,11 @@ abstract final class ThemeRed {
     tooltipsMatchBackground: true,
     // Component theme configurations for dark mode.
     subThemesData: const FlexSubThemesData(
+      // User
+      fabSchemeColor: SchemeColor.primary,
+      fabUseShape: true,
+      fabAlwaysCircular: true,
+
       interactionEffects: true,
       tintedDisabledControls: true,
       blendOnColors: true,

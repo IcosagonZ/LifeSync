@@ -15,6 +15,17 @@ final Map<String, IconData> vitals_mapping = {
   "Blood Sugar":Symbols.glucose,
 };
 
+final Map<String, IconData> time_mapping = {
+  "Sleep":Symbols.bedtime,
+  "Study":Symbols.book,
+  "Eating":Symbols.flatware,
+  "Hobby":Symbols.construction,
+  "Gaming":Symbols.sports_esports,
+  "Outing":Symbols.tour,
+  "Commute":Symbols.commute,
+  "Entertainment":Symbols.comedy_mask,
+};
+
 final Map<String, IconData> activity_mapping = {
   "Badminton":Symbols.badminton,
   "Baseball":Symbols.sports_baseball,
@@ -117,7 +128,13 @@ IconData iconmapper_geticon(String _section, [String item = "None"])
 
   if(section=="time")
   {
-    return Symbols.schedule;
+    if(time_mapping.containsKey(item)){
+      return time_mapping[item] ?? Symbols.schedule;
+    }
+    else
+    {
+      return Symbols.schedule;
+    }
   }
 
   if(section=="vitals")

@@ -8,6 +8,8 @@ import '../../data/models/nutrition.dart';
 
 import '../../data/iconmapper.dart';
 
+import '../add_data.dart';
+
 import '../../components/recents_listtile_multiline.dart';
 import '../../components/avatar_gradient.dart';
 
@@ -133,6 +135,27 @@ class Page_Nutrition_State extends State<Page_Nutrition> with RouteAware
     return Scaffold(
       appBar: AppBar(
         title: Text("Nutrition"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "nutrition",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

@@ -36,6 +36,7 @@ part 'add_data_parts/workout.part.dart';
 
 part 'add_data_parts/add_data_button.part.dart';
 part 'add_data_parts/modify_data.part.dart';
+part 'add_data_parts/insert_data.part.dart';
 
 class Page_AddData extends StatefulWidget
 {
@@ -129,17 +130,9 @@ class Page_AddData_State extends State<Page_AddData>
       }
     );
 
-    if(picked_time != null && picked_time != data_time_chosen)
+    if(picked_time != null)
     {
       return picked_time;
-      /*
-      setState(()
-      {
-        data_time_chosen = picked_time;
-        _data_time_chosen = DateTime(2025, 5, 15, picked_time.hour, picked_time.minute);
-      }
-      );
-      */
     }
 
     return null;
@@ -151,11 +144,11 @@ class Page_AddData_State extends State<Page_AddData>
     (
       context: context,
       initialDate: data_date_chosen ?? DateTime.now(),
-      firstDate: DateTime(2010),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(data_datetime.year-1),
+      lastDate: DateTime(data_datetime.year+1),
     );
 
-    if(picked_date != null && picked_date != data_date_chosen)
+    if(picked_date != null)
     {
       return picked_date;
     }
@@ -222,7 +215,7 @@ class Page_AddData_State extends State<Page_AddData>
 
     final _arguments = ModalRoute.of(context)?.settings.arguments;
     // If we are modifying existing data
-    if(!isInitialized && _arguments!=null){
+    if(!isInitialized && _arguments is List<String> && _arguments!=null){
       final arguments = _arguments as List;
       isInitialized = true;
 
@@ -242,6 +235,13 @@ class Page_AddData_State extends State<Page_AddData>
 
       modifyData(arguments);
     }
+    else if(!isInitialized && _arguments is String && _arguments!=null){
+      final arguments = _arguments as String;
+      isInitialized = true;
+
+      insertData(arguments);
+    }
+
 
     return Scaffold(
       appBar: AppBar(

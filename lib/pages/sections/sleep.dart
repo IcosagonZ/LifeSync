@@ -10,6 +10,8 @@ import '../../data/models/time.dart';
 
 import '../../helpers/helper_string.dart';
 
+import '../add_data.dart';
+
 import '../../components/listtile_single_icon.dart';
 import '../../components/avatar_gradient.dart';
 
@@ -24,7 +26,6 @@ class Page_Sleep extends StatefulWidget
 class Page_Sleep_State extends State<Page_Sleep> with RouteAware
 {
   DateTime data_timenow = DateTime.now();
-
 
   DateTime data_datestart= DateTime.now().subtract(Duration(days: 7));
   DateTime data_dateend = DateTime.now();
@@ -114,6 +115,27 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
     return Scaffold(
       appBar: AppBar(
         title: Text("Sleep"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "sleep",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

@@ -9,6 +9,8 @@ import '../../data/models/body_measurement.dart';
 import '../../data/iconmapper.dart';
 import '../../helpers/helper_calculate.dart';
 
+import '../add_data.dart';
+
 import '../../components/listtile_single_icon.dart';
 import '../../components/graph_linechart.dart';
 import '../../components/avatar_gradient.dart';
@@ -102,6 +104,27 @@ class Page_BodyMeasurements_State extends State<Page_BodyMeasurements> with Rout
     return Scaffold(
       appBar: AppBar(
         title: Text("Body measurements"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Body",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "body_measurement",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

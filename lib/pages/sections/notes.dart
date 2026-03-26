@@ -8,6 +8,7 @@ import '../../data/database.dart';
 import '../../data/models/note.dart';
 
 import '../add_note.dart';
+
 import '../../components/recents_listtile_multiline.dart';
 
 
@@ -149,7 +150,7 @@ class Page_Notes_State extends State<Page_Notes> with RouteAware
         icon: Icon(Icons.add),
         tooltip: "Add data",
         onPressed: () async {
-          print("Add data pressed");
+          //print("Add data pressed");
           final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
           {
             return const Page_AddNote();
