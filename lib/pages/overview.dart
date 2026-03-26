@@ -341,6 +341,41 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text("Overview"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              ));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.notes),
+            tooltip: "Notes",
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_Notes();
+              }
+              ));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.timeline),
+            tooltip: "Timeline",
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_Timeline();
+              }
+              ));
+            },
+          ),
+        ],
       ),
       body: Container(
         //width: double.infinity,
