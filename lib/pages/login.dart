@@ -49,12 +49,7 @@ class Page_Login_State extends State<Page_Login>
     final style_titlemedium = text_theme.titleMedium;
     final style_titlesmall = text_theme.titleSmall;
 
-    // Widget size variables
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(""),
-      ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Center(
