@@ -11,6 +11,7 @@ dependencies:
   flex_color_scheme: ^8.4.0
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
   flutter_svg: ^2.2.3
   google_fonts: ^8.0.2
   http: ^1.6.0
@@ -33,3 +34,29 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+
+flutter_launcher_icons:
+    image_path: "assets/logo_with_white_bg.png"
+    #image_path_android: "assets/images/icon-710x599-android.png"
+    #image_path_ios: "assets/images/icon-1024x1024.png"
+    android: true
+    ios: true
+    adaptive_icon_background: "assets/logo_white_bg.png" # only available for Android 8.0 devices and above
+    adaptive_icon_foreground: "assets/logo.png" # only available for Android 8.0 devices and above
+    adaptive_icon_foreground_inset: 16 # only available for Android 8.0 devices and above
+    adaptive_icon_monochrome: "assets/logo_monochrome.png" # only available for Android 13 devices and above
+    min_sdk_android: 21 # android min sdk min:16, default 21
+    remove_alpha_ios: true
+    background_color_ios: "#ffffff"
+    web:
+        generate: true
+        image_path: "assets/logo.png"
+        background_color: "#hexcode"
+        theme_color: "#hexcode"
+    windows:
+        generate: true
+        image_path: "assets/logo.png"
+        icon_size: 48 # min:48, max:256, default: 48
+    macos:
+        generate: true
+        image_path: "assets/logo.png"

@@ -227,25 +227,32 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(
+                    height: 64,
+                    child: Image(
+                      image: AssetImage("assets/logo.png"),
+                    ),
+                  ),
                   TextLogo(
                     "LifeSyncAI",
                     [
                       color_primary,
                       color_primary.withValues(alpha: 0.5)
                     ],
-                    48
+                    32
                   ),
-                  Text(
-                    "Version 0.1.1",
-                    style: TextStyle(
-                      color: color_primary
-                    ),
-                  )
                 ],
               ),
             ),
             ListTile(
-              leading: Icon(Icons.login),
+              leading: IconGradient(
+                Symbols.login,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Login"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -257,7 +264,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.chat),
+              leading: IconGradient(
+                Symbols.chat,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Chat with AI"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -268,7 +282,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               },
             ),
             ListTile(
-              leading: Icon(Icons.lightbulb),
+              leading: IconGradient(
+                Symbols.lightbulb,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Recommendations"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -280,7 +301,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.add),
+              leading: IconGradient(
+                Symbols.add,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Add data"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -291,7 +319,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               },
             ),
             ListTile(
-              leading: Icon(Icons.notes),
+              leading: IconGradient(
+                Symbols.notes,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Notes"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -302,7 +337,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               },
             ),
             ListTile(
-              leading: Icon(Icons.timeline),
+              leading: IconGradient(
+                Symbols.timeline,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Timeline"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -314,7 +356,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.sports_football),
+              leading: IconGradient(
+                Symbols.sports_soccer,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Goals"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)
@@ -325,7 +374,14 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
+              leading: IconGradient(
+                Symbols.settings,
+                [
+                  Colors.lightBlue,
+                  Colors.purple,
+                ],
+                24
+              ),
               title: Text("Settings"),
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)

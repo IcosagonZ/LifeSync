@@ -56,6 +56,12 @@ class Page_Login_State extends State<Page_Login>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                width: 64,
+                child: Image(
+                  image: AssetImage("assets/logo.png"),
+                ),
+              ),
               TextLogo(
                 "LifeSyncAI",
                 [
