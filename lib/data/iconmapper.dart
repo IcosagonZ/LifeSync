@@ -50,7 +50,7 @@ final Map<String, IconData> activity_mapping = {
 
 IconData iconmapper_geticon(String _section, [String item = "None"])
 {
-  print("${_section} ${item}");
+  //print("${_section} ${item}");
 
   final section = _section.toLowerCase();
   if(section=="academics_exam")

@@ -28,7 +28,7 @@ import 'models/workout.dart';
 //part 'academics_absent.g.dart';
 
 // SQL code
-List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);','create table if not exists scores(name text, value integer);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists goals(name text, value integer);', 'create table if not exists insights(id integer primary key, title text, subtitle text, description text, score integer, datetime text);', 'create table if not exists recommendations(id integer primary key, content text, datetime text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
+List<String> database_sql_commands = ['create table if not exists settings(id integer primary key, name text, value text);','create table if not exists scores(name text, value integer);', 'create table if not exists chat(id integer primary key, user text, server text);', 'create table if not exists goals(name text, value integer);', 'create table if not exists insights(id integer primary key, title text, subtitle text, description text, score integer, datetime text);', 'create table if not exists recommendations(id integer primary key, content text, datetime text);', 'create table if not exists academics_absent (id integer primary key, reason text, absent_date text, entry_date text, entry_note text);', 'create table if not exists academics_assignment (id integer primary key, subject text, type text, topic text, submitted integer, due_date text, submission_date text, entry_date text, entry_note text);', 'create table if not exists academics_exam (id integer primary key, subject text, type text, exam_date text, duration integer, entry_date text, entry_note text);', 'create table if not exists academics_mark (id integer primary key, subject text, type text, marks real, marks_total real, entry_date text, entry_note text);', 'create table if not exists activity (id integer primary key, name text, duration integer, distance integer, calories real, entry_date text, entry_note text);', 'create table if not exists body_measurement (id integer primary key, type text, value real, unit text, entry_date text, entry_note text);', 'create table if not exists mind_mood (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists note (id integer primary key, title text, content text, tags text, entry_date text);', 'create table if not exists nutrition (id integer primary key, name text, form text, type text, qty real, calories real, mass real, carbs real, protein real, fats real, entry_date text, entry_note text);', 'create table if not exists symptom (id integer primary key, name text, intensity text, resolved integer, end_date text, entry_date text, entry_note text);', 'create table if not exists time (id integer primary key, event text, duration integer, entry_date text, start_datetime text, end_datetime text, entry_note text);', 'create table if not exists vitals (id integer primary key, type text, value text, unit text, entry_date text, entry_note text);', 'create table if not exists workout (id integer primary key, name text, type text, duration integer, calories real, reps integer, weight real, entry_date text, entry_note text);'];
 
 // title, subtitle, datatype, datetime
 String database_sql_timeline = '''
@@ -55,6 +55,16 @@ union all
 */
 order by entry_date desc;
 ''';
+
+bool database_print_enabled = false;
+
+void database_print(String text)
+{
+  if(database_print_enabled)
+  {
+    print(text);
+  }
+}
 
 Future<String> database_path() async
 {
@@ -119,10 +129,91 @@ Future<List<Map<String, dynamic>>> database_read(String query) async
   return database_result;
 }
 
+Future<String> database_rawQuery(String command) async
+{
+  try
+  {
+    String sql_command = command.trim();
+    String sql_command_type = sql_command.split(" ").first.toUpperCase();
+
+    Database database_db = await database_open();
+
+    if(sql_command_type=="SELECT" || sql_command_type=="PRAGMA")
+    {
+      List<Map<String, dynamic>> result_map = await database_db.rawQuery(sql_command);
+      String result="";
+      for(var row in result_map)
+      {
+        result += "${row.toString()}\n";
+      }
+      return result;
+    }
+    else if(sql_command_type=="DELETE")
+    {
+      int result_int = await database_db.rawDelete(sql_command);
+      String result="Deleted ${result_int} rows";
+      return result;
+    }
+    else if(sql_command_type=="UPDATE")
+    {
+      int result_int = await database_db.rawUpdate(sql_command);
+      String result="Updated ${result_int} rows";
+      return result;
+    }
+    else if(sql_command_type=="INSERT")
+    {
+      int result_int = await database_db.rawInsert(sql_command);
+      String result="Inserted at index ${result_int}";
+      return result;
+    }
+    else if(sql_command[0]==".")
+    {
+      switch(sql_command)
+      {
+        case '.tables':
+          List<Map<String, dynamic>> result_map = await database_db.rawQuery("select name from sqlite_master where type='table' and name not like 'sqlite_%';");
+          String result="";
+          for(var row in result_map)
+          {
+            result += "${row.toString()}\n";
+          }
+          return result;
+        case '.schema':
+          List<Map<String, dynamic>> result_map = await database_db.rawQuery("select name,sql from sqlite_master where type='table' and name not like 'sqlite_%';");
+          String result="";
+          for(var row in result_map)
+          {
+            result += "${row.toString()}\n";
+          }
+          return result;
+        case '.databases':
+          List<Map<String, dynamic>> result_map = await database_db.rawQuery("pragma database_list;");
+          String result="";
+          for(var row in result_map)
+          {
+            result += "${row.toString()}\n";
+          }
+          return result;
+        default:
+          return "Unknown dot command, valid dot commands are: .tables, .schema, .databases";
+      }
+    }
+    else
+    {
+      database_db.execute(sql_command);
+      return "Executed command";
+    }
+  }
+  catch(e)
+  {
+    return "${e}";
+  }
+}
+
 Future<void> database_delete() async
 {
   await deleteDatabase(await database_path());
-  print("Deleted database");
+  database_print("Deleted database");
 }
 
 Future<int> database_delete_row_from_id(String table, int id) async
@@ -266,7 +357,7 @@ Future<int> database_insert_settings(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -289,7 +380,7 @@ Future<String> database_get_settings_backendurl() async
   }
 
   // if not returned it doesnt exist, add backendurl
-  print("Added backend url as it didnt exist");
+  database_print("Added backend url as it didnt exist");
   database_insert_settings("backend_url", default_url);
 
   return default_url;
@@ -313,7 +404,7 @@ Future<String> database_get_settings_token() async
   }
 
   // if not returned it doesnt exist, add backendurl
-  print("Database: Token doesnt exist");
+  database_print("Database: Token doesnt exist");
   return "N/A";
 }
 
@@ -332,7 +423,7 @@ Future<int> database_update_settings(
     where: 'name = ?',
     whereArgs: [name],
   );
-  print("Updated rows: ${row_index}");
+  database_print("Updated rows: ${row_index}");
   return row_index;
 }
 
@@ -347,7 +438,7 @@ Future<int> database_delete_settings(
     where: 'name = ?',
     whereArgs: [value],
   );
-  print("Deleted rows: ${row_index}");
+  database_print("Deleted rows: ${row_index}");
   return row_index;
 }
 
@@ -405,7 +496,7 @@ Future<int> database_set_settings_last_update(DateTime update_time) async
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  //print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -456,7 +547,7 @@ Future<int> database_insert_chat(
       'server':server,
     },
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -467,7 +558,7 @@ Future<int> database_delete_chat() async
   int row_index = await database_db.delete(
     "chat"
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -520,7 +611,7 @@ Future<int> database_insert_recommendation(
       'datetime': DateTime.now().toIso8601String(),
     },
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -533,7 +624,7 @@ Future<int> database_delete_recommendation_from_id(int id) async
     where: 'id = ?',
     whereArgs: [id],
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -599,7 +690,7 @@ Future<int> database_insert_insights(
       "datetime": DateTime.now().toIso8601String(),
     },
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -610,7 +701,7 @@ Future<int> database_delete_insights() async
   int row_index = await database_db.delete(
     "insights",
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -623,7 +714,7 @@ Future<int> database_delete_insights_from_id(int id) async
     where: 'id = ?',
     whereArgs: [id],
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -683,7 +774,7 @@ Future<int> database_insert_score(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -694,7 +785,7 @@ Future<int> database_delete_score() async
   int row_index = await database_db.delete(
     "scores",
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -735,7 +826,7 @@ Future<int> database_set_goal(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -756,7 +847,7 @@ Future<int> database_delete_goals() async
   int row_index = await database_db.delete(
     "goals",
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -857,7 +948,7 @@ Future<int> database_insert_academics_absent(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1012,7 +1103,7 @@ Future<int> database_insert_academics_assignment(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1105,7 +1196,7 @@ Future<int> database_insert_academics_exam(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1197,7 +1288,7 @@ Future<int> database_insert_academics_mark(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1321,7 +1412,7 @@ Future<int> database_insert_activity(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1439,7 +1530,7 @@ Future<int> database_insert_bodymeasurements(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1646,7 +1737,7 @@ Future<int> database_insert_mind_mood(
     _resolved = 0;
   }
 
-  print("Replacing {$id}");
+  database_print("Replacing {$id}");
 
   int row_index = await database_db.insert(
     "mind_mood",
@@ -1661,7 +1752,7 @@ Future<int> database_insert_mind_mood(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -2131,7 +2222,7 @@ Future<List<TimeData>> database_get_time() async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
   );
 
   List<TimeData> data_time_list = [];
@@ -2144,6 +2235,8 @@ Future<List<TimeData>> database_get_time() async
         data["event"],
         data["duration"],
         DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
         data["entry_note"],
       )
     );
@@ -2160,7 +2253,7 @@ async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
+    columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
     where: 'id = ?',
     whereArgs: [id],
   );
@@ -2175,6 +2268,8 @@ async
         data["event"],
         data["duration"],
         DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
         data["entry_note"],
       )
     );
@@ -2190,8 +2285,8 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
 
   final List<Map<String, dynamic>> data_time_map = await database_db.query(
     'time',
-    columns: ['id', 'event', 'duration', 'entry_date', 'entry_note'],
-    where: 'entry_date = ?',
+    columns: ['id', 'event', 'duration', 'entry_date', 'start_datetime', 'end_datetime', 'entry_note'],
+    where: 'date(entry_date) = date(?)',
     whereArgs: [_target_date],
   );
 
@@ -2204,7 +2299,9 @@ Future<List<TimeData>> database_get_time_for_date(DateTime target_date) async
         data["id"],
         data["event"],
         data["duration"],
-        data["entry_date"],
+        DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
         data["entry_note"],
       )
     );
@@ -2241,10 +2338,44 @@ Future<List<TimeDataGrouped>> database_get_time_for_date_grouped(DateTime target
   return data_time_list;
 }
 
+
+Future<List<TimeData>> database_get_time_sleep_date_range(DateTime start_date, DateTime end_date) async
+{
+  Database database_db = await database_open();
+
+  String _start_date = DateFormat('yyyy-MM-dd').format(start_date);
+  String _end_date = DateFormat('yyyy-MM-dd').format(end_date);
+
+  //database_print("${_start_date} and ${_end_date}");
+
+  final List<Map<String, dynamic>> data_time_map = await database_db.rawQuery('select * from time where event = ? and date(entry_date) between date(?) and date(?)', ["Sleep", _start_date, _end_date]);
+
+  List<TimeData> data_time_list = [];
+
+  for(var data in data_time_map)
+  {
+    data_time_list.add(
+      TimeData(
+        data["id"],
+        data["event"],
+        data["duration"],
+        DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_time_list;
+}
+
 Future<int> database_insert_time(
   String event,
   int duration,
   String entry_date,
+  String start_datetime,
+  String end_datetime,
   String entry_note,
   [int id=-1]
 ) async
@@ -2257,6 +2388,8 @@ Future<int> database_insert_time(
       'event':event,
       'duration':duration,
       'entry_date':entry_date,
+      'start_datetime':start_datetime,
+      'end_datetime':end_datetime,
       'entry_note':entry_note,
       if(id!=-1) "id": id,
     },
@@ -2543,7 +2676,7 @@ Future<int> database_aggregate_activity_calories(DateTime target_date) async
 
   if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    //print((data_aggregate.first['total'] as num).toInt());
+    //database_print((data_aggregate.first['total'] as num).toInt());
     return (data_aggregate.first['total'] as num).toInt();
   }
 
@@ -2560,7 +2693,7 @@ Future<int> database_aggregate_activity_distance(DateTime target_date) async
 
   if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    //print((data_aggregate.first['total'] as num).toInt());
+    //database_print((data_aggregate.first['total'] as num).toInt());
     return (data_aggregate.first['total'] as num).toInt();
   }
 
@@ -2577,7 +2710,7 @@ Future<int> database_aggregate_activity_duration(DateTime target_date) async
 
   if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    //print((data_aggregate.first['total'] as num).toInt());
+    //database_print((data_aggregate.first['total'] as num).toInt());
     return (data_aggregate.first['total'] as num).toInt();
   }
 
@@ -2810,7 +2943,7 @@ Future<List<GraphData>> database_graphdata_retrive(String table_name, String col
   // select value as value, entry_date from vitals where name = 'Heartrate' and entry_date between 2026-03-02 and 2026-03-09 order by entry_date asc
   final List<Map<String, dynamic>> database_result = await database_db.rawQuery('''select $column_name as value, entry_date from $table_name where $where_column = ? and date(entry_date) between date(?) and date(?) order by entry_date asc''', [ where_condition, _date_start, _date_end]);
 
-  //print("$table_name: got ${database_result.length} rows");
+  //database_print("$table_name: got ${database_result.length} rows");
 
   for (var row in database_result)
   {

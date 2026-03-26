@@ -379,7 +379,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Time",
                       onPressed: (){
-                        print("Time pressed");
+                        //print("Time pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Time();
@@ -399,7 +399,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Academics",
                       onPressed: (){
-                        print("Academics pressed");
+                        //print("Academics pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Academics();
@@ -419,7 +419,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Activity",
                       onPressed: (){
-                        print("Activity pressed");
+                        //print("Activity pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Activity();
@@ -439,7 +439,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Mind",
                       onPressed: (){
-                        print("Mind pressed");
+                        //print("Mind pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Mind();
@@ -459,7 +459,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Vitals",
                       onPressed: (){
-                        print("Vitals pressed");
+                        //print("Vitals pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Vitals();
@@ -497,7 +497,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Sleep",
                       onPressed: (){
-                        print("Sleep pressed");
+                        //print("Sleep pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Sleep();
@@ -517,7 +517,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Workout",
                       onPressed: (){
-                        print("Workout pressed");
+                        //print("Workout pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Workout();
@@ -537,7 +537,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Nutrition",
                       onPressed: (){
-                        print("Nutrition pressed");
+                        //print("Nutrition pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Nutrition();
@@ -557,7 +557,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Symptoms",
                       onPressed: (){
-                        print("Symptoms pressed");
+                        //print("Symptoms pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_Symptoms();
@@ -577,7 +577,7 @@ class Page_Overview_State extends State<Page_Overview> with RouteAware
                       ),
                       tooltip: "Body",
                       onPressed: (){
-                        print("Body pressed");
+                        //print("Body pressed");
                         Navigator.push(context, MaterialPageRoute(builder: (context)
                         {
                           return const Page_BodyMeasurements();

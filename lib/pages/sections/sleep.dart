@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
+
 import 'package:intl/intl.dart';
 
 import '../../main.dart';
@@ -22,7 +24,13 @@ class Page_Sleep extends StatefulWidget
 class Page_Sleep_State extends State<Page_Sleep> with RouteAware
 {
   DateTime data_timenow = DateTime.now();
+
+
+  DateTime data_datestart= DateTime.now().subtract(Duration(days: 7));
+  DateTime data_dateend = DateTime.now();
+
   int data_time_sleep = 0;
+  List<TimeData> data_time_sleep_range = [];
 
   String score = "N/A";
 
@@ -46,7 +54,8 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
   {
     // Get previous datas sleep data since entry_datetime = time person went to bed
     int data_time_sleep_result = await database_aggregate_time_sleep(data_timenow.subtract(Duration(days: 1)));
-    final score_result = await database_get_score("academics");
+    final data_time_sleep_range_result = await database_get_time_sleep_date_range(data_datestart, data_dateend);
+    final score_result = await database_get_score("sleep");
 
     setState(()
     {
@@ -59,6 +68,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
         score = "N/A";
       }
       data_time_sleep = data_time_sleep_result;
+      data_time_sleep_range = data_time_sleep_range_result;
     });
   }
 
@@ -122,7 +132,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
                           Row(
                             children: [
                               Expanded(
-                                child: Text("Time slept", style: style_cardlabel)
+                                child: Text("Time slept yesterday", style: style_cardlabel)
                               ),
                               Text(helper_get_duration(data_time_sleep))
                             ],
@@ -161,7 +171,7 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: recents_data.isEmpty,
+                      visible: data_time_sleep_range.isEmpty,
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Center(
@@ -170,18 +180,18 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
                       )
                     ),
                     Visibility(
-                      visible: recents_data.isNotEmpty,
+                      visible: data_time_sleep_range.isNotEmpty,
                       child: Center(
                         child: Column(
-                          children: recents_data.map((data)
+                          children: data_time_sleep_range.map((data)
                           {
                             return ListTileSingleIcon(
-                              list_icon: Icon(data.icon),
-                              list_title: data.title,
-                              list_subtitle: data.subtitle,
-                              list_trail: DateFormat('h:mm a').format(data.date_time),
-                              id: -1,
-                              datatype: "sleep",
+                              list_icon: Icon(Symbols.sleep),
+                              list_title: data.event,
+                              list_subtitle: "${helper_get_duration(data.duration)}",
+                              list_trail: DateFormat('h:mm a dd/mm').format(data.entry_date),
+                              id: data.id,
+                              datatype: "time",
                             );
                           }).toList(),
                         )
