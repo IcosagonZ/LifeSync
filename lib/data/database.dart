@@ -119,6 +119,87 @@ Future<List<Map<String, dynamic>>> database_read(String query) async
   return database_result;
 }
 
+Future<String> database_rawQuery(String command) async
+{
+  try
+  {
+    String sql_command = command.trim();
+    String sql_command_type = sql_command.split(" ").first.toUpperCase();
+
+    Database database_db = await database_open();
+
+    if(sql_command_type=="SELECT" || sql_command_type=="PRAGMA")
+    {
+      List<Map<String, dynamic>> result_map = await database_db.rawQuery(sql_command);
+      String result="";
+      for(var row in result_map)
+      {
+        result += "${row.toString()}\n";
+      }
+      return result;
+    }
+    else if(sql_command_type=="DELETE")
+    {
+      int result_int = await database_db.rawDelete(sql_command);
+      String result="Deleted ${result_int} rows";
+      return result;
+    }
+    else if(sql_command_type=="UPDATE")
+    {
+      int result_int = await database_db.rawUpdate(sql_command);
+      String result="Updated ${result_int} rows";
+      return result;
+    }
+    else if(sql_command_type=="INSERT")
+    {
+      int result_int = await database_db.rawInsert(sql_command);
+      String result="Inserted at index ${result_int}";
+      return result;
+    }
+    else if(sql_command[0]==".")
+    {
+      switch(sql_command)
+      {
+        case '.tables':
+          List<Map<String, dynamic>> result_map = await database_db.rawQuery("select name from sqlite_master where type='table' and name not like 'sqlite_%';");
+          String result="";
+          for(var row in result_map)
+          {
+            result += "${row.toString()}\n";
+          }
+          return result;
+        case '.schema':
+          List<Map<String, dynamic>> result_map = await database_db.rawQuery("select name,sql from sqlite_master where type='table' and name not like 'sqlite_%';");
+          String result="";
+          for(var row in result_map)
+          {
+            result += "${row.toString()}\n";
+          }
+          return result;
+        case '.databases':
+          List<Map<String, dynamic>> result_map = await database_db.rawQuery("pragma database_list;");
+          String result="";
+          for(var row in result_map)
+          {
+            result += "${row.toString()}\n";
+          }
+          return result;
+        default:
+          return "Unknown dot command, valid dot commands are: .tables, .schema, .databases";
+      }
+    }
+    else
+    {
+      database_db.execute(sql_command);
+      return "Executed command";
+    }
+  }
+  catch(e)
+  {
+    return "${e}";
+  }
+}
+
 Future<void> database_delete() async
 {
   await deleteDatabase(await database_path());
