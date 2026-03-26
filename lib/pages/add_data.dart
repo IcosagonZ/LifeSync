@@ -130,7 +130,7 @@ class Page_AddData_State extends State<Page_AddData>
       }
     );
 
-    if(picked_time != null && picked_time != data_time_chosen)
+    if(picked_time != null)
     {
       return picked_time;
     }
@@ -148,7 +148,7 @@ class Page_AddData_State extends State<Page_AddData>
       lastDate: DateTime(data_datetime.year+1),
     );
 
-    if(picked_date != null && picked_date != data_date_chosen)
+    if(picked_date != null)
     {
       return picked_date;
     }
