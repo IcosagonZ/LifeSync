@@ -139,6 +139,27 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
     return Scaffold(
       appBar: AppBar(
         title: Text("Academics"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.playlist_add),
+            tooltip: "Add data",
+            onPressed: () async {
+              //print("Add data pressed");
+              final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
+              {
+                return const Page_AddData();
+              },
+              settings: RouteSettings(
+                arguments: "academics",
+              ),
+              ));
+              if(result!=null) // when returning
+              {
+                initData();
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -411,25 +432,6 @@ class Page_Academics_State extends State<Page_Academics> with RouteAware
             ),
           ]
         )
-      ),
-      floatingActionButton: IconButton(
-        icon: Icon(Icons.add),
-        tooltip: "Add data",
-        onPressed: () async {
-          //print("Add data pressed");
-          final result = await Navigator.push(context, MaterialPageRoute(builder: (context)
-          {
-            return const Page_AddData();
-          },
-          settings: RouteSettings(
-            arguments: "academics",
-          ),
-          ));
-          if(result!=null) // when returning
-          {
-            initData();
-          }
-        },
       ),
     );
   }
