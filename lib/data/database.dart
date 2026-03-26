@@ -56,6 +56,13 @@ union all
 order by entry_date desc;
 ''';
 
+bool database_print_enabled = false;
+
+void database_print(String text)
+{
+  print(text);
+}
+
 Future<String> database_path() async
 {
   var database_storage_path = await getDatabasesPath();
@@ -203,7 +210,7 @@ Future<String> database_rawQuery(String command) async
 Future<void> database_delete() async
 {
   await deleteDatabase(await database_path());
-  print("Deleted database");
+  database_print("Deleted database");
 }
 
 Future<int> database_delete_row_from_id(String table, int id) async
@@ -347,7 +354,7 @@ Future<int> database_insert_settings(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -370,7 +377,7 @@ Future<String> database_get_settings_backendurl() async
   }
 
   // if not returned it doesnt exist, add backendurl
-  print("Added backend url as it didnt exist");
+  database_print("Added backend url as it didnt exist");
   database_insert_settings("backend_url", default_url);
 
   return default_url;
@@ -394,7 +401,7 @@ Future<String> database_get_settings_token() async
   }
 
   // if not returned it doesnt exist, add backendurl
-  print("Database: Token doesnt exist");
+  database_print("Database: Token doesnt exist");
   return "N/A";
 }
 
@@ -413,7 +420,7 @@ Future<int> database_update_settings(
     where: 'name = ?',
     whereArgs: [name],
   );
-  print("Updated rows: ${row_index}");
+  database_print("Updated rows: ${row_index}");
   return row_index;
 }
 
@@ -428,7 +435,7 @@ Future<int> database_delete_settings(
     where: 'name = ?',
     whereArgs: [value],
   );
-  print("Deleted rows: ${row_index}");
+  database_print("Deleted rows: ${row_index}");
   return row_index;
 }
 
@@ -486,7 +493,7 @@ Future<int> database_set_settings_last_update(DateTime update_time) async
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  //print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -537,7 +544,7 @@ Future<int> database_insert_chat(
       'server':server,
     },
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -548,7 +555,7 @@ Future<int> database_delete_chat() async
   int row_index = await database_db.delete(
     "chat"
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -601,7 +608,7 @@ Future<int> database_insert_recommendation(
       'datetime': DateTime.now().toIso8601String(),
     },
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -614,7 +621,7 @@ Future<int> database_delete_recommendation_from_id(int id) async
     where: 'id = ?',
     whereArgs: [id],
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -680,7 +687,7 @@ Future<int> database_insert_insights(
       "datetime": DateTime.now().toIso8601String(),
     },
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -691,7 +698,7 @@ Future<int> database_delete_insights() async
   int row_index = await database_db.delete(
     "insights",
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -704,7 +711,7 @@ Future<int> database_delete_insights_from_id(int id) async
     where: 'id = ?',
     whereArgs: [id],
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -764,7 +771,7 @@ Future<int> database_insert_score(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -775,7 +782,7 @@ Future<int> database_delete_score() async
   int row_index = await database_db.delete(
     "scores",
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -816,7 +823,7 @@ Future<int> database_set_goal(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -837,7 +844,7 @@ Future<int> database_delete_goals() async
   int row_index = await database_db.delete(
     "goals",
   );
-  print("Deleted $row_index");
+  database_print("Deleted $row_index");
   return row_index;
 }
 
@@ -938,7 +945,7 @@ Future<int> database_insert_academics_absent(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1093,7 +1100,7 @@ Future<int> database_insert_academics_assignment(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1186,7 +1193,7 @@ Future<int> database_insert_academics_exam(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1278,7 +1285,7 @@ Future<int> database_insert_academics_mark(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1402,7 +1409,7 @@ Future<int> database_insert_activity(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1520,7 +1527,7 @@ Future<int> database_insert_bodymeasurements(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -1727,7 +1734,7 @@ Future<int> database_insert_mind_mood(
     _resolved = 0;
   }
 
-  print("Replacing {$id}");
+  database_print("Replacing {$id}");
 
   int row_index = await database_db.insert(
     "mind_mood",
@@ -1742,7 +1749,7 @@ Future<int> database_insert_mind_mood(
     },
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
-  print("Row index: ${row_index}");
+  database_print("Row index: ${row_index}");
   return row_index;
 }
 
@@ -2328,6 +2335,38 @@ Future<List<TimeDataGrouped>> database_get_time_for_date_grouped(DateTime target
   return data_time_list;
 }
 
+
+Future<List<TimeData>> database_get_time_sleep_date_range(DateTime start_date, DateTime end_date) async
+{
+  Database database_db = await database_open();
+
+  String _start_date = DateFormat('yyyy-MM-dd').format(start_date);
+  String _end_date = DateFormat('yyyy-MM-dd').format(end_date);
+
+  //database_print("${_start_date} and ${_end_date}");
+
+  final List<Map<String, dynamic>> data_time_map = await database_db.rawQuery('select * from time where event = ? and date(entry_date) between date(?) and date(?)', ["Sleep", _start_date, _end_date]);
+
+  List<TimeData> data_time_list = [];
+
+  for(var data in data_time_map)
+  {
+    data_time_list.add(
+      TimeData(
+        data["id"],
+        data["event"],
+        data["duration"],
+        DateTime.parse(data["entry_date"]),
+        DateTime.parse(data["start_datetime"]),
+        DateTime.parse(data["end_datetime"]),
+        data["entry_note"],
+      )
+    );
+  }
+
+  return data_time_list;
+}
+
 Future<int> database_insert_time(
   String event,
   int duration,
@@ -2634,7 +2673,7 @@ Future<int> database_aggregate_activity_calories(DateTime target_date) async
 
   if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    //print((data_aggregate.first['total'] as num).toInt());
+    //database_print((data_aggregate.first['total'] as num).toInt());
     return (data_aggregate.first['total'] as num).toInt();
   }
 
@@ -2651,7 +2690,7 @@ Future<int> database_aggregate_activity_distance(DateTime target_date) async
 
   if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    //print((data_aggregate.first['total'] as num).toInt());
+    //database_print((data_aggregate.first['total'] as num).toInt());
     return (data_aggregate.first['total'] as num).toInt();
   }
 
@@ -2668,7 +2707,7 @@ Future<int> database_aggregate_activity_duration(DateTime target_date) async
 
   if(data_aggregate.isNotEmpty && data_aggregate.first['total']!=null)
   {
-    //print((data_aggregate.first['total'] as num).toInt());
+    //database_print((data_aggregate.first['total'] as num).toInt());
     return (data_aggregate.first['total'] as num).toInt();
   }
 
@@ -2901,7 +2940,7 @@ Future<List<GraphData>> database_graphdata_retrive(String table_name, String col
   // select value as value, entry_date from vitals where name = 'Heartrate' and entry_date between 2026-03-02 and 2026-03-09 order by entry_date asc
   final List<Map<String, dynamic>> database_result = await database_db.rawQuery('''select $column_name as value, entry_date from $table_name where $where_column = ? and date(entry_date) between date(?) and date(?) order by entry_date asc''', [ where_condition, _date_start, _date_end]);
 
-  //print("$table_name: got ${database_result.length} rows");
+  //database_print("$table_name: got ${database_result.length} rows");
 
   for (var row in database_result)
   {

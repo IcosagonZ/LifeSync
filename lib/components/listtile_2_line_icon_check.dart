@@ -55,7 +55,7 @@ class ListTile2LineIconCheck extends StatelessWidget
 
 
     return Padding(
-      padding: EdgeInsets.all(2),
+      padding: EdgeInsets.all(8),
       child: Row(
         children: [
           SizedBox(
