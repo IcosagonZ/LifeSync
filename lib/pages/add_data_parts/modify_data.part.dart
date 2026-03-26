@@ -274,6 +274,13 @@ extension ModifyData on Page_AddData_State{
 
           data_date_chosen = time_data.entry_date;
           data_time_chosen = TimeOfDay.fromDateTime(time_data.entry_date);
+
+          data_time_start_date = time_data.start_datetime;
+          data_time_end_date = time_data.end_datetime;
+
+          data_time_start_chosen = TimeOfDay.fromDateTime(time_data.start_datetime);
+          data_time_end_chosen = TimeOfDay.fromDateTime(time_data.end_datetime);
+
           general_notes_controller.text = time_data.entry_note;
         });
       }
