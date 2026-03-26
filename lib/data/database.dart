@@ -2210,10 +2210,11 @@ Future<bool> database_symptom_unresolved_present() async
 }
 
 class TimeDataGrouped{
+  IconData icon;
   String event;
   int duration;
 
-  TimeDataGrouped(this.event, this.duration);
+  TimeDataGrouped(this.icon, this.event, this.duration);
 }
 
 Future<List<TimeData>> database_get_time() async
@@ -2244,7 +2245,6 @@ Future<List<TimeData>> database_get_time() async
 
   return data_time_list;
 }
-
 
 Future<List<TimeData>> database_get_time_from_id(int id)
 async
@@ -2329,6 +2329,7 @@ Future<List<TimeDataGrouped>> database_get_time_for_date_grouped(DateTime target
   {
     data_time_list.add(
       TimeDataGrouped(
+        iconmapper_geticon("time",data["event"]),
         data["event"],
         data["duration"],
       )

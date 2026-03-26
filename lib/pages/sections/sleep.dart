@@ -25,7 +25,6 @@ class Page_Sleep_State extends State<Page_Sleep> with RouteAware
 {
   DateTime data_timenow = DateTime.now();
 
-
   DateTime data_datestart= DateTime.now().subtract(Duration(days: 7));
   DateTime data_dateend = DateTime.now();
 
