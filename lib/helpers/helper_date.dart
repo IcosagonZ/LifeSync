@@ -9,9 +9,9 @@ String helper_date_get_suffix(int day)
     case(1):
       return "st";
     case(2):
-      return "st";
+      return "nd";
     case(3):
-      return "st";
+      return "rd";
     default:
       return "th";
   }
