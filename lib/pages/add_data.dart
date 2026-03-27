@@ -215,8 +215,8 @@ class Page_AddData_State extends State<Page_AddData>
 
     final _arguments = ModalRoute.of(context)?.settings.arguments;
     // If we are modifying existing data
-    if(!isInitialized && _arguments is List<String> && _arguments!=null){
-      final arguments = _arguments as List;
+    if(!isInitialized && _arguments is List && _arguments!=null){
+      final arguments = _arguments;
       isInitialized = true;
 
       dataId = arguments[0];
