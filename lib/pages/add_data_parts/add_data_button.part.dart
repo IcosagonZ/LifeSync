@@ -495,7 +495,7 @@ extension AddDataButton on Page_AddData_State{
                 database_insert_vitals(
                   vital_name_dropdown_chosen ?? " ",
                   vital_bodytemperature_controller.text,
-                  "C",
+                  "F",
                   entry_date,
                   general_notes_controller.text,
                   dataId

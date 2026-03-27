@@ -116,7 +116,7 @@ extension VitalsWidget on Page_AddData_State{
                       ),
                     ),
                     SizedBox(width: 16),
-                    Text("°C"),
+                    Text("°F"),
                   ]
                 ),
               ]
