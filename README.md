@@ -24,8 +24,13 @@ Front end will be made using Flutter for mobile friendly cross platform data ent
 
 ## Screenshots
 <p align="center">
-    <img src="screenshots/screenshot_0.png" alt="Home page" width="400"/>
-    <img src="screenshots/screenshot_1.png" alt="Timeline page" width="400"/>
+    <img src="screenshots/screenshot_0.jpeg" alt="Home page" width="400"/>
+    <img src="screenshots/screenshot_1.jpeg" alt="Timeline page" width="400"/>
+</p>
+
+<p align="center">
+    <img src="screenshots/screenshot_2.jpeg" alt="Side bar" width="400"/>
+    <img src="screenshots/screenshot_3.jpeg" alt="Recommendations page" width="400"/>
 </p>
 
 ## Features
