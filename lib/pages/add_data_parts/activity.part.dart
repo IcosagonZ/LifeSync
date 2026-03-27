@@ -66,7 +66,7 @@ extension ActivityWidget on Page_AddData_State{
                     setState(()
                     {
                       activity_dropdown_chosen = newValue;
-                      print(activity_dropdown_chosen);
+                      //print(activity_dropdown_chosen);
                     });
                   },
                   items: activity_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)

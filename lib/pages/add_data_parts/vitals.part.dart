@@ -42,7 +42,7 @@ extension VitalsWidget on Page_AddData_State{
                     setState(()
                     {
                       vital_name_dropdown_chosen = newValue;
-                      print(vital_name_dropdown_chosen);
+                      //print(vital_name_dropdown_chosen);
                     });
                   },
                   items: vital_name_options.map<DropdownMenuItem<String>>((String dropdown_item)

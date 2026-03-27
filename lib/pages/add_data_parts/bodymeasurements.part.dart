@@ -29,7 +29,7 @@ extension BodyMeasurementsWidget on Page_AddData_State{
                   setState(()
                   {
                     bodymeasurement_dropdown_chosen = newValue;
-                    print(bodymeasurement_dropdown_chosen);
+                    //print(bodymeasurement_dropdown_chosen);
                   });
                 },
                 items: bodymeasurement_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
