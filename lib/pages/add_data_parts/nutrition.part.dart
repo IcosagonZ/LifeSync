@@ -14,7 +14,7 @@ final List<String> nutrition_form_options = [
   "Solid Food",
   "Supplement",
 ];
-String? nutrition_form_dropdown_chosen;
+String? nutrition_form_dropdown_chosen = "Solid Food";
 
 final List<String> nutrition_type_options = [
   "Breakfast",
@@ -71,7 +71,7 @@ extension NutritionWidget on Page_AddData_State{
                     setState(()
                     {
                       nutrition_form_dropdown_chosen = newValue;
-                      print(nutrition_form_dropdown_chosen);
+                      //print(nutrition_form_dropdown_chosen);
                     });
                   },
                   items: nutrition_form_options.map<DropdownMenuItem<String>>((String dropdown_item)
@@ -104,7 +104,7 @@ extension NutritionWidget on Page_AddData_State{
                     setState(()
                     {
                       nutrition_type_dropdown_chosen = newValue;
-                      print(nutrition_type_dropdown_chosen);
+                      //print(nutrition_type_dropdown_chosen);
                     });
                   },
                   items: nutrition_type_options.map<DropdownMenuItem<String>>((String dropdown_item)

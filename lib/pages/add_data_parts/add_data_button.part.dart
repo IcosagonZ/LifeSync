@@ -6,7 +6,7 @@ extension AddDataButton on Page_AddData_State{
       child: Text(add_data_text),
       onPressed: ()
       {
-        print("Add data pressed");
+        //print("Add data pressed");
 
         // Set date time
         data_datetime = DateTime(
@@ -181,7 +181,7 @@ extension AddDataButton on Page_AddData_State{
           }
           else
           {
-            print(mind_mood_resolved);
+            //print(mind_mood_resolved);
             database_insert_mind_mood(
               mind_mood_name_controller.text,
               mind_mood_intensity_dropdown_chosen ?? "",
@@ -495,7 +495,7 @@ extension AddDataButton on Page_AddData_State{
                 database_insert_vitals(
                   vital_name_dropdown_chosen ?? " ",
                   vital_bodytemperature_controller.text,
-                  "C",
+                  "F",
                   entry_date,
                   general_notes_controller.text,
                   dataId

@@ -58,7 +58,7 @@ extension SymptomWidget on Page_AddData_State{
                     setState(()
                     {
                       symptoms_intensity_dropdown_chosen = newValue;
-                      print(symptoms_intensity_dropdown_chosen);
+                      //print(symptoms_intensity_dropdown_chosen);
                     });
                   },
                   items: symptoms_intensity_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)

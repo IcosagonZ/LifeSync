@@ -146,8 +146,8 @@ class Page_Notes_State extends State<Page_Notes> with RouteAware
           ]
         )
       ),
-      floatingActionButton: IconButton(
-        icon: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.small(
+        child: Icon(Icons.add),
         tooltip: "Add data",
         onPressed: () async {
           //print("Add data pressed");

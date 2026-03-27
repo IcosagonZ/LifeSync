@@ -58,7 +58,7 @@ extension MindWidget on Page_AddData_State{
                     setState(()
                     {
                       mind_mood_intensity_dropdown_chosen = newValue;
-                      print(mind_mood_intensity_dropdown_chosen);
+                      //print(mind_mood_intensity_dropdown_chosen);
                     });
                   },
                   items: mind_mood_intensity_dropdown_options.map<DropdownMenuItem<String>>((String dropdown_item)
@@ -87,7 +87,7 @@ extension MindWidget on Page_AddData_State{
                 onChanged: (bool? value){
                   setState(() {
                     mind_mood_resolved = value;
-                    print(value);
+                    //print(value);
                   });
                 },
               )
