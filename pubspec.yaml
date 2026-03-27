@@ -36,12 +36,12 @@ flutter:
     - assets/
 
 flutter_launcher_icons:
-    image_path: "assets/logo_with_white_bg.png"
+    image_path: "assets/logo_with_bg.png"
     #image_path_android: "assets/images/icon-710x599-android.png"
     #image_path_ios: "assets/images/icon-1024x1024.png"
     android: true
     ios: true
-    adaptive_icon_background: "assets/logo_white_bg.png" # only available for Android 8.0 devices and above
+    adaptive_icon_background: "assets/logo_bg.png" # only available for Android 8.0 devices and above
     adaptive_icon_foreground: "assets/logo.png" # only available for Android 8.0 devices and above
     adaptive_icon_foreground_inset: 16 # only available for Android 8.0 devices and above
     adaptive_icon_monochrome: "assets/logo_monochrome.png" # only available for Android 13 devices and above
