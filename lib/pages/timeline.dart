@@ -7,6 +7,8 @@ import '../components/timeline_listtile.dart';
 
 import '../data/database.dart';
 
+import '../helpers/helper_date.dart';
+
 class Page_Timeline extends StatefulWidget
 {
   const Page_Timeline({super.key});
@@ -105,6 +107,10 @@ class Page_Timeline_State extends State<Page_Timeline> with RouteAware
                   String data_month_string = DateFormat('M/yyyy').format(data.date_time);
                   String data_year_string = DateFormat('yyyy').format(data.date_time);
 
+                  int day_int = data.date_time.day;
+                  String day = "$day_int${helper_date_get_suffix(day_int)}";
+                  String weekday = "${DateFormat('EEEE').format(data.date_time)}";
+
                   TimelineListTile data_tile = TimelineListTile(
                     id: data.id,
                     datatype: data.datatype,
@@ -140,9 +146,9 @@ class Page_Timeline_State extends State<Page_Timeline> with RouteAware
                         Row(
                           children: [
                             SizedBox(
-                              width: 16,
+                              width: 24,
                             ),
-                            Text(DateFormat('MMMM, d').format(data.date_time), style:style_titlemedium),
+                            Text("$weekday, $day", style:style_titlemedium),
                           ]
                         ),
                         data_tile,
@@ -179,9 +185,9 @@ class Page_Timeline_State extends State<Page_Timeline> with RouteAware
                         Row(
                           children: [
                             SizedBox(
-                              width: 16,
+                              width: 24,
                             ),
-                            Text(DateFormat('MMMM, d').format(data.date_time), style:style_titlemedium),
+                            Text("$weekday, $day", style:style_titlemedium),
                           ]
                         ),
                         data_tile,
@@ -210,7 +216,9 @@ class Page_Timeline_State extends State<Page_Timeline> with RouteAware
                               width: 16,
                               child: Divider()
                             ),
+                            SizedBox(width: 8),
                             Text(DateFormat('yyyy').format(data.date_time), style:style_headlinemedium),
+                            SizedBox(width: 8),
                             Expanded(
                               child: Divider()
                             ),
@@ -223,7 +231,7 @@ class Page_Timeline_State extends State<Page_Timeline> with RouteAware
                         Row(
                           children: [
                             SizedBox(
-                              width: 16,
+                              width: 24,
                             ),
                             Text(DateFormat('MMMM').format(data.date_time), style:style_headlinesmall),
                           ]
@@ -235,9 +243,9 @@ class Page_Timeline_State extends State<Page_Timeline> with RouteAware
                         Row(
                           children: [
                             SizedBox(
-                              width: 16,
+                              width: 24,
                             ),
-                            Text(DateFormat('MMMM, d').format(data.date_time), style:style_titlemedium),
+                            Text("$weekday, $day", style:style_titlemedium),
                           ]
                         ),
                         data_tile,
