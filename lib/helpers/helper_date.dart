@@ -1,6 +1,6 @@
 String helper_date_get_suffix(int day)
 {
-  if(day>=11 || day<=13)
+  if(day>=11 && day<=13)
   {
     return "th";
   }
