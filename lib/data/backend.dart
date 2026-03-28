@@ -4,7 +4,8 @@ import 'dart:io';
 
 import 'database.dart';
 
-//String backend_url = "http://127.0.0.1:8000/";
+import 'api_keys.dart';
+// Format is String roboflow_api_key = "<YOUR_API_KEY>";
 
 dynamic server_getresponse(String url) async
 {
@@ -312,39 +313,74 @@ Future<LLMResponse> backend_send_llm(String message) async
   );
 }
 
+
+// Image recognised resposne
+class NutritionPredictions
+{
+  String name;
+  double confidence;
+  int calories;
+
+  NutritionPredictions(this.name, this.confidence, this.calories);
+}
+
 // Image upload
 class NutritionImageResponse{
   String status;
+  String message;
 
-  String name;
-  String calories;
-
-  NutritionImageResponse(this.status, this.name, this.calories);
+  List<NutritionPredictions> result;
+  NutritionImageResponse(this.status, this.message, this.result);
 }
 
 Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
 {
   print("Backend: Image upload");
 
+  final calorie_map = {
+    "appam": 120,
+    "aviyal": 150,
+    "beef": 250,
+    "biriyani": 300,
+    "chappati": 120,
+    "chicken_curry": 220,
+    "chicken_fry": 280,
+    "chutney": 80,
+    "dosa": 130,
+    "egg_curry": 180,
+    "fish_fry": 200,
+    "idiyappam": 150,
+    "idli": 70,
+    "kadala_curry": 180,
+    "kappa": 160,
+    "noodles": 220,
+    "oothappam": 180,
+    "paneer": 260,
+    "pappadam": 60,
+    "pathiri": 120,
+    "payar": 140,
+    "porotta": 250,
+    "puri": 150,
+    "rice": 200,
+    "sambar": 100,
+    "upma": 180,
+    "vada": 140,
+  };
+
   try
   {
-    String backend_url = await database_get_settings_backendurl();
-    String token = await database_get_settings_token();
+    //String token = await database_get_settings_token();
 
-    final url = Uri.parse("${backend_url}upload/nutrition");
+    final url = Uri.parse("https://serverless.roboflow.com/foodfood/5?api_key=${roboflow_api_key}");
 
     var request = http.MultipartRequest("POST", url);
-    request.headers.addAll({
-      "Authorization": "Bearer $token",
-      "Content-Type": "application/json"
-    });
 
     var stream = http.ByteStream(image.openRead());
     var length = await image.length();
     var filename = image.path.split("/").last;
 
     var multipart_file = http.MultipartFile(
-      "file_upload",
+      "file",
       stream,
       length,
       filename: filename,
@@ -360,10 +396,36 @@ Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
     if(response.statusCode==200)
     {
       print("Backend: Success");
+
+      List<NutritionPredictions> result = [];
+
+      //print(response_json);
+
+      for (var item in response_json["predictions"])
+      {
+        if (item["confidence"] > 0.5)
+        {
+          int item_calories = -1;
+          final item_confidence = item["confidence"]*100;
+          String item_name = item["class"];
+
+          if(calorie_map.containsKey(item_name))
+          {
+            item_calories = calorie_map[item_name] ?? -1;
+          }
+
+          result.add(NutritionPredictions(
+            item_name,
+            item_confidence,
+            item_calories
+          ));
+        }
+      }
+
       return NutritionImageResponse(
-        response_json["status"],
-        response_json["nutrition_name"],
-        response_json["nutrition_calories"].toString()
+        "OK",
+        "Success",
+        result
       );
     }
     else
@@ -375,7 +437,7 @@ Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
       return NutritionImageResponse(
         "${response.statusCode}",
         "${response.body}",
-        "N/A"
+        []
       );
     }
   }
@@ -383,8 +445,8 @@ Future<NutritionImageResponse> backend_send_nutrition_image(File image) async
   {
     return NutritionImageResponse(
       "ERROR",
-      "N/A",
-      "N/A"
+      "${e}",
+      [],
     );
   }
 }

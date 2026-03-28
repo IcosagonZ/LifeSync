@@ -466,9 +466,8 @@ class Page_AddData_State extends State<Page_AddData>
                         ));
                         if(result!=null)
                         {
-                          //print("Result: $result");
                           nutrition_name_controller.text = result["name"];
-                          nutrition_calories_controller.text = result["calories"];
+                          nutrition_calories_controller.text = "${result["calories"]}";
                         }
                       },
                     ),

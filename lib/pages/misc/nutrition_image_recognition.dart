@@ -20,6 +20,9 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
   TextEditingController nutrition_name = TextEditingController();
   TextEditingController nutrition_calories = TextEditingController();
 
+  List<NutritionPredictions> nutrition_predictions = [];
+  bool nutrition_loading = false;
+
   bool nutrition_data_received = false;
   String nutrition_name_text = "-1";
   String nutrition_calories_text = "-1";
@@ -46,8 +49,8 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
     await backend_send_nutrition_image(File(image_path!.path));;
     setState(()
     {
-      nutrition_name_text = nutrition_response.name;
-      nutrition_calories_text = nutrition_response.calories;
+      //nutrition_name_text = nutrition_response.name;
+      //nutrition_calories_text = nutrition_response.calories;
       if(nutrition_response.status=="OK")
       {
         nutrition_data_received = true;
@@ -115,24 +118,66 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
             ),
             SizedBox(height: 32),
             Visibility(
-              visible: nutrition_data_received,
-              child: Padding(
-                padding: EdgeInsetsGeometry.all(32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      nutrition_name_text,
-                      textAlign: TextAlign.center,
-                      style: style_displaysmall,
-                    ),
-                    SizedBox(height: 24),
-                    Text(
-                      "${nutrition_calories_text} cal",
-                      textAlign: TextAlign.center,
-                      style: style_titlelarge,
-                    ),
-                  ]
+              visible: nutrition_predictions.isEmpty && !nutrition_loading,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsetsGeometry.all(32),
+                  child: Center(
+                    child: Text("No predictions available")
+                  )
+                )
+              )
+            ),
+            Visibility(
+              visible: nutrition_loading,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsetsGeometry.all(32),
+                  child: Center(
+                    child: CircularProgressIndicator()
+                  )
+                )
+              )
+            ),
+            Visibility(
+              visible: nutrition_predictions.isNotEmpty && !nutrition_loading,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsetsGeometry.all(8),
+                  child: Column(
+                    children: List.generate(nutrition_predictions.length, (index)
+                    {
+                      final item = nutrition_predictions[index];
+                      final calories = item.calories;
+                      String calories_string = "N/A";
+                      if(calories!=-1)
+                      {
+                        calories_string = "${calories} cal";
+                      }
+
+                      return InkWell(
+                        onTap: (){
+                          Navigator.pop(context, {
+                            "name" : item.name,
+                            "calories" : item.calories
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.all(8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(item.name),
+                              ),
+                              Text(calories_string),
+                              SizedBox(width: 8),
+                              Text("${item.confidence.toStringAsFixed(2)}%"),
+                            ],
+                          ),
+                        )
+                      );
+                    }),
+                  )
                 )
               )
             ),
@@ -151,38 +196,42 @@ class Page_NutritionImageRecognition_State extends State<Page_NutritionImageReco
               {
                 if(image_path!=null)
                 {
+                  if(mounted)
+                  {
+                    setState(() {
+                      nutrition_loading = true;
+                    });
+                  }
+
                   final result = await nutrition_upload();
                   if(result.status=="OK")
                   {
                     if(mounted)
                     {
                       ScaffoldMessenger.of(context).showSnackBar(notify_snackbar("Received data from server"));
+                      setState(() {
+                        nutrition_predictions = result.result;
+                      });
                     }
                   }
                   else
                   {
                     if(mounted)
                     {
-                      dialog_information_show(context, "Error ${result.status}", result.name);
+                      dialog_information_show(context, "Error ${result.status}", result.message);
                     }
+                  }
+
+                  if(mounted)
+                  {
+                    setState(() {
+                      nutrition_loading = false;
+                    });
                   }
                 }
               },
             ),
             SizedBox(height: 16),
-            ElevatedButton(
-              child: Text("Use data"),
-              onPressed: (){
-                print("Use data pressed");
-                if(nutrition_data_received)
-                {
-                  Navigator.pop(context, {
-                    "name" : nutrition_name_text,
-                    "calories" : nutrition_calories_text
-                  });
-                }
-              },
-            ),
           ]
         ),
       ),
